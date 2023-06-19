@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <style>
+            .main_container {
+                background-image: url("https://images.unsplash.com/photo-1483354483454-4cd359948304?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80");
+                width: 100%;
+                height: 100%;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+            .left_container {
+                width: 25%;
+                float: left;
+                background-color: aliceblue;
+            }
+            .right_container{
+                width: 25%;
+                float: left;
+                padding-left: 1%;
+            }
+            .background_white{
+                height: 100%;
+            }
+            .form_space{
+                padding-left: 1%;
+                padding-top: 5%;
+            }
+        </style>
+
+    </head>
+    <body>
+        <div class="main_container ">
+            <div class="left_container">
+                <div class="background_white">
+
+                    <h1>LOGIN</h1>
+                    <form action="/user/login" method="POST">
+                        <label>Email :</label><br>
+                        <input placeholder="Email" type="text" name="email"><br>
+                        <label>Password :</label><br>
+                        <input placeholder="Password" type="text" name="password">
+                        <input type="submit" value="submit">
+                    </form>
+
+                </div>
+            </div>
+            <div class="right_container">
+                <h1>Soulley</h1>
+            </div>
+        </div>
+    </body>
+</html>
