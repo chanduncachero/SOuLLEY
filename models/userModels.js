@@ -13,7 +13,19 @@ const userSchema = mongoose.Schema(
             required: [
                 true, "Please enter a unique Password"
             ]
-        }
+        },
+        username:{
+            type: String,
+            required: [
+                true, "Please enter a valid username"
+            ]
+        },
+        socketid:{
+            type: String,
+            required: [
+                true, "Please enter a valid socketid"
+            ]
+        },
     },
     {
         timestamps: true

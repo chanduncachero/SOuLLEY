@@ -1,0 +1,125 @@
+<html>
+    <head>
+        <title>SOuL-LEY</title>
+
+        <link rel="stylesheet" type="text/css" href="./css/style.css">
+        <link rel="icon" href="data:;base64,=">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+            integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
+    </head>
+    <body>
+        <div class="main_container">
+            <div class="Title_header">
+                <div class="top_bar">
+                    <div><h1 class="project_title">SOuL-LEY</h1></div>
+                    <div class="center"><h7 id="username"> </h7></div>
+                </div>
+            </div>
+            <div class="three_function_division">
+<!-- sms and call -->
+                <div class="first_division">
+                    <div class="text_container">
+                        <h2>Text message</h2>
+                        <input type="tel" id="number" placeholder="639xxx-xxx-xxx">
+                        <input type="text" id="msg" placeholder="enter your message">
+                        <input type="button" id="button" value="Send Text">
+                        <!-- <p class="response"></p> -->
+                    </div>
+                    <div class="text_container">
+                        <h2>Call number</h2>
+                        <input type="tel" id="call_number" placeholder="639-xxx-xxx-xxx">
+                        <!-- <input type="text" id="msg" placeholder="enter your message"> -->
+                        <input type="button" id="call_id" value="Call Number">
+                        <!-- <p class="response"></p> -->
+                    </div>
+                </div>
+<!-- CHAT below -->
+                <div class="second_division">
+                    <div class="chat_header">
+                        <h2>Chats</h2>
+                        <div id="search_chat">
+                            <input class="chat_input_one" type="search" placeholder="search people" id="myInput" list="user_data">
+                            <datalist id="user_data">
+                                <!-- <option id=""></option> -->
+                            </datalist>
+                        </div>
+                    </div>
+                    <div class="chat_interface">
+                        <div class="chat_view" >
+                            <div id="input_test" class="message_box" >
+                            </div>
+                        </div>
+                        <div class="chat_input" id="chat_input_here">
+                        </div>
+                    </div>
+                </div>
+<!-- VIDEO Call Below -->
+                <div class="third_division">
+                    <div class="video_header">
+                        <h2>Video Calls</h2>
+                        <div id="search_caller">
+                            <input class="chat_input_one" type="search" placeholder="call people" id="callInput" list="user_data">
+                            <datalist id="user_data">
+                                <!-- <option id=""></option> -->
+                            </datalist>
+                        </div>
+                    </div>
+<!-- Top Video Call Interface -->
+                    <div>
+                        <div class="video_body" id="video_body">
+                        </div>
+                        <div class="middle_position" id="middle_position">
+                            <!-- <button>
+                                <i class="fa-solid fa-video-slash fa-lg"></i>
+                            </button>
+                            <button>
+                                <i class="fa-solid fa-phone-slash fa-lg end_call" style="color: red;" ></i>
+                            </button> -->
+                        </div>
+                    </div>
+<!-- Below Video Call -->
+                        <div class="callee_video" id="video_below">
+                        </div>
+                </div>
+            </div>
+        </div>
+<!-- caller end dialog-->
+        <div class="dialog">
+            <!-- <button class="close-button">&times;</button> -->
+            <h2 id="call_someone"></h2>
+            <div>
+                <button class="cancel_vcall">
+                    <i class="fa-solid fa-phone-slash"></i>
+                </button>
+            </div>
+        </div>
+<!-- receiver end dialog -->
+        <div class="receiver-dialog">
+            <h2 id="caller_name"></h2>
+            <div>
+            <!-- <button class="close-button">&times;</button> -->
+                <div>
+                    <button id="accept_vcall" class="accept_vcall">
+                        <i class="fa-solid fa-phone"></i>
+                    </button>
+                    <button class="cancel_vcall">
+                        <i class="fa-solid fa-phone-slash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+<!-- Number Call Interface -->
+        <div id="numCallDialog" class="numCallDialog">
+            <h3 id="numCallText"></h3>
+            <!-- <button class="close-button">&times;</button> -->
+            <div id="okButton">
+                
+            </div>
+        </div>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://unpkg.com/peerjs@1.3.2/dist/peerjs.min.js"></script>
+        <script src="/js/dashboard.js"></script>
+    </body>
+    
+</html>

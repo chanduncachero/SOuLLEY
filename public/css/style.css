@@ -1,12 +1,351 @@
-.main_container {
-    background-image: url("https://images.unsplash.com/photo-1483354483454-4cd359948304?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80");
-    width: 100%;
-    height: 100%;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
+            body{
+                font-family: "Roboto",sans-serif;
+            }
+            .main_container {
+                background-image: url("https://images.unsplash.com/photo-1483354483454-4cd359948304?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80");
+                width: 100%;
+                height: 100%;
+                background-repeat: no-repeat;
+                background-size: cover;
+                border-style: solid;
+                transition:filter 0ms ease-in-out 0ms;
+            }
+            .project_title{
+                color: black;
+                /* width: fit-content; */
+            }
+            .three_function_division{
+                box-sizing: border-box;
+            }
+            .first_division{
+                width: 33%;
+                float: left;
+                border-style: solid;
+                height: 90%;
+            }
+            .second_division{
+                width: 33%;
+                float: left;
+                /* border-style: solid; */
+                /* height: 90%; */
+            }
+            .third_division{
+                width: 33%;
+                float: left;
+                height: 90%;
+                border-style: solid;
+                position: relative;
+            }
+            .chat_interface{
+                box-sizing: border-box;
+                max-width: 90%;
+                /* min-height: 100%; */
+                padding-left: 3%;
+            }
+            .chat_view{
+                /* position: absolute;
+                top: 20%; */
+                max-height: 60%;
+                overflow-y: scroll;
+                display: flex;
+                flex-direction: column-reverse;
+                
+            }
+            .chat_input{
+               position:absolute;
+               bottom: 20%;
+            }
+            .card_body{
+                height: 20px;
+                background-color: rgb(55, 134, 212);
+                /* border-style: solid; */
+                box-shadow: 0px 2px 5px 5px rgba(0,0,0,0.1);
+                color: whitesmoke;
+            }
+            .chat_header{
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                padding-left: 3%;
+            }
+            .chat_input_one{
+                margin-left: 5%;
+            }
+            .user_message{
+                margin-left: auto;
+                background-color: white;
+                color: black;
+                box-shadow: 0px 2px 5px 5px rgba(0,0,0,0.1);
+            }
+            .user_message .user_mess{
+                float: right;
+            }
+            /* .message_box{
+                overflow: auto;
+                display: flex;
+                flex-direction: column-reverse;
+            } */
+            .Title_header{
+                display: flex;
+                flex-wrap: nowrap;
+                flex-direction: row;
+                /* line-height: 100%; */
+            }
+            .Title_header div{
+                /* display: none; */
+                line-height: 100%;
+                display: flex;
+                flex-wrap: nowrap;
+                flex-direction: row;
+            }
+            .center{
+                /* float: left;
+                clear: none;
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: row;
+                top: 50%; */
+                /* position: absolute  ; */
+                margin-left: 20px;
+                margin-top: 20px;
+            }
+            /* .top_bar{
+                float: left;
+                clear: none;
+                display: inline-block;
+                top: 50%;
+                vertical-align: middle;
+            } */
+            .logout_dropdown{
+                position: relative;
+                display: inline-block;
+                margin-left: 5px;
+                bottom: 3px;
+                /* margin-bottom: 10px; */
+                /* vertical-align: middle; */
+            }
+            .logout_drop{
+                position: absolute;
+            }
+            #log_butn {
+                position: absolute;
+                top: 2px;
+                height: 30px;
+                width: 70px;
+                background-color: white;
+                margin-left: 8px;
+            }
+            #log_butn:hover {
+                background-color: rgb(231, 224, 224);
+            }
 
-.project_title{
-    color: black;
-}
+            #log_butn .span1 {
+                position: absolute;
+                margin-left: 8px;
+                margin-top: 8px;
+            }
+/* Caller Dialog  */
+            .dialog{
+                position: absolute;
+                top: -100%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+                width: 98%;
+                max-width:450px;    
+                padding: 20px;
+                background: #fff;
+                border-radius: 10px;
+                opacity: 0;
+                box-shadow: 0px 2px 5px 5px rgba(0,0,0,0.1);
+                margin-top: -25px;
+                transition: top 0ms ease-in-out 300ms, 
+                            opacity 300ms ease-in-out, margin-top 300ms ease-in-out;
+            }
+            .dialog > * {
+                margin: 15px 0px;
+            }
+            .dialog .close-button{
+                position: absolute;
+                top: -5px;
+                right: 10px;
+                width: 20px;
+                height: 20px;
+                background: #eee;
+                color: #111;
+                border: none;
+                outline: none;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+            .active-dialog {
+                overflow: hidden;
+            }
+            body.active-dialog .main_container{
+                filter: blur(5px);
+                background: rgba(0,0,0,0.08);
+                transition:filter 0ms ease-in-out 0ms;
+            }
+            body.active-dialog .dialog{
+                top: 50%;
+                opacity: 1;
+                margin-top: 0px;
+                transition: top 0ms ease-in-out 0ms, 
+                            opacity 300ms ease-in-out, margin-top 300ms ease-in-out;
+            }
+            .senderName{
+                /* height: 20px; */
+                color: red;
+                position: absolute;
+                /* margin-top: 20px; */
+                /* margin-left: 10px; */
+                font-size: small;
+            }
+/* Callee dialog */
+    .receiver-dialog{
+        position: absolute;
+        top: -100%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        width: 98%;
+        max-width:450px;    
+        padding: 20px;
+        background: #fff;
+        border-radius: 10px;
+        opacity: 0;
+        box-shadow: 0px 2px 5px 5px rgba(0,0,0,0.1);
+        margin-top: -25px;
+        transition: top 0ms ease-in-out 300ms, 
+                    opacity 300ms ease-in-out, margin-top 300ms ease-in-out;
+    }
+    .receiver-dialog > * {
+        margin: 15px 0px;
+    }
+    .receiver-dialog .close-button{
+        position: absolute;
+        top: -5px;
+        right: 10px;
+        width: 20px;
+        height: 20px;
+        background: #eee;
+        color: #111;
+        border: none;
+        outline: none;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+    .active-receiver-dialog {
+        overflow: hidden;
+    }
+    body.active-receiver-dialog .main_container{
+        filter: blur(5px);
+        background: rgba(0,0,0,0.08);
+        transition:filter 0ms ease-in-out 0ms;
+    }
+    body.active-receiver-dialog .receiver-dialog{
+        top: 50%;
+        opacity: 1;
+        margin-top: 0px;
+        transition: top 0ms ease-in-out 0ms, 
+                    opacity 300ms ease-in-out, margin-top 300ms ease-in-out;
+    }
 
+/* Video Interface Display */
+            /* #video_body{
+                display: grid;
+                grid-template-columns: repeat(auto-fills, 300px);
+                grid-auto-rows: 300px;
+            } */
+            #video_body{
+                /* display: grid; */
+                /* grid-template-columns: repeat(auto-fills, 300px); */
+                /* grid-auto-rows: 300px; */
+                margin-top: 25px;
+                margin-left: 25px;
+                margin-bottom: 25px;
+                max-width: 500px;
+                height: 250px;
+                border-style: solid;
+                /* background-color: whitesmoke; */
+            }
+            .callee_video{
+                margin-top: 50px;
+                margin-left: 25px;
+                margin-bottom: 25px;
+                max-width: 500px;
+                height: 250px;
+                border-style: solid;
+                /* background-color: black; */
+            }
+            video {
+                /* position: relative; */
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .middle_position{
+                position: absolute;
+                margin: auto;
+                left: 40%;
+                top: 52%;
+                padding: 10px;
+            }
+            .middle_position button{
+                /* position: absolute; */
+                margin: auto;
+                /* left: 40%; */
+                padding: 10px;
+            }
+/* Number Call Dialog */
+            /* #numCallDialog{
+
+            }
+            #numCallText{
+
+            } */
+            .numCallDialog{
+                position: absolute;
+                top: -100%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+                width: 98%;
+                max-width:450px;    
+                padding: 20px;
+                background: #fff;
+                border-radius: 10px;
+                opacity: 0;
+                box-shadow: 0px 2px 5px 5px rgba(0,0,0,0.1);
+                margin-top: -25px;
+                transition: top 0ms ease-in-out 300ms, 
+                            opacity 300ms ease-in-out, margin-top 300ms ease-in-out;
+            }
+            .numCallDialog > * {
+                margin: 15px 0px;
+            }
+            .numCallDialog .close-button{
+                position: absolute;
+                top: -5px;
+                right: 10px;
+                width: 20px;
+                height: 20px;
+                background: #eee;
+                color: #111;
+                border: none;
+                outline: none;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+            .active-numCallDialog {
+                overflow: hidden;
+            }
+            body.active-numCallDialog .main_container{
+                filter: blur(5px);
+                background: rgba(0,0,0,0.08);
+                transition:filter 0ms ease-in-out 0ms;
+            }
+            body.active-numCallDialog .numCallDialog{
+                top: 50%;
+                opacity: 1;
+                margin-top: 0px;
+                transition: top 0ms ease-in-out 0ms, 
+                            opacity 300ms ease-in-out, margin-top 300ms ease-in-out;
+            }

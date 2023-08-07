@@ -25,6 +25,17 @@
                 padding-left: 1%;
                 padding-top: 5%;
             }
+            .submit_button{
+                position: absolute;
+                margin-top: 5px;
+                margin-left: 10px;
+            }
+            .input_box{
+                /* position: absolute; */
+                margin-left: 10px;
+                margin-top: 2px;
+                margin-bottom: 2px;
+            }
         </style>
 
     </head>
@@ -34,25 +45,23 @@
                 <div class="background_white">
 
                     <h1>Register</h1>
-                    <form action="/saveUSer" method="POST">
-                        <label>Email :</label><br>
-                        <input placeholder="Email" type="text" name="email"><br>
-                        <label>Password :</label><br>
-                        <input placeholder="Password" type="text" name="password">
-                        <input type="submit" value="submit">
-                        <!-- <input type="submit" value="submit" onClick="login"> -->
+                    <form action="/save/user" method="POST">
+                        <label for="email_id">Email :</label><br>
+                        <input class="input_box" placeholder="Email" type="email" name="email" id="email_id" required><br>
+                        <label for="password_id">Password :</label><br>
+                        <input class="input_box" placeholder="Password" type="password" name="password" id="password_id" required><br>
+                        <label for="username_id">Username :</label><br>
+                        <input class="input_box" placeholder="Username" type="text" name="username" id="username_id" required><br>
+                        <!-- <input type="submit" id="submitNow" value="submit" onclick="empty()"> -->
+                        <input class="submit_button" type="submit" value="submit">
                     </form>
-
+                    <span id="error_register"></span>
                 </div>
             </div>
             <div class="right_container">
                 <h1>Soulley</h1>
             </div>
         </div>
-        <script>
-            // function login(){
-            //     window.location.href="/login"
-            // }
-        </script>
+        <!-- <script src="/socket.io/socket.io.js"></script> -->
     </body>
 </html>
