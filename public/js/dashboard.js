@@ -297,73 +297,81 @@ button.addEventListener("click", send, false);
 function send(){
     const number = numberInput.value.replace(/\D/g, '');
     const text = textInput.value;
+    const auth_to = document.getElementById("auth_token").value;
     // const text_num = JSON.stringify({number: number, text: text});
-    // console.log(number, text, "text and number");
-    fetch('/send/sms', {
-        method: 'post',
-        headers: {
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify({number: number, text: text})
-    }
-    ).then(function(res){
-        console.log(res, "sent result")
-        if(res.status === 500){
+    console.log(auth_to, "auth_to");
+    if(auth_to!=""){
+        fetch('/send/sms', {
+            method: 'post',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({number: number, text: text, auth_token: auth_to})
+        }
+        ).then(function(res){
+            console.log(res, "sent result")
+            if(res.status === 500){
+                console.log(err, "error twilio");
+                alert("Check Receiver's Number");
+            }else{
+                console.log(res.status, "sent successfully")
+                alert("Text Message Sent Successfully: " + number );
+                document.getElementById("number").value = "";
+                document.getElementById("msg").value = "";
+            }
+        }).catch(err =>{
             console.log(err, "error twilio");
             alert("Check Receiver's Number");
-        }else{
-            console.log(res.status, "sent successfully")
-            alert("Text Message Sent Successfully: " + number );
-            document.getElementById("number").value = "";
-            document.getElementById("msg").value = "";
-        }
-    }).catch(err =>{
-        console.log(err, "error twilio");
-        alert("Check Receiver's Number");
-    });
+        });
+    }else{
+        alert("Auth Token is required")
+    }
 };
 
 //Send Call
 callButton.addEventListener("click", call, false);
 function call(){
     const call = callNumber.value.replace(/\D/g, '');
-    console.log(call, "call number")
+    const auth_to = document.getElementById("auth_token").value;
+    // console.log(call, "call number");
 
-    document.body.classList.add("active-numCallDialog");
-    document.getElementById("numCallText").innerHTML = "Calling Number " + call + ". . .";
-    let x = `
-        <button id="callCancel">
-            <i class="fa-solid fa-phone-slash" style="color: #eb1000"></i>
-        </button
-    `
-    document.getElementById("okButton").innerHTML = x;
-    document.getElementById("callCancel").addEventListener("click", () =>{
-        document.body.classList.remove("active-numCallDialog");
-    });
+    if(auth_to!=""){
+        document.body.classList.add("active-numCallDialog");
+        document.getElementById("numCallText").innerHTML = "Calling Number " + call + ". . .";
+        let x = `
+            <button id="callCancel">
+                <i class="fa-solid fa-phone-slash" style="color: #eb1000"></i>
+            </button
+        `
+        document.getElementById("okButton").innerHTML = x;
+        document.getElementById("callCancel").addEventListener("click", () =>{
+            document.body.classList.remove("active-numCallDialog");
+        });
 
-    fetch('/call', {
-        method: 'post',
-        headers: {
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify({number: call})
-        // body: {number: number, text: text}
-    }).then(res => {
-        if(res.status === 500){
-            let x = `
-                <i class="fa-regular fa-circle-xmark" style="color: #e7230d;"></i>
-            `;
-            document.getElementById("numCallText").innerHTML = " Number can't be reached " + x;
-        }else {
-            let x = `
-                <i class="fa-solid fa-phone-flip" style="color: #1c8228;"></i>
-            `;
-            document.getElementById("numCallText").innerHTML = call + " is on the  line " + x;
-
-        }
-    }).catch(function(error){
-        console.log(error);
-    });
+        fetch('/call', {
+            method: 'post',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({number: call, auth_token: auth_to})
+        }).then(res => {
+            if(res.status === 500){
+                let x = `
+                    <i class="fa-regular fa-circle-xmark" style="color: #e7230d;"></i>
+                `;
+                document.getElementById("numCallText").innerHTML = " Number can't be reached " + x;
+            }else {
+                let x = `
+                    <i class="fa-solid fa-phone-flip" style="color: #1c8228;"></i>
+                `;
+                document.getElementById("numCallText").innerHTML = call + " is on the  line " + x;
+            }
+        }).catch(function(error){
+            console.log(error);
+        });
+    }else{
+        alert("Auth Token required");
+    }
 };
 
 //Users array for dropdown of Video Call and Chat
