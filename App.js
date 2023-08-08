@@ -4,7 +4,7 @@ const path = require("path");
 const router = express.Router();
 const bodyparser = require("body-parser");
 const twilio = require("twilio");
-const dotenv = require("dotenv").config();
+const dotenv = require("dotenv");
 const { Server } = require("socket.io");
 const session = require("express-session");
 // const Routes = require('./routes/routes.js');
@@ -289,7 +289,7 @@ app.delete('/userDelete/:id', async (req, res)=>{
 //Call and Text SMS
 app.post('/call', requireLogin, (req, res)=>{
         // const client  = new twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
-        const client  = new twilio(process.env.TWILIO_SID, TWILIO_AUTH_TOKEN = req.body.auth_token);
+        const client  = new twilio(TWILIO_SID = req.body.auth_sid, TWILIO_AUTH_TOKEN = req.body.auth_token);
     // try{
         client.calls
         .create({url:"http://demo.twilio.com/docs/voice.xml", from:+13609001106, to: "+" + req.body.number})
@@ -303,7 +303,9 @@ app.post('/call', requireLogin, (req, res)=>{
 });
 app.post("/send/sms",requireLogin, (req, res)=>{
 
-        const client  = new twilio(process.env.TWILIO_SID, TWILIO_AUTH_TOKEN = req.body.auth_token);
+        // const client  = new twilio(process.env.TWILIO_SID, TWILIO_AUTH_TOKEN = req.body.auth_token);
+        const client  = new twilio(TWILIO_SID = req.body.auth_sid, TWILIO_AUTH_TOKEN = req.body.auth_token);
+
         // const client  = new twilio(TWILIO_SID = ACb5745873e9c982ef6eefe86dd3c21665, TWILIO_AUTH_TOKEN = req.body.auth_token);
 
         // TWILIO_SID = ACb5745873e9c982ef6eefe86dd3c21665

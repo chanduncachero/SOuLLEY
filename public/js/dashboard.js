@@ -4,6 +4,7 @@ const   numberInput = document.getElementById("number"),
         response = document.querySelector(".response"),
         callNumber = document.getElementById("call_number"),
         callButton = document.getElementById("call_id"),
+        TWILIO_SID = "ACb5745873e9c982ef6eefe86dd3c21665",
 
 //Send Chat
         touserData = [],
@@ -306,7 +307,7 @@ function send(){
             headers: {
                 'Content-type': 'application/json'
             },
-            body: JSON.stringify({number: number, text: text, auth_token: auth_to})
+            body: JSON.stringify({number: number, text: text, auth_token: auth_to, auth_sid: TWILIO_SID})
         }
         ).then(function(res){
             console.log(res, "sent result")
@@ -353,7 +354,7 @@ function call(){
             headers: {
                 'Content-type': 'application/json'
             },
-            body: JSON.stringify({number: call, auth_token: auth_to})
+            body: JSON.stringify({number: call, auth_token: auth_to, auth_sid: TWILIO_SID})
         }).then(res => {
             if(res.status === 500){
                 let x = `
