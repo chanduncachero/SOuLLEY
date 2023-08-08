@@ -195,14 +195,12 @@ app.post('/user/login', async (req, res)=>{
             res.redirect("/dashboard"); 
         }
         else{
-            // setTimeout( res.redirect("/login"), 5000);
-            res.send("wrong credentials");
+            res.send("Incorrect Password");
         }
         res.end();
     } catch(error){
-        // setTimeout( res.redirect("/login"), 5000);
-        res.status(500).send({message: error.message});
-        console.log("No Credentials has matched");
+        res.status(500).send("Incorrect Email, Incorrect Password");
+        // console.log("No Credentials has matched");
         res.end();
     }
 });
@@ -289,7 +287,7 @@ app.delete('/userDelete/:id', async (req, res)=>{
 });
 
 //Call and Text SMS
-app.post('/call', (req, res)=>{
+app.post('/call', requireLogin, (req, res)=>{
         const client  = new twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
     // try{
         client.calls
@@ -298,11 +296,11 @@ app.post('/call', (req, res)=>{
             console.log(message, "sent success")
             res.status(200).json({message})
         }).catch(err=> {
-            console.log(err, "text not sent" )
+            console.log(err, "text not sent" );
             res.status(500).json({message: err.message});
         });
 });
-app.post("/send/sms", (req, res)=>{
+app.post("/send/sms",requireLogin, (req, res)=>{
         const client  = new twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
     
             client.messages

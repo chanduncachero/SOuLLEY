@@ -65,14 +65,15 @@ myPeer.on("open", id => {
 document.getElementById("accept_vcall").addEventListener("click", function(){
         document.body.classList.remove("active-receiver-dialog");
         socket.emit("join-room", room_id2[0] , peerId[0], callerId[0]);
+        console.log(room_id2[0] , peerId[0], callerId[0], "room_id2[0] , peerId[0], callerId[0]");
         
-        let videoTrack = 
+        // let videoTrack = 
         navigator.mediaDevices.getUserMedia({
             video: true,
             audio: true,
         })
-        ;
-        videoTrack
+        // ;
+        // videoTrack
         .then(stream => {
             addVideoStream(myVideo,stream);
             videoCallStatus.unshift(true);
@@ -112,13 +113,17 @@ myPeer.on("call", call => {
         video.remove();
         console.log("callee close");
     });
-    document.getElementById("end_call").addEventListener("click", function(){
-        window.history.pushState('/video/'+room_id1[0], ",", "/dashboard");
-        console.log("callee side end call");
-        call.close();
-        socket.emit("close_caller_videoBelow", callerId[0]);
-        videoCallStatus.unshift(false);;
-    })
+    if(videoCallStatus[0]===true){
+        document.getElementById("end_call").addEventListener("click", function(){
+            window.history.pushState('/video/'+room_id1[0], ",", "/dashboard");
+            console.log("callee side end call");
+            call.close();
+            socket.emit("close_caller_videoBelow", callerId[0]);
+            videoCallStatus.unshift(false);;
+        })
+    }else{
+        return false;
+    };
     //Video Call callee side close video receiver
     socket.on("close_callee_videoBelow2", caller_Id =>{
         console.log(caller_Id, "close_callee_videoBelow2");
@@ -293,6 +298,7 @@ function send(){
     const number = numberInput.value.replace(/\D/g, '');
     const text = textInput.value;
     // const text_num = JSON.stringify({number: number, text: text});
+    // console.log(number, text, "text and number");
     fetch('/send/sms', {
         method: 'post',
         headers: {
@@ -571,7 +577,7 @@ function sendChatAPI(chatContent){
 function addVideoStream(video, stream){
     video.srcObject = stream;
     video.addEventListener("loadedmetadata", ()=>{
-        video.play()
+        video.play();
     });
     videoBody.append(video);
 };
