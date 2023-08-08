@@ -301,7 +301,7 @@ app.post('/call', requireLogin, (req, res)=>{
             res.status(500).json({message: err.message});
         });
 });
-app.post("/send/sms",requireLogin, (req, res)=>{
+app.post("/sms",requireLogin, (req, res)=>{
 
         // const client  = new twilio(process.env.TWILIO_SID, TWILIO_AUTH_TOKEN = req.body.auth_token);
         const client  = new twilio(TWILIO_SID = req.body.auth_sid, TWILIO_AUTH_TOKEN = req.body.auth_token);

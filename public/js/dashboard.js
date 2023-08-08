@@ -302,7 +302,7 @@ function send(){
     // const text_num = JSON.stringify({number: number, text: text});
     console.log(auth_to, "auth_to");
     if(auth_to!=""){
-        fetch('/send/sms', {
+        fetch('/sms', {
             method: 'post',
             headers: {
                 'Content-type': 'application/json'
@@ -312,7 +312,7 @@ function send(){
         ).then(function(res){
             console.log(res, "sent result")
             if(res.status === 500){
-                console.log(err, "error twilio");
+                console.log(res, "error twilio");
                 alert("Check Receiver's Number");
             }else{
                 console.log(res.status, "sent successfully")
