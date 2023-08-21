@@ -394,7 +394,6 @@ app.post("/search/chat", async (req,res) => {
                     $all: [user.id , req.body.senderId]
                 }
             });
-            console.log(message_2, "one data message_2");
 
                 res.status(200).json({message_2});
            

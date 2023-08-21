@@ -516,17 +516,16 @@ async function getPersonalChat(data){
             document.getElementById("chat_input_here").innerHTML = x;
 
 //Send Personal MEssage
+            const chatContent = document.getElementById("chat_content");
             document.getElementById("send_chat").addEventListener("click",() =>{
-            chatContent = document.getElementById("chat_content");
                 sendChatAPI(chatContent);
-                // false
             });
             return res.json();
     }).then(function(data){
         console.log(data, "query result 1");
         console.log(data.message_2, "query result");
 
-            for(message of data.message_2){
+            for(let message of data.message_2){
                 // console.log(message.user_id[0],"chandun here", userID[0])
                 if(message.user_id[0]===userID[0]){
                 let x = `
