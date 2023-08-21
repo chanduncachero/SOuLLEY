@@ -249,12 +249,159 @@
                     opacity 300ms ease-in-out, margin-top 300ms ease-in-out;
     }
 
-/* Video Interface Display */
-            /* #video_body{
+/* Group Video Call */
+            .groupCallInvited{
+                margin-right: 5px;
+            }
+            .myNav{
+                transition:filter 0ms ease-in-out 0ms;
+                height: 100%;
+                position: fixed;
+                width: 0;
+                z-index: 1;
+                transition: 0.5s;
+                top: 0;
+                left: 0;
+                overflow-x: hidden;
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-image: url("https://images.unsplash.com/photo-1483354483454-4cd359948304?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80");
+            }
+            .list-of-channel{
+                width: 20%;
+                float: left;
+                border-style: solid;
+                height: 90%;
+            }
+            .group-video-list{
+                width: 80%;
+                float: right;
+                /* border-style: solid; */
+                height: 90%;
+            }
+            .group_video_call{
+                float: right;
+                position: absolute;
+                margin-left: 100px;
+                top: 45px;
+            }
+
+/* Create Channel Dialog */
+            .create-channel-dialog{
+                position: absolute;
+                top: -100%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+                width: 98%;
+                max-width:450px;    
+                padding: 20px;
+                background: #fff;
+                border-radius: 10px;
+                opacity: 0;
+                box-shadow: 0px 2px 5px 5px rgba(0,0,0,0.1);
+                margin-top: -25px;
+                transition: top 0ms ease-in-out 300ms, 
+                            opacity 300ms ease-in-out, margin-top 300ms ease-in-out;
+            }
+            .create-channel-dialog > * {
+                margin: 15px 0px;
+            }
+            .create-channel-dialog .close-button{
+                position: absolute;
+                top: -5px;
+                right: 10px;
+                width: 20px;
+                height: 20px;
+                background: #eee;
+                color: #111;
+                border: none;
+                outline: none;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+            .active-create-channel-dialog {
+                overflow: hidden;
+            }
+            body.active-create-channel-dialog .main_container{
+                filter: blur(5px);
+                background: rgba(0,0,0,0.08);
+                transition:filter 0ms ease-in-out 0ms;
+            }
+            body.active-create-channel-dialog .create-channel-dialog{
+                top: 50%;
+                opacity: 1;
+                margin-top: 0px;
+                transition: top 0ms ease-in-out 0ms, 
+                            opacity 300ms ease-in-out, margin-top 300ms ease-in-out;
+            }
+            
+/* Group Video Grid */
+            .end-call-button{
+                position: absolute;
+                z-index: 9;
+                margin-top: 250px;
+                margin-left: 140px;
+                padding: 10px;
+            }
+            .end-call-button button{
+                margin: auto;
+                padding: 10px;
+            }
+            .group-video-grid{
                 display: grid;
-                grid-template-columns: repeat(auto-fills, 300px);
+                grid-template-columns: repeat(auto-fill, 300px);
                 grid-auto-rows: 300px;
-            } */
+            }
+/* Group Invite Dialog */
+            .group-receiver-dialog{
+                position: absolute;
+                top: -100%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+                width: 98%;
+                max-width:450px;    
+                padding: 20px;
+                background: #fff;
+                border-radius: 10px;
+                opacity: 0;
+                box-shadow: 0px 2px 5px 5px rgba(0,0,0,0.1);
+                margin-top: -25px;
+                transition: top 0ms ease-in-out 300ms, 
+                            opacity 300ms ease-in-out, margin-top 300ms ease-in-out;
+            }
+            .group-receiver-dialog > * {
+                margin: 15px 0px;
+            }
+            .group-receiver-dialog .close-button{
+                position: absolute;
+                top: -5px;
+                right: 10px;
+                width: 20px;
+                height: 20px;
+                background: #eee;
+                color: #111;
+                border: none;
+                outline: none;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+            .active-group-receiver-dialog {
+                overflow: hidden;
+            }
+            body.active-group-receiver-dialog .main_container{
+                filter: blur(5px);
+                background: rgba(0,0,0,0.08);
+                transition:filter 0ms ease-in-out 0ms;
+            }
+            body.active-group-receiver-dialog .group-receiver-dialog{
+                top: 50%;
+                opacity: 1;
+                margin-top: 0px;
+                transition: top 0ms ease-in-out 0ms, 
+                            opacity 300ms ease-in-out, margin-top 300ms ease-in-out;
+            }
+
+/* Video Interface Display */
             #video_body{
                 /* display: grid; */
                 /* grid-template-columns: repeat(auto-fills, 300px); */

@@ -113,6 +113,32 @@ io.on("connection", (socket) => {
         console.log(userTo2, "to user with session");
         io.to(userTo2.socketid).emit("chatMessageResponseOther", body, userFrom.username);
     });
+
+//Group Room Video Call Join room UUID and PEER ID
+    socket.on("group-call-join-room", (roomId, peerId)=>{
+        socket.join(roomId);
+        socket.broadcast.to(roomId).emit("user-connected-group-call", peerId);
+
+        socket.on("disconnect", ()=>{
+            socket.broadcast.to(roomId).emit("user-disconnected", peerId);
+            // io.broadcast.emit("user-disconnected", peerId);
+        });
+    });
+
+//Receive Group Video Call Invite
+    socket.on("group_video_call", async (x_array, roomid, callername, callerId, callerPeer) => {
+        let a = await User.find({});
+        x_array.forEach( async element => {
+            let b = await a.find(user => user.username === element);
+            io.to(b.socketid).emit("group_video_call_accept", roomid,callername,callerId ,callerPeer );
+        });
+    });
+
+//Group Video Call Broadcast and delete 
+    socket.on("group-video-call-quit", (peerId , room )=>{
+        // io.broadcast("user-disconnected", peerId);
+        socket.broadcast.to(room).emit("user-disconnected", peerId);
+    });
 });
 
 function requireLogin(req, res, next) {
