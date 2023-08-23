@@ -128,10 +128,8 @@ io.on("connection", (socket) => {
 //Receive Group Video Call Invite
     socket.on("group_video_call", async (x_array, roomid, callername, callerId, callerPeer) => {
         let a = await User.find({});
-        x_array.forEach( async element => {
-            let b = await a.find(user => user.username === element);
-            io.to(b.socketid).emit("group_video_call_accept", roomid,callername,callerId ,callerPeer );
-        });
+        let b = await a.find(user => user.username === x_array);
+        io.to(b.socketid).emit("group_video_call_accept", roomid,callername,callerId ,callerPeer );
     });
 
 //Group Video Call Broadcast and delete 

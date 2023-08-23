@@ -743,7 +743,9 @@ document.getElementById("groupCallSubmit").addEventListener("click", function(){
         alert("No user was choosen to a Group Call");
     }else{
         socket.emit("group-call-join-room", room_id1[0], peerId[0]);
-        socket.emit("group_video_call", x_array, room_id1[0], userData[0].username, connectedUser, peerId[0]);
+        x_array.forEach( element=>{
+            socket.emit("group_video_call", element, room_id1[0], userData[0].username, connectedUser[0], peerId[0]);
+        });
         window.history.pushState("/dashboard","",'/video/'+room_id1[0]);
         callerGroupCall();
         groupVideoCallStatus.unshift(true);
