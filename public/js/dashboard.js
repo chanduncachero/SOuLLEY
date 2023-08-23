@@ -237,7 +237,7 @@ myPeer.on("call", call => {
 });
 socket.on("user-connected", userId => {
     console.log(callerStream[0],"connect to new user working , user connected");
-    connectToNewUser(userId, callerStream[0]);
+    setTimeout(connectToNewUser(userId, callerStream[0]), 2000); 
     document.body.classList.remove("active-dialog");
 });
 
