@@ -182,6 +182,7 @@ acceptVcall.addEventListener("click", function(){
 //Video Interface Control
 myPeer.on("call", call => {
     if(groupVideoCallStatus[0]===true){
+        // console.log(groupVideoCallStatus[0],"groupVideoCallStatus true");
         call.answer(calleeStream[0]);
         const video = document.createElement("video");
         call.on("stream", userVideoStream => {
@@ -191,9 +192,11 @@ myPeer.on("call", call => {
             });
             document.getElementById("group-video-grid").append(video)
         });
-        document.getElementById("end_call").addEventListener("click", function(){
-            video.remove();
-        });
+        if(videoCallStatus[0]===true){
+            document.getElementById("end_call").addEventListener("click", function(){
+                video.remove();
+            });
+        };
         call.on("close", () => {
             video.remove();
             console.log("callee close");
@@ -201,6 +204,7 @@ myPeer.on("call", call => {
 
         peers[callerPeers[0]] = call;
     }else{
+        // console.log(groupVideoCallStatus[0],"groupVideoCallStatus false");
         call.answer(calleeStream[0]);
         const video = document.createElement("video");
         call.on("stream", userVideoStream => {
@@ -694,12 +698,14 @@ function connectToNewUser(userId, callerStreamOne){
     call.on("stream", userVideoStream => {
         belowVideoStream(video, userVideoStream)
     });
-    document.getElementById("end_call").addEventListener("click", function(){
-        window.history.pushState('/video/'+room_id1[0], ",", "/dashboard");
-        console.log("caller side end call");
-        call.close();
-        socket.emit("close_callee_videoBelow", calleeInfo4Socket[0], connectedUser);
-    });
+    if(videoCallStatus[0]===true){
+        document.getElementById("end_call").addEventListener("click", function(){
+            window.history.pushState('/video/'+room_id1[0], ",", "/dashboard");
+            console.log("caller side end call");
+            call.close();
+            socket.emit("close_callee_videoBelow", calleeInfo4Socket[0], connectedUser);
+        });
+    };
     socket.on("close_caller_videoBelow", () =>{
         console.log("close_caller_videoBelow");
         call.close();
