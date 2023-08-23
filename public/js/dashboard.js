@@ -83,7 +83,7 @@ socket.on("group_video_call_accept", (roomid, callername, callerId1, callerPeer)
 
 socket.on("user-connected-group-call", userID =>{
     console.log(userID, "has joined the group call")
-    connectToGroupCallee(userID);
+    connectToGroupCallee(userID, callerStream[0]);
 });
 
 //Accept Group Video Call 
@@ -694,20 +694,20 @@ function belowVideoStream(video, stream){
     });
     videoBelow.append(video);
 };
-function connectToNewUser(userId, callerStreamOne){
-    const call = myPeer.call(userId, callerStreamOne);
+function connectToNewUser(userId, stream){
+    const call = myPeer.call(userId, stream);
     const video = document.createElement('video')
     call.on("stream", userVideoStream => {
         belowVideoStream(video, userVideoStream)
     });
-    if(videoCallStatus[0]===true){
-        document.getElementById("end_call").addEventListener("click", function(){
-            console.log("caller side end call");
-            call.close();
-        });
-    }else{
-        return false;
-    };
+    // if(videoCallStatus[0]===true){
+    //     document.getElementById("end_call").addEventListener("click", function(){
+    //         console.log("caller side end call");
+    //         call.close();
+    //     });
+    // }else{
+    //     return false;
+    // };
     socket.on("close_caller_videoBelow", () =>{
         console.log("close_caller_videoBelow");
         call.close();
@@ -803,8 +803,8 @@ function callerGroupCall(){
     };
 };
 
-function connectToGroupCallee(peerId){
-    const call = myPeer.call(peerId, callerStream[0]);
+function connectToGroupCallee(peerId, stream){
+    const call = myPeer.call(peerId, stream);
     const video = document.createElement('video');
     call.on("stream", userVideoStream =>{
         video.srcObject = userVideoStream;
