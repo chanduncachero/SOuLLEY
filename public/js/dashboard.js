@@ -717,8 +717,8 @@ function connectToNewUser(userId, stream){
         console.log("caller close");
 
     })
-    call.on("error",() =>{
-        console.log("data connection detected, code in caller side");
+    call.on("error",error =>{
+        console.log(error, "data connection detected, code in caller side");
     })
 };
 
@@ -811,13 +811,16 @@ function connectToGroupCallee(peerId, stream){
         video.addEventListener("loadedmetadata", ()=>{
             video.play();
         });
-        myVideoGrid.append(video);
+        document.getElementById("group-video-grid").append(video);
         // addVideoStream(video, userVideoStream);
     });
     call.on("close", ()=>{
         video.remove();
         // console.log("group callee closed");
     });
+    call.on("error",err =>{
+        console.log(err, "data connection detected, code in caller side");
+    })
     // if(videoCallStatus[0]===true){
     //     document.getElementById("end_call").addEventListener("click", function(){
     //         video.remove();
