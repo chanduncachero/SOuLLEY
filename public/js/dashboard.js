@@ -803,29 +803,33 @@ function callerGroupCall(){
     };
 };
 
-function connectToGroupCallee(peerId, stream){
-    const call = myPeer.call(peerId, stream);
+async function connectToGroupCallee (peerId, stream){
+    const call = await myPeer.call(peerId, stream);
     const video = document.createElement('video');
-    call.on("stream", userVideoStream =>{
-        video.srcObject = userVideoStream;
-        video.addEventListener("loadedmetadata", ()=>{
-            video.play();
+    try{
+        await call.on("stream", userVideoStream =>{
+            video.srcObject = userVideoStream;
+            video.addEventListener("loadedmetadata", ()=>{
+                video.play();
+            });
+            document.getElementById("group-video-grid").append(video);
+            // addVideoStream(video, userVideoStream);
         });
-        document.getElementById("group-video-grid").append(video);
-        // addVideoStream(video, userVideoStream);
-    });
-    call.on("close", ()=>{
-        video.remove();
-        // console.log("group callee closed");
-    });
-    call.on("error",err =>{
-        console.log(err, "data connection detected, code in caller side");
-    })
-    // if(videoCallStatus[0]===true){
-    //     document.getElementById("end_call").addEventListener("click", function(){
-    //         video.remove();
-    //     });
-    // };
+        call.on("close", ()=>{
+            video.remove();
+            // console.log("group callee closed");
+        });
+        call.on("error",err =>{
+            console.log(err, "data connection detected, code in caller side");
+        })
+        // if(videoCallStatus[0]===true){
+        //     document.getElementById("end_call").addEventListener("click", function(){
+        //         video.remove();
+        //     });
+        // };
+    } catch (err){
+        console.log(err, "video call error caller side");
+    }
 
     peers[peerId] = call;
 };
