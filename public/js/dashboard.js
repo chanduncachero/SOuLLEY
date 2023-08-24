@@ -214,6 +214,7 @@ myPeer.on("call", call => {
         call.answer(calleeStream[0]);
         const video = document.createElement("video");
         call.on("stream", userVideoStream => {
+            console.log(userVideoStream, "caller stream to callee")
             belowVideoStream(video, userVideoStream);
         })
         call.on("close", () => {
@@ -705,6 +706,7 @@ function connectToNewUser(userId, stream){
     const video = document.createElement('video');
     try{
         call.on("stream", function(userVideoStream){
+            console.log(userVideoStream, "callee stream return")
             belowVideoStream(video, userVideoStream)
         });
         // if(videoCallStatus[0]===true){
