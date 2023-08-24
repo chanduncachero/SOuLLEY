@@ -16,7 +16,12 @@ const   numberInput = document.getElementById("number"),
         callInput = document.getElementById("callInput"),
         videoBody = document.getElementById("video_body"),
         videoBelow = document.getElementById("video_below"),
-        myPeer = new Peer(),
+        myPeer = new Peer(undefined,{
+            host:'/',
+            port:'3001',
+            // path:'soulley',
+            // secure: true
+        }),
         acceptVcall = document.getElementById("accept_vcall"),
         peers = {},
         myVideo = document.createElement("video"),
@@ -83,7 +88,7 @@ socket.on("group_video_call_accept", (roomid, callername, callerId1, callerPeer)
 
 socket.on("user-connected-group-call", userID =>{
     console.log(userID, "has joined the group call")
-    connectToGroupCallee(userID, callerStream[0]);
+    setTimeout(connectToGroupCallee(userID, callerStream[0]), 1000);
 });
 
 //Accept Group Video Call 
@@ -237,7 +242,7 @@ myPeer.on("call", call => {
 });
 socket.on("user-connected", userId => {
     console.log(callerStream[0],"connect to new user working , user connected");
-    setTimeout(connectToNewUser(userId, callerStream[0]), 2000); 
+    setTimeout(connectToNewUser(userId, callerStream[0]), 1000); 
     document.body.classList.remove("active-dialog");
 });
 
@@ -803,11 +808,11 @@ function callerGroupCall(){
     };
 };
 
-async function connectToGroupCallee (peerId, stream){
-    const call = await myPeer.call(peerId, stream);
+function connectToGroupCallee (peerId, stream){
+    const call = myPeer.call(peerId, stream);
     const video = document.createElement('video');
     try{
-        await call.on("stream", userVideoStream =>{
+        call.on("stream", userVideoStream =>{
             video.srcObject = userVideoStream;
             video.addEventListener("loadedmetadata", ()=>{
                 video.play();
