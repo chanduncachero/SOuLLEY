@@ -16,12 +16,13 @@ const   numberInput = document.getElementById("number"),
         callInput = document.getElementById("callInput"),
         videoBody = document.getElementById("video_body"),
         videoBelow = document.getElementById("video_below"),
-        myPeer = new Peer(undefined,{
-            host:'/',
-            port:'3001',
+        myPeer = new Peer(
+            // undefined, {
+            // host:'/dashboard',
+            // port:'3001',
             // path:'soulley',
-            // secure: true
-        }),
+            // secure: true}
+        ),
         acceptVcall = document.getElementById("accept_vcall"),
         peers = {},
         myVideo = document.createElement("video"),
@@ -139,7 +140,7 @@ document.getElementById("group-cancel_vcall").addEventListener("click", function
     document.getElementById("myNav").style.width = "0%";
 });
 
-myPeer.on("open", id => {
+myPeer.on('open', id => {
     peerId.unshift(id)
 });
 
@@ -393,7 +394,7 @@ socket.on("message", userID1 => {
         console.log(userData[0], "ready to connect");
         autoUpdateSocket(userID1);
     }else{
-        return console.log("empty userData");
+        // return console.log("empty userData");
     }
 });
 
@@ -574,7 +575,7 @@ async function findRoomId(){
         return res.json();
     })
     .then(function(data){
-        console.log(data.roomId, "video call new room id");
+        // console.log(data.roomId, "video call new room id");
         room_id1.unshift(data.roomId);
     })
     .catch(err => {
@@ -701,30 +702,34 @@ function belowVideoStream(video, stream){
 };
 function connectToNewUser(userId, stream){
     const call = myPeer.call(userId, stream);
-    const video = document.createElement('video')
-    call.on("stream", userVideoStream => {
-        belowVideoStream(video, userVideoStream)
-    });
-    // if(videoCallStatus[0]===true){
-    //     document.getElementById("end_call").addEventListener("click", function(){
-    //         console.log("caller side end call");
-    //         call.close();
-    //     });
-    // }else{
-    //     return false;
-    // };
-    socket.on("close_caller_videoBelow", () =>{
-        console.log("close_caller_videoBelow");
-        call.close();
-    });   
-    call.on("close", () => {
-        video.remove();
-        console.log("caller close");
-
-    })
-    call.on("error",error =>{
-        console.log(error, "data connection detected, code in caller side");
-    })
+    const video = document.createElement('video');
+    try{
+        call.on("stream", function(userVideoStream){
+            belowVideoStream(video, userVideoStream)
+        });
+        // if(videoCallStatus[0]===true){
+        //     document.getElementById("end_call").addEventListener("click", function(){
+        //         console.log("caller side end call");
+        //         call.close();
+        //     });
+        // }else{
+        //     return false;
+        // };
+        call.on("close", () => {
+            video.remove();
+            console.log("caller close");
+        });
+        socket.on("close_caller_videoBelow", () =>{
+            console.log("close_caller_videoBelow");
+            call.close();
+        });   
+        call.on("error",error =>{
+            console.log(error, "data connection detected, code in caller side");
+        });
+    }catch(err){
+        console.log(err);
+    }
+    
 };
 
 //Group Video Call
@@ -812,7 +817,7 @@ function connectToGroupCallee (peerId, stream){
     const call = myPeer.call(peerId, stream);
     const video = document.createElement('video');
     try{
-        call.on("stream", userVideoStream =>{
+        call.on("stream", function(userVideoStream){
             video.srcObject = userVideoStream;
             video.addEventListener("loadedmetadata", ()=>{
                 video.play();

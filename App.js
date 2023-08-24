@@ -86,7 +86,7 @@ io.on("connection", (socket) => {
     });
 //Receive video call join room
     socket.on("join-room", (roomId, id, callerId) => {
-        console.log("join room connecting...")
+        // console.log("join room connecting...");
 
         io.to(callerId).emit("user-connected", id);
     });
