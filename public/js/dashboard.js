@@ -45,8 +45,23 @@ const   numberInput = document.getElementById("number"),
                 // { url: 'stun:[your stun id]:[port]' },
                 { url: 'turn:numb.viagenie.ca:3478', username:'webrtc@live.com', credential: 'muazkh' },
                 // { url: 'turn:numb.viagenie.ca:443', username:'webrtc@live.com', credential: 'muazkh' }
-                { urls: "turn:13.250.13.83:3478?transport=udp", username: "YzYNCouZM1mhqhmseWk6", credential: "YzYNCouZM1mhqhmseWk6"}
-                ]}
+                { urls: "turn:13.250.13.83:3478?transport=udp", username: "YzYNCouZM1mhqhmseWk6", credential: "YzYNCouZM1mhqhmseWk6"},
+                {
+                    url: 'turn:numb.viagenie.ca',
+                    credential: 'muazkh',
+                    username: 'webrtc@live.com'
+                },
+                {
+                    url: 'turn:192.158.29.39:3478?transport=udp',
+                    credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+                    username: '28224511:1379330808'
+                },
+                {
+                    url: 'turn:192.158.29.39:3478?transport=tcp',
+                    credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+                    username: '28224511:1379330808'
+                }
+            ]}
         }),
         acceptVcall = document.getElementById("accept_vcall"),
         peers = {},
@@ -264,8 +279,8 @@ myPeer.on("call", call => {
         });   
         call.on("error",() =>{
             console.log("data connection detected code in callee side");
-        })
-    }
+        });
+    };
 });
 socket.on("user-connected", userId => {
     console.log(callerStream[0],"connect to new user working , user connected");
