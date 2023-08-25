@@ -23,8 +23,29 @@ const   numberInput = document.getElementById("number"),
             //     ]};
 
             config: {iceServers: [
+                {url:'stun:stun01.sipphone.com'},
+                {url:'stun:stun.ekiga.net'},
+                {url:'stun:stun.fwdnet.net'},
+                {url:'stun:stun.ideasip.com'},
+                {url:'stun:stun.iptel.org'},
+                {url:'stun:stun.rixtelecom.se'},
+                {url:'stun:stun.schlund.de'},
+                {url:'stun:stun.l.google.com:19302'},
+                {url:'stun:stun1.l.google.com:19302'},
+                {url:'stun:stun2.l.google.com:19302'},
+                {url:'stun:stun3.l.google.com:19302'},
+                {url:'stun:stun4.l.google.com:19302'},
+                {url:'stun:stunserver.org'},
+                {url:'stun:stun.softjoys.com'},
+                {url:'stun:stun.voiparound.com'},
+                {url:'stun:stun.voipbuster.com'},
+                {url:'stun:stun.voipstunt.com'},
+                {url:'stun:stun.voxgratia.org'},
+                {url:'stun:stun.xten.com'},
                 // { url: 'stun:[your stun id]:[port]' },
-                { url: 'turn:numb.viagenie.ca', username:'webrtc@live.com', credential: 'muazkh' }
+                { url: 'turn:numb.viagenie.ca:3478', username:'webrtc@live.com', credential: 'muazkh' },
+                // { url: 'turn:numb.viagenie.ca:443', username:'webrtc@live.com', credential: 'muazkh' }
+                { urls: "turn:13.250.13.83:3478?transport=udp", username: "YzYNCouZM1mhqhmseWk6", credential: "YzYNCouZM1mhqhmseWk6"}
                 ]}
         }),
         acceptVcall = document.getElementById("accept_vcall"),
@@ -178,6 +199,7 @@ acceptVcall.addEventListener("click", function(){
             document.getElementById("middle_position").innerHTML = x;
 
             document.getElementById("end_call").addEventListener("click", function(){
+                window.history.pushState('/video/'+room_id1[0], ",", "/dashboard");
                 videoCallStatus.unshift(false);;
                 stream.getTracks().forEach(function(track) {
                     track.stop();
@@ -227,7 +249,6 @@ myPeer.on("call", call => {
         });
         if(videoCallStatus[0]===true){
             document.getElementById("end_call").addEventListener("click", function(){
-                window.history.pushState('/video/'+room_id1[0], ",", "/dashboard");
                 console.log("callee side end call");
                 call.close();
                 socket.emit("close_caller_videoBelow", callerId[0]);
@@ -713,14 +734,14 @@ function connectToNewUser(userId, stream){
             console.log(userVideoStream, "callee stream return")
             belowVideoStream(video, userVideoStream)
         });
-        // if(videoCallStatus[0]===true){
-        //     document.getElementById("end_call").addEventListener("click", function(){
-        //         console.log("caller side end call");
-        //         call.close();
-        //     });
-        // }else{
-        //     return false;
-        // };
+        if(videoCallStatus[0]===true){
+            document.getElementById("end_call").addEventListener("click", function(){
+                console.log("caller side end call");
+                call.close();
+            });
+        }else{
+            return false;
+        };
         call.on("close", () => {
             video.remove();
             console.log("caller close");
