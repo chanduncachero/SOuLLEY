@@ -38,9 +38,8 @@ const   numberInput = document.getElementById("number"),
                 { url: 'stun:stun.voipstunt.com' },
                 { url: 'stun:stun.voxgratia.org' },
 
-
-                {url:'turn:turn01.hubl.in?transport=udp'},
-                {url:'turn:turn02.hubl.in?transport=tcp'},
+                // {url:'turn:turn01.hubl.in?transport=udp'},
+                // {url:'turn:turn02.hubl.in?transport=tcp'},
                 {
                     url: 'turn:numb.viagenie.ca',
                     credential: 'muazkh',
