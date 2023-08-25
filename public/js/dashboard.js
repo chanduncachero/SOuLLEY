@@ -16,13 +16,17 @@ const   numberInput = document.getElementById("number"),
         callInput = document.getElementById("callInput"),
         videoBody = document.getElementById("video_body"),
         videoBelow = document.getElementById("video_below"),
-        myPeer = new Peer(
-            // undefined, {
-            // host:'/dashboard',
-            // port:'3001',
-            // path:'soulley',
-            // secure: true}
-        ),
+        myPeer = new Peer({
+            // config: {‘iceServers’: [
+            //     { url: ‘stun:[your stun id]:[port]’ },
+            //     { url: ‘turn:[your turn id]:[port]’,username:’[turn username]’, credential: ‘[turn password]’ }
+            //     ]};
+
+            config: {iceServers: [
+                // { url: 'stun:[your stun id]:[port]' },
+                { url: 'turn:numb.viagenie.ca', username:'webrtc@live.com', credential: 'muazkh' }
+                ]}
+        }),
         acceptVcall = document.getElementById("accept_vcall"),
         peers = {},
         myVideo = document.createElement("video"),
