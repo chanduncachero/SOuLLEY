@@ -153,7 +153,9 @@ function requireLogin(req, res, next) {
 router.get("/dashboard", requireLogin, async (req, res) => {
     res.sendFile(path.join(__dirname+'/public/dashboard.html'));
 });
-
+router.get("/", (req, res) =>{
+    res.sendFile(path.join(__dirname+'/public/login.html'));
+});
 router.get("/login", (req, res) =>{
     res.sendFile(path.join(__dirname+'/public/login.html'));
 });
