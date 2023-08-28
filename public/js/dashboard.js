@@ -73,8 +73,10 @@ const   numberInput = document.getElementById("number"),
             ]}
         },
         peerConfiguration = {},
-        myPeer = new Peer(peerConfiguration),
-        
+        responseRTC = await fetch("https://soulley.metered.live/api/v1/turn/credentials?apiKey=952f829b9568c7f2a9dc8e7ab73c7aed21bc"),
+        iceServers = await responseRTC.json(),
+        myPeer = new Peer({iceServers: iceServers}),
+
         acceptVcall = document.getElementById("accept_vcall"),
         peers = {},
         myVideo = document.createElement("video"),
@@ -110,11 +112,12 @@ const   numberInput = document.getElementById("number"),
         channelList = document.getElementById('channel_list');
 
         myVideo.muted = true;
-        (async() => {
-            const response = await fetch("https://yourappname.metered.live/api/v1/turn/credentials?apiKey=952f829b9568c7f2a9dc8e7ab73c7aed21bc");
-            const iceServers = await response.json();
-            peerConfiguration.iceServers = iceServers
-          })();
+        // (async() => {
+        //     const response = await fetch("https://soulley.metered.live/api/v1/turn/credentials?apiKey=952f829b9568c7f2a9dc8e7ab73c7aed21bc");
+        //     const iceServers = await response.json();
+        //     peerConfiguration.iceServers = iceServers
+        //   })();
+
 //Video call interface callee dialog confirmation 
 socket.on("vcall_invite_interface", (username, roomid, callerId1)=>{
     if(videoCallStatus[0]===true){
