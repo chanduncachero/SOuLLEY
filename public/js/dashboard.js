@@ -744,7 +744,7 @@ function belowVideoStream(video, stream){
 };
 function connectToNewUser(userId, stream){
     try{
-        const call = myPeer.call(userId, stream);
+        const call = myPeer.call(userId, stream, {MediaMetadata: {userId: myPeer.id}});
         const video = document.createElement('video');
         call.on("stream", function(userVideoStream){
             console.log(userVideoStream, "callee stream return")
@@ -857,7 +857,7 @@ function callerGroupCall(){
 };
 
 function connectToGroupCallee (peerId, stream){
-    const call = myPeer.call(peerId, stream);
+    const call = myPeer.call(peerId, stream, {MediaMetadata: {peerId: myPeer.id}});
     const video = document.createElement('video');
     try{
         setTimeout(
