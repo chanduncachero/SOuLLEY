@@ -221,7 +221,7 @@ acceptVcall.addEventListener("click", function(){
 });
 
 //Video Interface Control
-myPeer.on("call", call => {
+myPeer.on("call", function(call) {
     if(groupVideoCallStatus[0]===true){
         try{
             console.log(groupVideoCallStatus[0],"groupVideoCallStatus true");
