@@ -860,7 +860,6 @@ function connectToGroupCallee (peerId, stream){
     const call = myPeer.call(peerId, stream, {MediaMetadata: {peerId: myPeer.id}});
     const video = document.createElement('video');
     try{
-        setTimeout(
         call.on("stream", function(userVideoStream){
             video.srcObject = userVideoStream;
             video.addEventListener("loadedmetadata", ()=>{
@@ -868,8 +867,7 @@ function connectToGroupCallee (peerId, stream){
             });
             document.getElementById("group-video-grid").append(video);
             // addVideoStream(video, userVideoStream);
-        }), 3000
-        );
+        });
         call.on("close", ()=>{
             video.remove();
             // console.log("group callee closed");
