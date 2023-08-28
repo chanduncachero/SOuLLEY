@@ -47,7 +47,7 @@ const   numberInput = document.getElementById("number"),
         responseRTC = await fetch("https://soulley.metered.live/api/v1/turn/credentials?apiKey=952f829b9568c7f2a9dc8e7ab73c7aed21bc"),
         iceServers = await responseRTC.json(),
         // myPeer = new Peer(),
-        myPeer = new Peer({iceConfiguration}),
+        myPeer = new Peer(iceConfiguration),
         // myPeer = new Peer(),
 
 
