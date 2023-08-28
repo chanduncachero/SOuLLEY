@@ -21,50 +21,52 @@ const   numberInput = document.getElementById("number"),
             //     { url: ‘stun:[your stun id]:[port]’ },
             //     { url: ‘turn:[your turn id]:[port]’,username:’[turn username]’, credential: ‘[turn password]’ }
             //     ]};
-            
             config: {iceServers: [
-                { url: 'stun:stun.l.google.com:19302' },
-                { url: 'stun:stun1.l.google.com:19302' },
-                { url: 'stun:stun2.l.google.com:19302' },
-                { url: 'stun:stun3.l.google.com:19302' },
-                { url: 'stun:stun4.l.google.com:19302' },
-                { url: 'stun:stun.ekiga.net' },
-                { url: 'stun:stun.ideasip.com' },
-                { url: 'stun:stun.rixtelecom.se' },
-                { url: 'stun:stun.schlund.de' },
-                { url: 'stun:stun.stunprotocol.org:3478' },
-                { url: 'stun:stun.voiparound.com' },
-                { url: 'stun:stun.voipbuster.com' },
-                { url: 'stun:stun.voipstunt.com' },
-                { url: 'stun:stun.voxgratia.org' },
-
-                // {url:'turn:turn01.hubl.in?transport=udp'},
-                // {url:'turn:turn02.hubl.in?transport=tcp'},
                 {
-                    url: 'turn:numb.viagenie.ca',
-                    credential: 'muazkh',
-                    username: 'webrtc@live.com'
-                },
-                {
-                    url: 'turn:192.158.29.39:3478?transport=udp',
-                    credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-                    username: '28224511:1379330808'
-                },
-                {
-                    url: 'turn:192.158.29.39:3478?transport=tcp',
-                    credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-                    username: '28224511:1379330808'
-                },
-                {
-                    url: 'turn:turn.bistri.com:80',
-                    credential: 'homeo',
-                    username: 'homeo'
-                 },
-                 {
-                    url: 'turn:turn.anyfirewall.com:443?transport=tcp',
-                    credential: 'webrtc',
-                    username: 'webrtc'
+                    urls: 'turn:openrelay.metered.ca:80',
+                    username: 'openrelayproject',
+                    credential: 'openrelayproject'
                 }
+                // { url: 'stun:stun.l.google.com:19302' },
+                // { url: 'stun:stun1.l.google.com:19302' },
+                // { url: 'stun:stun2.l.google.com:19302' },
+                // { url: 'stun:stun3.l.google.com:19302' },
+                // { url: 'stun:stun4.l.google.com:19302' },
+                // { url: 'stun:stun.ekiga.net' },
+                // { url: 'stun:stun.ideasip.com' },
+                // { url: 'stun:stun.rixtelecom.se' },
+                // { url: 'stun:stun.schlund.de' },
+                // { url: 'stun:stun.stunprotocol.org:3478' },
+                // { url: 'stun:stun.voiparound.com' },
+                // { url: 'stun:stun.voipbuster.com' },
+                // { url: 'stun:stun.voipstunt.com' },
+                // { url: 'stun:stun.voxgratia.org' },
+
+                // {
+                //     url: 'turn:numb.viagenie.ca',
+                //     credential: 'muazkh',
+                //     username: 'webrtc@live.com'
+                // },
+                // {
+                //     url: 'turn:192.158.29.39:3478?transport=udp',
+                //     credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+                //     username: '28224511:1379330808'
+                // },
+                // {
+                //     url: 'turn:192.158.29.39:3478?transport=tcp',
+                //     credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+                //     username: '28224511:1379330808'
+                // },
+                // {
+                //     url: 'turn:turn.bistri.com:80',
+                //     credential: 'homeo',
+                //     username: 'homeo'
+                //  },
+                //  {
+                //     url: 'turn:turn.anyfirewall.com:443?transport=tcp',
+                //     credential: 'webrtc',
+                //     username: 'webrtc'
+                // }
                 // { url: 'turn:numb.viagenie.ca:3478', username:'webrtc@live.com', credential: 'muazkh' },
                 // { url: 'turn:numb.viagenie.ca:443', username:'webrtc@live.com', credential: 'muazkh' }
                 // { urls: "turn:13.250.13.83:3478?transport=udp", username: "YzYNCouZM1mhqhmseWk6", credential: "YzYNCouZM1mhqhmseWk6"},
