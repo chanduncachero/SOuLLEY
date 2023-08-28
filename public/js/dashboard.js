@@ -17,65 +17,40 @@ const   numberInput = document.getElementById("number"),
         videoBody = document.getElementById("video_body"),
         videoBelow = document.getElementById("video_below"),
         iceConfiguration = {
-            // config: {‘iceServers’: [
-            //     { url: ‘stun:[your stun id]:[port]’ },
-            //     { url: ‘turn:[your turn id]:[port]’,username:’[turn username]’, credential: ‘[turn password]’ }
-            //     ]};
-            config: {iceServers: [
+            iceServers: [
                 {
-                    urls: 'turn:openrelay.metered.ca:80',
-                    username: 'openrelayproject',
-                    credential: 'openrelayproject'
-                }
-                // { url: 'stun:stun.l.google.com:19302' },
-                // { url: 'stun:stun1.l.google.com:19302' },
-                // { url: 'stun:stun2.l.google.com:19302' },
-                // { url: 'stun:stun3.l.google.com:19302' },
-                // { url: 'stun:stun4.l.google.com:19302' },
-                // { url: 'stun:stun.ekiga.net' },
-                // { url: 'stun:stun.ideasip.com' },
-                // { url: 'stun:stun.rixtelecom.se' },
-                // { url: 'stun:stun.schlund.de' },
-                // { url: 'stun:stun.stunprotocol.org:3478' },
-                // { url: 'stun:stun.voiparound.com' },
-                // { url: 'stun:stun.voipbuster.com' },
-                // { url: 'stun:stun.voipstunt.com' },
-                // { url: 'stun:stun.voxgratia.org' },
-
-                // {
-                //     url: 'turn:numb.viagenie.ca',
-                //     credential: 'muazkh',
-                //     username: 'webrtc@live.com'
-                // },
-                // {
-                //     url: 'turn:192.158.29.39:3478?transport=udp',
-                //     credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-                //     username: '28224511:1379330808'
-                // },
-                // {
-                //     url: 'turn:192.158.29.39:3478?transport=tcp',
-                //     credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-                //     username: '28224511:1379330808'
-                // },
-                // {
-                //     url: 'turn:turn.bistri.com:80',
-                //     credential: 'homeo',
-                //     username: 'homeo'
-                //  },
-                //  {
-                //     url: 'turn:turn.anyfirewall.com:443?transport=tcp',
-                //     credential: 'webrtc',
-                //     username: 'webrtc'
-                // }
-                // { url: 'turn:numb.viagenie.ca:3478', username:'webrtc@live.com', credential: 'muazkh' },
-                // { url: 'turn:numb.viagenie.ca:443', username:'webrtc@live.com', credential: 'muazkh' }
-                // { urls: "turn:13.250.13.83:3478?transport=udp", username: "YzYNCouZM1mhqhmseWk6", credential: "YzYNCouZM1mhqhmseWk6"},
-            ]}
+                    urls: "stun:stun.relay.metered.ca:80",
+                },
+                {
+                    urls: "turn:a.relay.metered.ca:80",
+                    username: "4cc69cba81278a9bd51da56b",
+                    credential: "41t3146m1OrqCb9X",
+                },
+                {
+                    urls: "turn:a.relay.metered.ca:80?transport=tcp",
+                    username: "4cc69cba81278a9bd51da56b",
+                    credential: "41t3146m1OrqCb9X",
+                },
+                {
+                    urls: "turn:a.relay.metered.ca:443",
+                    username: "4cc69cba81278a9bd51da56b",
+                    credential: "41t3146m1OrqCb9X",
+                },
+                {
+                    urls: "turn:a.relay.metered.ca:443?transport=tcp",
+                    username: "4cc69cba81278a9bd51da56b",
+                    credential: "41t3146m1OrqCb9X",
+                },
+            ]
         },
         peerConfiguration = {},
         responseRTC = await fetch("https://soulley.metered.live/api/v1/turn/credentials?apiKey=952f829b9568c7f2a9dc8e7ab73c7aed21bc"),
         iceServers = await responseRTC.json(),
-        myPeer = new Peer({iceServers: iceServers}),
+        // myPeer = new Peer({iceServers: iceServers}),
+        myPeer = new Peer(iceConfiguration),
+        // myPeer = new Peer(),
+
+
 
         acceptVcall = document.getElementById("accept_vcall"),
         peers = {},
