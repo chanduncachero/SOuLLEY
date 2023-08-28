@@ -154,7 +154,9 @@ router.get("/dashboard", requireLogin, async (req, res) => {
     res.sendFile(path.join(__dirname+'/public/dashboard.html'));
 });
 router.get("/", (req, res) =>{
-    res.sendFile(path.join(__dirname+'/public/login.html'));
+    // window.history.pushState("/","","/login");
+    res.redirect("/login");
+    // res.sendFile(path.join(__dirname+'/public/login.html'));
 });
 router.get("/login", (req, res) =>{
     res.sendFile(path.join(__dirname+'/public/login.html'));
@@ -167,7 +169,7 @@ router.get("/error404", (req, res) =>{
 });
 router.get("/*", (req, res)=> {
     // res.send("Page unavailable in soulley")
-    res.sendFile(path.join(__dirname + '/public/error.html'));
+    res.sendFile(path.join(__dirname + '/public/login.html'));
 });
 
 // Routes API below
