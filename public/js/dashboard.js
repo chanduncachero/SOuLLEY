@@ -46,8 +46,8 @@ const   numberInput = document.getElementById("number"),
         peerConfiguration = {},
         responseRTC = await fetch("https://soulley.metered.live/api/v1/turn/credentials?apiKey=952f829b9568c7f2a9dc8e7ab73c7aed21bc"),
         iceServers = await responseRTC.json(),
-        // myPeer = new Peer({iceServers: iceServers}),
-        myPeer = new Peer(iceConfiguration),
+        // myPeer = new Peer(),
+        myPeer = new Peer({iceConfiguration}),
         // myPeer = new Peer(),
 
 
@@ -223,57 +223,64 @@ acceptVcall.addEventListener("click", function(){
 //Video Interface Control
 myPeer.on("call", call => {
     if(groupVideoCallStatus[0]===true){
-        console.log(groupVideoCallStatus[0],"groupVideoCallStatus true");
-        call.answer(calleeStream[0]);
-        const video = document.createElement("video");
-        call.on("stream", userVideoStream => {
-            video.srcObject = userVideoStream;
-            video.addEventListener("loadedmetadata", ()=>{
-                video.play();
+        try{
+            console.log(groupVideoCallStatus[0],"groupVideoCallStatus true");
+            call.answer(calleeStream[0]);
+            const video = document.createElement("video");
+            call.on("stream", userVideoStream => {
+                video.srcObject = userVideoStream;
+                video.addEventListener("loadedmetadata", ()=>{
+                    video.play();
+                });
+                document.getElementById("group-video-grid").append(video);
             });
-            document.getElementById("group-video-grid").append(video);
-        });
-        // if(videoCallStatus[0]===true){
-        //     document.getElementById("end_call").addEventListener("click", function(){
-        //         video.remove();
-        //     });
-        // };
-        call.on("close", () => {
-            video.remove();
-            console.log("callee close");
-        });
-
-        peers[callerPeers[0]] = call;
-    }else{
-        console.log(groupVideoCallStatus[0],"groupVideoCallStatus false");
-        call.answer(calleeStream[0]);
-        const video = document.createElement("video");
-        call.on("stream", userVideoStream => {
-            console.log(userVideoStream, "caller stream to callee")
-            belowVideoStream(video, userVideoStream);
-        })
-        call.on("close", () => {
-            video.remove();
-            console.log("callee close");
-        });
-        if(videoCallStatus[0]===true){
-            document.getElementById("end_call").addEventListener("click", function(){
-                console.log("callee side end call");
-                call.close();
-                socket.emit("close_caller_videoBelow", callerId[0]);
-                videoCallStatus.unshift(false);;
-            })
-        }else{
-            return false;
+            // if(videoCallStatus[0]===true){
+            //     document.getElementById("end_call").addEventListener("click", function(){
+            //         video.remove();
+            //     });
+            // };
+            call.on("close", () => {
+                video.remove();
+                console.log("callee close");
+            });
+            peers[callerPeers[0]] = call;
+        }catch (err){
+            consol.log(err, ("group peer call answer error"));
         };
-        //Video Call callee side close video receiver
-        socket.on("close_callee_videoBelow2", caller_Id =>{
-            console.log(caller_Id, "close_callee_videoBelow2");
-            call.close();
-        });   
-        call.on("error",() =>{
-            console.log("data connection detected code in callee side");
-        });
+    }else{
+        try{
+            console.log(groupVideoCallStatus[0],"groupVideoCallStatus false");
+            call.answer(calleeStream[0]);
+            const video = document.createElement("video");
+            call.on("stream", userVideoStream => {
+                console.log(userVideoStream, "caller stream to callee")
+                belowVideoStream(video, userVideoStream);
+            })
+            call.on("close", () => {
+                video.remove();
+                console.log("callee close");
+            });
+            if(videoCallStatus[0]===true){
+                document.getElementById("end_call").addEventListener("click", function(){
+                    console.log("callee side end call");
+                    call.close();
+                    socket.emit("close_caller_videoBelow", callerId[0]);
+                    videoCallStatus.unshift(false);;
+                })
+            }else{
+                return false;
+            };
+            //Video Call callee side close video receiver
+            socket.on("close_callee_videoBelow2", caller_Id =>{
+                console.log(caller_Id, "close_callee_videoBelow2");
+                call.close();
+            });   
+            call.on("error",() =>{
+                console.log("data connection detected code in callee side");
+            });
+        }catch(err){
+            consol.log(err, ("peer call answer error"));
+        }
     };
 });
 socket.on("user-connected", userId => {
@@ -736,9 +743,9 @@ function belowVideoStream(video, stream){
     videoBelow.append(video);
 };
 function connectToNewUser(userId, stream){
-    const call = myPeer.call(userId, stream);
-    const video = document.createElement('video');
     try{
+        const call = myPeer.call(userId, stream);
+        const video = document.createElement('video');
         call.on("stream", function(userVideoStream){
             console.log(userVideoStream, "callee stream return")
             belowVideoStream(video, userVideoStream)
@@ -853,6 +860,7 @@ function connectToGroupCallee (peerId, stream){
     const call = myPeer.call(peerId, stream);
     const video = document.createElement('video');
     try{
+        setTimeout(
         call.on("stream", function(userVideoStream){
             video.srcObject = userVideoStream;
             video.addEventListener("loadedmetadata", ()=>{
@@ -860,7 +868,8 @@ function connectToGroupCallee (peerId, stream){
             });
             document.getElementById("group-video-grid").append(video);
             // addVideoStream(video, userVideoStream);
-        });
+        }), 3000
+        );
         call.on("close", ()=>{
             video.remove();
             // console.log("group callee closed");
