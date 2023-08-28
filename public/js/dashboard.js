@@ -744,7 +744,7 @@ function belowVideoStream(video, stream){
 };
 function connectToNewUser(userId, stream){
     try{
-        const call = myPeer.call(userId, stream, {Metadata: {userId: myPeer.id}});
+        const call = myPeer.call(userId, stream, {MediaMetadata: {userId: myPeer.id}});
         const video = document.createElement('video');
         call.on("stream", function(stream){
             console.log(stream, "callee stream return")
