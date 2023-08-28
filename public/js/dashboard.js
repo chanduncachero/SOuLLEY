@@ -16,7 +16,7 @@ const   numberInput = document.getElementById("number"),
         callInput = document.getElementById("callInput"),
         videoBody = document.getElementById("video_body"),
         videoBelow = document.getElementById("video_below"),
-        myPeer = new Peer({
+        iceConfiguration = {
             // config: {‘iceServers’: [
             //     { url: ‘stun:[your stun id]:[port]’ },
             //     { url: ‘turn:[your turn id]:[port]’,username:’[turn username]’, credential: ‘[turn password]’ }
@@ -71,7 +71,10 @@ const   numberInput = document.getElementById("number"),
                 // { url: 'turn:numb.viagenie.ca:443', username:'webrtc@live.com', credential: 'muazkh' }
                 // { urls: "turn:13.250.13.83:3478?transport=udp", username: "YzYNCouZM1mhqhmseWk6", credential: "YzYNCouZM1mhqhmseWk6"},
             ]}
-        }),
+        },
+        peerConfiguration = {},
+        myPeer = new Peer(peerConfiguration),
+        
         acceptVcall = document.getElementById("accept_vcall"),
         peers = {},
         myVideo = document.createElement("video"),
@@ -107,7 +110,11 @@ const   numberInput = document.getElementById("number"),
         channelList = document.getElementById('channel_list');
 
         myVideo.muted = true;
-
+        (async() => {
+            const response = await fetch("https://yourappname.metered.live/api/v1/turn/credentials?apiKey=952f829b9568c7f2a9dc8e7ab73c7aed21bc");
+            const iceServers = await response.json();
+            peerConfiguration.iceServers = iceServers
+          })();
 //Video call interface callee dialog confirmation 
 socket.on("vcall_invite_interface", (username, roomid, callerId1)=>{
     if(videoCallStatus[0]===true){
