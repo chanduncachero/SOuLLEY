@@ -168,7 +168,7 @@ router.get("/error404", (req, res) =>{
 router.get("/*", (req, res)=> {
     // res.send("Page unavailable in soulley")
     res.sendFile(path.join(__dirname + '/public/login.html'));
-    res.redirect("/login");
+    // res.redirect("/login");
 });
 
 // Routes API below
