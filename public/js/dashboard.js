@@ -287,7 +287,7 @@ myPeer.on("call", function(call) {
 });
 socket.on("user-connected", userId => {
     console.log(callerStream[0],"connect to new user working , user connected");
-    setTimeout(connectToNewUser(userId, callerStream[0]), 3000); 
+    setTimeout(connectToNewUser(userId), 3000); 
     document.body.classList.remove("active-dialog");
 });
 
@@ -645,40 +645,39 @@ callInput.addEventListener("input", (req, res)=>{
                 window.history.pushState("/dashboard","",'/video/'+room_id1[0]);
     
     //Video Call Start
-                let videoTrack = 
-                navigator.mediaDevices.getUserMedia({
-                    video: true,
-                    audio: true,
-                });
-                videoTrack.then(stream => {
-                    addVideoStream(myVideo,stream);
-                    videoCallStatus.unshift(true);
-                    callerStream.unshift(stream);
-                    console.log(callerStream[0], "callerstream created");
-                    let x = `
-                        <div id="middle_pos_One">
-                            <button>
-                                <i class="fa-solid fa-video-slash fa-lg" id="off_cam"></i>
-                            </button>
-                            <button>
-                                <i class="fa-solid fa-phone-slash fa-lg" style="color: red;" id="end_call"></i>
-                            </button>
-                        </diV>
-                    `
-                    document.getElementById("middle_position").innerHTML = x;
-                    document.getElementById("end_call").addEventListener("click", function(){
-                        window.history.pushState('/video/'+room_id1[0], ",", "/dashboard");
-                        socket.emit("close_callee_videoBelow", calleeInfo4Socket[0], connectedUser);
-                        videoCallStatus.unshift(false);
-                        stream.getTracks().forEach(function(track) {
-                            track.stop();
-                            myVideo.remove();
-                            document.getElementById("middle_pos_One").innerHTML = null;
-                            findRoomId();
-
-                        });
-                    })   
-                });
+                // let videoTrack = 
+                // navigator.mediaDevices.getUserMedia({
+                //     video: true,
+                //     audio: true,
+                // });
+                // videoTrack.then(stream => {
+                //     addVideoStream(myVideo,stream);
+                //     videoCallStatus.unshift(true);
+                //     callerStream.unshift(stream);
+                //     console.log(callerStream[0], "callerstream created");
+                //     let x = `
+                //         <div id="middle_pos_One">
+                //             <button>
+                //                 <i class="fa-solid fa-video-slash fa-lg" id="off_cam"></i>
+                //             </button>
+                //             <button>
+                //                 <i class="fa-solid fa-phone-slash fa-lg" style="color: red;" id="end_call"></i>
+                //             </button>
+                //         </diV>
+                //     `
+                //     document.getElementById("middle_position").innerHTML = x;
+                //     document.getElementById("end_call").addEventListener("click", function(){
+                //         window.history.pushState('/video/'+room_id1[0], ",", "/dashboard");
+                //         socket.emit("close_callee_videoBelow", calleeInfo4Socket[0], connectedUser);
+                //         videoCallStatus.unshift(false);
+                //         stream.getTracks().forEach(function(track) {
+                //             track.stop();
+                //             myVideo.remove();
+                //             document.getElementById("middle_pos_One").innerHTML = null;
+                //             findRoomId();
+                //         });
+                //     })   
+                // });
             }
            
         }else{
@@ -745,33 +744,41 @@ function belowVideoStream(video, stream){
     });
     videoBelow.append(video);
 };
-function connectToNewUser(userId, stream){
+// function connectToNewUser(userId, stream){
+function connectToNewUser(userId){
     try{
-        const call = myPeer.call(userId, stream);
-        const video = document.createElement('video');
-        call.on("stream", function(stream){
-            console.log(stream, "callee stream return")
-            belowVideoStream(video, stream)
-        });
-        if(videoCallStatus[0]===true){
-            document.getElementById("end_call").addEventListener("click", function(){
-                console.log("caller side end call");
-                call.close();
+        navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: true
+        }).then(stream => {
+            addVideoStream(myVideo,stream);
+            const call = myPeer.call(userId, stream);
+            const video = document.createElement('video');
+            call.on("stream", function(stream){
+                console.log(stream, "callee stream return")
+                belowVideoStream(video, stream)
             });
-        }else{
-            return false;
-        };
-        call.on("close", () => {
-            video.remove();
-            console.log("caller close");
-        });
-        socket.on("close_caller_videoBelow", () =>{
-            console.log("close_caller_videoBelow");
-            call.close();
-        });   
-        call.on("error",error =>{
-            console.log(error, "data connection detected, code in caller side");
-        });
+            // if(videoCallStatus[0]===true){
+            //     document.getElementById("end_call").addEventListener("click", function(){
+            //         console.log("caller side end call");
+            //         call.close();
+            //     });
+            // }else{
+            //     return false;
+            // };
+            call.on("close", () => {
+                video.remove();
+                console.log("caller close");
+            });
+            socket.on("close_caller_videoBelow", () =>{
+                console.log("close_caller_videoBelow");
+                call.close();
+            });   
+            call.on("error",error =>{
+                console.log(error, "data connection detected, code in caller side");
+            });
+        })
+       
     }catch(err){
         console.log(err);
     }
