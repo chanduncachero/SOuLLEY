@@ -142,7 +142,7 @@ io.on("connection", (socket) => {
 function requireLogin(req, res, next) {
     if (req.session.loggedIn) {
         next(); // allow the next route to run
-        console.log("require login passed");
+        // console.log("require login passed");
     } else {
       // require the user to log in
       console.log("Auth not found");

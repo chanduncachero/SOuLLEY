@@ -1,3 +1,4 @@
+
 const   numberInput = document.getElementById("number"),
         textInput = document.getElementById("msg"),
         button = document.getElementById("button"),
@@ -5,7 +6,6 @@ const   numberInput = document.getElementById("number"),
         callNumber = document.getElementById("call_number"),
         callButton = document.getElementById("call_id"),
         TWILIO_SID = "ACb5745873e9c982ef6eefe86dd3c21665",
-
 //Send Chat
         touserData = [],
 
@@ -46,8 +46,8 @@ const   numberInput = document.getElementById("number"),
         peerConfiguration = {},
         responseRTC = await fetch("https://soulley.metered.live/api/v1/turn/credentials?apiKey=952f829b9568c7f2a9dc8e7ab73c7aed21bc"),
         iceServers = await responseRTC.json(),
-        // myPeer = new Peer(),
-        myPeer = new Peer(iceConfiguration),
+        myPeer = new Peer(),
+        // myPeer = new Peer(iceConfiguration),
         // myPeer = new Peer(),
 
 
@@ -123,7 +123,7 @@ socket.on("group_video_call_accept", (roomid, callername, callerId1, callerPeer)
 
 socket.on("user-connected-group-call", userID =>{
     console.log(userID, "has joined the group call")
-    setTimeout(connectToGroupCallee(userID, callerStream[0]), 1000);
+    setTimeout(connectToGroupCallee(userID, callerStream[0]), 3000);
 });
 
 //Accept Group Video Call 
@@ -181,7 +181,9 @@ myPeer.on('open', id => {
 //Video Call Accepted
 acceptVcall.addEventListener("click", function(){
         document.body.classList.remove("active-receiver-dialog");
-        socket.emit("join-room", room_id2[0] , peerId[0], callerId[0]);
+        // setTimeout(
+            socket.emit("join-room", room_id2[0] , peerId[0], callerId[0]), 4000
+        // );
         console.log(room_id2[0] , peerId[0], callerId[0], "room_id2[0] , peerId[0], callerId[0]");
         
         // let videoTrack = 
@@ -285,7 +287,7 @@ myPeer.on("call", function(call) {
 });
 socket.on("user-connected", userId => {
     console.log(callerStream[0],"connect to new user working , user connected");
-    setTimeout(connectToNewUser(userId, callerStream[0]), 1000); 
+    setTimeout(connectToNewUser(userId, callerStream[0]), 3000); 
     document.body.classList.remove("active-dialog");
 });
 
@@ -636,8 +638,9 @@ callInput.addEventListener("input", (req, res)=>{
                 document.body.classList.add("active-dialog");
                 callSomeone.innerHTML = "Calling "+ req.target.value + "...";
                 calleeInfo4Socket.unshift(req.target.value);
-    
-                socket.emit("video_call_invite", req.target.value, userData[0].username, room_id1[0], connectedUser);
+                setTimeout(
+                    socket.emit("video_call_invite", req.target.value, userData[0].username, room_id1[0], connectedUser), 4000
+                );
                 console.log(room_id1[0], "chandun roomid 1 here");  
                 window.history.pushState("/dashboard","",'/video/'+room_id1[0]);
     
@@ -744,7 +747,7 @@ function belowVideoStream(video, stream){
 };
 function connectToNewUser(userId, stream){
     try{
-        const call = myPeer.call(userId, stream, {MediaMetadata: {userId: myPeer.id}});
+        const call = myPeer.call(userId, stream);
         const video = document.createElement('video');
         call.on("stream", function(stream){
             console.log(stream, "callee stream return")
