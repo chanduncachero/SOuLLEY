@@ -252,7 +252,12 @@
 /* Group Video Call */
             .groupCallInvited{
                 margin-right: 5px;
+                /* width: fit-content; */
             }
+            /* .groupCallInvited:hover{
+                color: gray;
+                background-color: gray;
+            } */
             .myNav{
                 transition:filter 0ms ease-in-out 0ms;
                 height: 100%;

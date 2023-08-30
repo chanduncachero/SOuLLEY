@@ -135,7 +135,7 @@ io.on("connection", (socket) => {
 //Group Video Call Broadcast and delete 
     socket.on("group-video-call-quit", (peerId , room )=>{
         // io.broadcast("user-disconnected", peerId);
-        socket.broadcast.to(room).emit("user-disconnected", peerId);
+        socket.broadcast.to(room).emit("caller-disconnected", peerId);
     });
 });
 
