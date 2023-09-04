@@ -159,9 +159,9 @@ io.on("connection", (socket) => {
                     socket.broadcast.to(roomId).emit("user-disconnected", peerId);
                 });
             }else{
-                socket.to(peerId).emit("current-connected-group-peer-twoandmore", y);
-
                 socket.join(roomId);
+                io.to(peerId).emit("current-connected-group-peer-twoandmore", y);
+
                 socket.broadcast.to(roomId).emit("current-connected-group-peer", peerId);
         
                 socket.on("disconnect", ()=>{

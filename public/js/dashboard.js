@@ -133,7 +133,7 @@ socket.on("current-connected-group-peer", peerID=>{
 
 //Group Call, 2 and more Callee
 socket.on("current-connected-group-peer-twoandmore", grouplist=>{
-    console.log(grouplist.list_of_user, "current-connected-group-peer-twoandmore");
+    console.log(grouplist, "current-connected-group-peer-twoandmore");
     try{
         // const video = document.createElement('video');
         navigator.mediaDevices.getUserMedia({
