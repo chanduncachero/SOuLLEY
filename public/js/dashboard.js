@@ -120,12 +120,83 @@ socket.on("group_video_call_accept", (roomid, callername, callerId1, callerPeer)
         document.getElementById("group_caller_name").innerHTML = callername + " is inviting you to a Group Call" + "...";
     }
 });
-
 socket.on("user-connected-group-call", userID =>{
     console.log(userID, "has joined the group call")
-    // setTimeout(connectToGroupCallee(userID, callerStream[0]), 3000);
     connectToGroupCallee(userID);
+    document.body.classList.remove("active-groupCallerDialog");
+    window.history.pushState("/dashboard","",'/video/'+room_id1[0]);
 });
+socket.on("current-connected-group-peer", peerID=>{
+    console.log(peerID, "has joined the group call");
+    console.log(peerID, "current-connected-group-peer");
+});
+
+//Group Call, 2 and more Callee
+socket.on("current-connected-group-peer-twoandmore", grouplist=>{
+    console.log(grouplist.list_of_user, "current-connected-group-peer-twoandmore");
+    try{
+        // const video = document.createElement('video');
+        navigator.mediaDevices.getUserMedia({
+            video:true,
+            audio:true
+        }).then(stream=> {
+            groupVideoStream(myVideo, stream);
+            groupVideoCallStatus.unshift(true);
+            videoCallStatus.unshift(true);
+            callerStream.unshift(stream);
+
+            grouplist.list_of_user.forEach(element=>{
+                const call = myPeer.call(element, stream);
+                const video = document.createElement('video');
+    
+                call.on("stream", function(stream){
+                    groupVideoStream(video, stream);
+                });
+                if(videoCallStatus[0]===true){
+                    document.getElementById("end_call").addEventListener("click", function(){
+                        video.remove();
+                    });
+                };
+                call.on("close", ()=>{
+                    video.remove();
+                });
+                call.on("error",err =>{
+                    console.log(err, "data connection detected, code in caller side");
+                })
+                peers[element] = call;
+            });
+           
+        });
+        let x = `
+            <div class="end-call-button" id="end-call-button">
+                <button>
+                    <i class="fa-solid fa-phone-slash fa-lg" style="color: red;" id="end_call"></i>
+                </button>
+            </div>
+        `;
+        document.getElementById("group-video-grid").innerHTML = x;
+        document.getElementById("end_call").addEventListener("click", function(){
+            socket.emit("group-video-call-quit", peerId[0], room_id1[0]);
+            groupVideoCallStatus.unshift(false);
+            document.getElementById("end-call-button").innerHTML = null;
+            document.getElementById("myNav").style.width = "0%";
+            window.history.pushState('/video/'+room_id1[0],"","/dashboard");
+            videoCallStatus.unshift(false);
+            callerStream[0].getTracks().forEach(function(track) {
+                track.stop();
+                myVideo.remove();
+                findRoomId();
+            });
+        })
+    } catch (err){
+        console.log(err, "video call error caller side");
+    }
+});
+socket.on("cancel-group-call", ()=>{
+    document.body.classList.remove("active-group-receiver-dialog");
+    window.history.pushState('/video/'+groupRoomId[0],"","/dashboard");
+    document.getElementById("myNav").style.width = "0%";
+})
 
 //Accept Group Video Call 
 document.getElementById("group-accept_vcall").addEventListener("click", function(){
@@ -133,39 +204,7 @@ document.getElementById("group-accept_vcall").addEventListener("click", function
     socket.emit("group-call-join-room", groupRoomId[0], peerId[0]);
     // socket.emit("join-group-call",groupCallerSocketId[0], peerId[0]);
     document.body.classList.remove("active-group-receiver-dialog");
-    navigator.mediaDevices.getUserMedia({
-        video:true,
-        audio:true
-    }).then(stream=>{
-        calleeStream.unshift(stream);
-        myVideo.srcObject = stream;
-        myVideo.addEventListener("loadedmetadata", ()=> {
-            myVideo.play();
-        });
-        document.getElementById("group-video-grid").append(myVideo);
-        videoCallStatus.unshift(true);
-    });
-    let x = `
-        <div class="end-call-button" id="end-call-button">
-            <button>
-                <i class="fa-solid fa-phone-slash fa-lg" style="color: red;" id="end_call"></i>
-            </button>
-        </div>
-    `;
-    document.getElementById("group-video-grid").innerHTML = x;
-    document.getElementById("end_call").addEventListener("click", ()=>{
-        socket.emit("group-video-call-quit", peerId[0], groupRoomId[0]);
-        groupVideoCallStatus.unshift(false);
-        window.history.pushState('/video/'+groupRoomId[0],"","/dashboard");
-        document.getElementById("myNav").style.width = "0%";
-        document.getElementById("end-call-button").innerHTML = null;
-        videoCallStatus.unshift(false);
-        calleeStream[0].getTracks().forEach(function(track) {
-            track.stop();
-            myVideo.remove();
-            findRoomId();
-        });
-    });
+    acceptGroupCall();
 });
 
 //Cancel Group Video Call
@@ -176,7 +215,8 @@ document.getElementById("group-cancel_vcall").addEventListener("click", function
 });
 
 myPeer.on('open', id => {
-    peerId.unshift(id)
+    peerId.unshift(id);
+    autoUpdatePeerid(id);
 });
 
 //Video Call Accepted
@@ -424,6 +464,36 @@ function userLogin(){
         })
 }
 userLogin()
+
+//Auto Update PeerID
+async function autoUpdatePeerid(id){
+    await fetch("/updatePeer/"+userData[0]._id, {
+        method: "put",
+        headers:{
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({peerid:id})
+    }).then(res=>{
+        console.log(res, "PEER iD UPDATED");
+    }).catch(err => {
+    console.log(err, "PEER iD DENIED");
+    })
+};
+
+//Save Group Session
+function createGroupSession(){
+    fetch('/create/group-session', {
+        method: 'post',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({room: room_id1[0], peerId: peerId[0]})
+    }).then(res => {
+        console.log(res, "Group Session Saved");
+    }).catch(res=>{
+        console.log(res, "Group Sess")
+    });
+};
 
 //Auto update api
 async function autoUpdateSocket(userID1){
@@ -861,19 +931,28 @@ document.getElementById("groupCallSubmit").addEventListener("click", function(){
             console.log("close previous session to start new call");
             alert("close previous sessioin to start new video call");
         }else{
-            groupVideoCallStatus.unshift(true);
-            socket.emit("group-call-join-room", room_id1[0], peerId[0]);
+            createGroupSession();
             x_array.forEach( element=>{
                 socket.emit("group_video_call", element, room_id1[0], userData[0].username, connectedUser[0], peerId[0]);
             });
-            window.history.pushState("/dashboard","",'/video/'+room_id1[0]);
             // callerGroupCall();
             document.body.classList.remove("active-create-channel-dialog");
 
             document.getElementById("groupCallInvited").innerHTML = null;
             document.getElementById("groupCall").value = "";
+            document.body.classList.add("active-groupCallerDialog");
+            socket.emit("group-call-join-room-caller", room_id1[0], peerId[0]);
         }
     }
+});
+
+//Group Call, Caller Dialog
+document.getElementById("group-caller-cancel-vcall").addEventListener("click", function(){
+    document.body.classList.remove("active-groupCallerDialog");
+    findRoomId();
+    x_array.forEach( element=>{
+        socket.emit("groupCallerDialog", element);
+    });
 });
 
 // function callerGroupCall(){
@@ -918,6 +997,46 @@ document.getElementById("groupCallSubmit").addEventListener("click", function(){
 //     };
 // };
 
+function acceptGroupCall(){
+    try{
+        navigator.mediaDevices.getUserMedia({
+            video:true,
+            audio:true
+        }).then(stream=>{
+            calleeStream.unshift(stream);
+            myVideo.srcObject = stream;
+            myVideo.addEventListener("loadedmetadata", ()=> {
+                myVideo.play();
+            });
+            document.getElementById("group-video-grid").append(myVideo);
+            videoCallStatus.unshift(true);
+        });
+        let x = `
+            <div class="end-call-button" id="end-call-button">
+                <button>
+                    <i class="fa-solid fa-phone-slash fa-lg" style="color: red;" id="end_call"></i>
+                </button>
+            </div>
+        `;
+        document.getElementById("group-video-grid").innerHTML = x;
+        document.getElementById("end_call").addEventListener("click", ()=>{
+            // socket.emit("group-video-call-quit", peerId[0], groupRoomId[0]);
+            groupVideoCallStatus.unshift(false);
+            window.history.pushState('/video/'+groupRoomId[0],"","/dashboard");
+            document.getElementById("myNav").style.width = "0%";
+            document.getElementById("end-call-button").innerHTML = null;
+            videoCallStatus.unshift(false);
+            calleeStream[0].getTracks().forEach(function(track) {
+                track.stop();
+                myVideo.remove();
+                findRoomId();
+            });
+        });
+    }catch(err){
+        console.log(err, "acceptGroupCall error callee side");
+    }
+}
+
 function groupVideoStream(video, stream){
     video.srcObject = stream;
     video.addEventListener("loadedmetadata", ()=> {
@@ -934,6 +1053,7 @@ function connectToGroupCallee(peerId){
             audio:true
         }).then(stream=> {
             groupVideoStream(myVideo, stream);
+            groupVideoCallStatus.unshift(true);
             videoCallStatus.unshift(true);
             callerStream.unshift(stream);
 

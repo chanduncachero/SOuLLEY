@@ -26,6 +26,12 @@ const userSchema = mongoose.Schema(
                 true, "Please enter a valid socketid"
             ]
         },
+        peerid:{
+            type:String,
+            required: [
+                false,
+            ]
+        }
     },
     {
         timestamps: true

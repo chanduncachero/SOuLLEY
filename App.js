@@ -16,6 +16,7 @@ const http = require("http");
 const mongoose = require("mongoose");
 const User = require("./models/userModels");
 const Message = require("./models/messageModels");
+const GroupSession = require("./models/groupSessionModel");
 const { exit } = require("process");
 const { error } = require("console");
 // const Chat = require("twilio/lib/rest/Chat");
@@ -114,15 +115,61 @@ io.on("connection", (socket) => {
         io.to(userTo2.socketid).emit("chatMessageResponseOther", body, userFrom.username);
     });
 
-//Group Room Video Call Join room UUID and PEER ID
-    socket.on("group-call-join-room", (roomId, peerId)=>{
-        socket.join(roomId);
-        socket.broadcast.to(roomId).emit("user-connected-group-call", peerId);
+//Receive Cancel Group Call from Caller
+    socket.on("groupCallerDialog", async (callee) => {
+        let a = await User.find({});
+        let b = await a.find(user => user.username === callee);
+        socket.to(b.socketid).emit("cancel-group-call");
+    });
 
-        socket.on("disconnect", ()=>{
-            socket.broadcast.to(roomId).emit("user-disconnected", peerId);
-            // io.broadcast.emit("user-disconnected", peerId);
-        });
+//Group Room Video Call Join room UUID and PEER ID
+    socket.on("group-call-join-room-caller", (roomId, peerId)=>{
+            socket.join(roomId);
+            socket.broadcast.to(roomId).emit("user-connected-group-call", peerId);
+    
+            socket.on("disconnect", ()=>{
+                socket.broadcast.to(roomId).emit("user-disconnected", peerId);
+                // io.broadcast.emit("user-disconnected", peerId);
+            });
+    });
+    socket.on("group-call-join-room", async(roomId, peerId)=>{
+        let x = await GroupSession.find({});
+        let y = await x.find(session => session.session_room === roomId);
+
+        // if(y.list_of_user[0]===peerId){
+        //     socket.join(roomId);
+        //     socket.broadcast.to(roomId).emit("user-connected-group-call", peerId);
+    
+        //     socket.on("disconnect", ()=>{
+        //         socket.broadcast.to(roomId).emit("user-disconnected", peerId);
+        //         // io.broadcast.emit("user-disconnected", peerId);
+        //     });
+        // }else{
+            let room = y._id;
+            let groupsession = await GroupSession.findByIdAndUpdate(room,{$inc:{number_of_user:1}},{new: true});
+            let groupsession2 = await GroupSession.findByIdAndUpdate(room,{$push:{list_of_user:peerId}},{safe: true, upsert: true},{new: true});
+
+            console.log(groupsession,groupsession2, "group number of user groupsession");
+
+            if(y.number_of_user === 1){
+                socket.join(roomId);
+                socket.broadcast.to(roomId).emit("user-connected-group-call", peerId);
+        
+                socket.on("disconnect", ()=>{
+                    socket.broadcast.to(roomId).emit("user-disconnected", peerId);
+                });
+            }else{
+                socket.to(peerId).emit("current-connected-group-peer-twoandmore", y);
+
+                socket.join(roomId);
+                socket.broadcast.to(roomId).emit("current-connected-group-peer", peerId);
+        
+                socket.on("disconnect", ()=>{
+                    socket.broadcast.to(roomId).emit("user-disconnected", peerId);
+                });
+            }
+        // }
+        
     });
 
 //Receive Group Video Call Invite
@@ -201,6 +248,35 @@ app.put("/update/socket/:id", async(req,res)=>{
     }catch(error){
         res.status(500).json({message: error.message});
     }
+});
+
+//Update Peer ID
+app.put("/updatePeer/:id", async(req,res)=>{
+    try{
+        const {id} = req.params;
+        const user = await User.findByIdAndUpdate(id, req.body);
+        if(!user){
+            return res.status(404).json({message: `cannot find any product with ID ${id}`})
+        }
+        const updatedUser = await User.findById(id);
+        res.status(200).json(updatedUser);
+    }catch(error){
+        res.status(500).json({message: error.message});
+    }
+});
+
+//Create Group Session
+app.post("/create/group-session", async(req, res) => {
+    try{
+        let newGroupCall = new GroupSession({
+            session_room: req.body.room,
+            number_of_user: 1,
+            list_of_user: req.body.peerId
+        });
+        await GroupSession.create(newGroupCall);
+    }catch(error){
+        console.log(error, "group session error");
+    };
 });
 
 //Login API
