@@ -152,6 +152,8 @@ io.on("connection", (socket) => {
             console.log(groupsession,groupsession2, "group number of user groupsession");
 
             if(y.number_of_user === 1){
+                socket.to(peerId).emit("group-call-first-callee", peerId);
+
                 socket.join(roomId);
                 socket.broadcast.to(roomId).emit("user-connected-group-call", peerId);
         
@@ -160,7 +162,7 @@ io.on("connection", (socket) => {
                 });
             }else{
                 socket.join(roomId);
-                io.to(peerId).emit("current-connected-group-peer-twoandmore", y);
+                socket.to(peerId).emit("current-connected-group-peer-twoandmore", y);
 
                 socket.broadcast.to(roomId).emit("current-connected-group-peer", peerId);
         

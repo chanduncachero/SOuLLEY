@@ -120,6 +120,9 @@ socket.on("group_video_call_accept", (roomid, callername, callerId1, callerPeer)
         document.getElementById("group_caller_name").innerHTML = callername + " is inviting you to a Group Call" + "...";
     }
 });
+socket.on("group-call-first-callee", userID =>{
+    acceptGroupCall();
+});
 socket.on("user-connected-group-call", userID =>{
     console.log(userID, "has joined the group call")
     connectToGroupCallee(userID);
@@ -204,7 +207,7 @@ document.getElementById("group-accept_vcall").addEventListener("click", function
     socket.emit("group-call-join-room", groupRoomId[0], peerId[0]);
     // socket.emit("join-group-call",groupCallerSocketId[0], peerId[0]);
     document.body.classList.remove("active-group-receiver-dialog");
-    acceptGroupCall();
+    // acceptGroupCall();
 });
 
 //Cancel Group Video Call
