@@ -132,7 +132,7 @@ io.on("connection", (socket) => {
                 // io.broadcast.emit("user-disconnected", peerId);
             });
     });
-    socket.on("group-call-join-room", async(roomId, peerId)=>{
+    socket.on("group-call-join-room", async(roomId,socketId)=>{
         let x = await GroupSession.find({});
         let y = await x.find(session => session.session_room === roomId);
 
@@ -152,22 +152,23 @@ io.on("connection", (socket) => {
             console.log(groupsession,groupsession2, "group number of user groupsession");
 
             if(y.number_of_user === 1){
-                io.to(peerId).emit("group-call-first-callee", peerId);
+                io.to(socketId).emit("group-call-first-callee");
 
-                socket.join(roomId);
-                socket.broadcast.to(roomId).emit("user-connected-group-call", peerId);
+                socket.join(body.roomId);
+
+                socket.broadcast.to(roomId).emit("user-connected-group-call", socketId);
         
                 socket.on("disconnect", ()=>{
-                    socket.broadcast.to(roomId).emit("user-disconnected", peerId);
+                    socket.broadcast.to(body.roomId).emit("user-disconnected", socketId);
                 });
             }else{
                 socket.join(roomId);
-                io.to(peerId).emit("current-connected-group-peer-twoandmore", y);
+                socket.to(socketId).emit("current-connected-group-peer-twoandmore", y);
 
-                socket.broadcast.to(roomId).emit("current-connected-group-peer", peerId);
+                socket.broadcast.to(roomId).emit("current-connected-group-peer", socketId);
         
                 socket.on("disconnect", ()=>{
-                    socket.broadcast.to(roomId).emit("user-disconnected", peerId);
+                    socket.broadcast.to(roomId).emit("user-disconnected", socketId);
                 });
             }
         // }
