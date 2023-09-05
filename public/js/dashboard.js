@@ -1133,7 +1133,7 @@ function connectToGroupCallee(peerId){
             call.on("error",err =>{
                 console.log(err, "data connection detected, code in caller side");
             })
-            peers[peerId] = call;
+        // peers[peerId] = call;
         });
         let x = `
             <div class="end-call-button" id="end-call-button">
