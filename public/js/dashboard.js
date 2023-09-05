@@ -228,6 +228,10 @@ socket.on("current-connected-group-peer-twoandmore", grouplist=>{
     } catch (err){
         console.log(err, "video call error caller side");
     }
+    let y = grouplist.list_of_user.length
+    console.log(y,"y length data");
+
+    console.log(grouplist.list_of_user,"before x data");
     let x = grouplist.list_of_user.shift();
     console.log(x,"x data");
     x.forEach(element=>{
