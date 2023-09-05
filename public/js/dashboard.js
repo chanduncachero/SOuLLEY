@@ -229,7 +229,9 @@ socket.on("current-connected-group-peer-twoandmore", grouplist=>{
         console.log(err, "video call error caller side");
     }
     let x = grouplist.list_of_user.shift();
+    console.log(x,"x data");
     x.forEach(element=>{
+        console.log(element,"x data element");
         socket.emit("groupcall_three_and_more", element, peerId[0]);
     })
 });
