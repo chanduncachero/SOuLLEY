@@ -202,7 +202,7 @@ socket.on("cancel-group-call", ()=>{
 //Accept Group Video Call 
 document.getElementById("group-accept_vcall").addEventListener("click", function(){
     groupVideoCallStatus.unshift(true);
-    socket.emit("group-call-join-room", groupRoomId[0], peerId[0]);
+    socket.emit("group-call-join-room", groupRoomId[0], peerId[0], connectedUser[0]);
     // socket.emit("join-group-call",groupCallerSocketId[0], peerId[0]);
     document.body.classList.remove("active-group-receiver-dialog");
     // acceptGroupCall();
@@ -890,7 +890,7 @@ function connectToNewUser(userId){
             document.getElementById("middle_position").innerHTML = x;
             document.getElementById("end_call").addEventListener("click", function(){
                 window.history.pushState('/video/'+room_id1[0], ",", "/dashboard");
-                socket.emit("close_callee_videoBelow", calleeInfo4Socket[0], connectedUser);
+                socket.emit("close_callee_videoBelow", calleeInfo4Socket[0], connectedUser[0]);
                 videoCallStatus.unshift(false);
                 callerStream[0].getTracks().forEach(function(track) {
                     track.stop();
