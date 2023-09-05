@@ -121,9 +121,9 @@ socket.on("group_video_call_accept", (roomid, callername, callerId1, callerPeer)
     }
 });
 
-socket.on("user-connected-group-call", userID =>{
-    console.log(userID, "has joined the group call")
-    connectToGroupCallee(userID);
+socket.on("user-connected-group-call", userId =>{
+    console.log(userId, "has joined the group call")
+    setTimeout(connectToGroupCallee(userId),3000);
     document.body.classList.remove("active-groupCallerDialog");
     window.history.pushState("/dashboard","",'/video/'+room_id1[0]);
 });
@@ -1104,7 +1104,7 @@ function groupVideoStream(video, stream){
     myVideoGrid.append(video);
 }
 
-function connectToGroupCallee(userID){
+function connectToGroupCallee(userId){
     try{
         // const video = document.createElement('video');
         navigator.mediaDevices.getUserMedia({
@@ -1116,15 +1116,14 @@ function connectToGroupCallee(userID){
             videoCallStatus.unshift(true);
             callerStream.unshift(stream);
 
-            const call = myPeer.call(userID, stream);
+            const call = myPeer.call(userId, stream);
             const video = document.createElement('video');
-
-            call.on("stream", function(stream){
-                groupVideoStream(video, stream);
+            call.on("stream", function(calleeStream){
+                groupVideoStream(video, calleeStream);
             });
             if(videoCallStatus[0]===true){
                 document.getElementById("end_call").addEventListener("click", function(){
-                    video.remove();
+                    call.close();
                 });
             };
             call.on("close", ()=>{
