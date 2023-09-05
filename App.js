@@ -125,7 +125,7 @@ io.on("connection", (socket) => {
 //Group Room Video Call Join room UUID and PEER ID
     socket.on("group-call-join-room-caller", (roomId, peerId)=>{
             socket.join(roomId);
-            socket.broadcast.to(roomId).emit("user-connected-group-call", peerId);
+            // socket.broadcast.to(roomId).emit("user-connected-group-call", peerId);
     
             socket.on("disconnect", ()=>{
                 socket.broadcast.to(roomId).emit("user-disconnected", peerId);

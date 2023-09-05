@@ -1106,12 +1106,12 @@ function groupVideoStream(video, stream){
 
 function connectToGroupCallee(peerId){
     try{
-        const video = document.createElement('video');
+        // const video = document.createElement('video');
         navigator.mediaDevices.getUserMedia({
             video:true,
             audio:true
         }).then(stream=> {
-            groupVideoStream(video, stream);
+            groupVideoStream(myVideo, stream);
             groupVideoCallStatus.unshift(true);
             videoCallStatus.unshift(true);
             callerStream.unshift(stream);
