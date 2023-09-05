@@ -1104,7 +1104,7 @@ function groupVideoStream(video, stream){
     myVideoGrid.append(video);
 }
 
-function connectToGroupCallee(peerId){
+function connectToGroupCallee(userID){
     try{
         // const video = document.createElement('video');
         navigator.mediaDevices.getUserMedia({
@@ -1116,7 +1116,7 @@ function connectToGroupCallee(peerId){
             videoCallStatus.unshift(true);
             callerStream.unshift(stream);
 
-            const call = myPeer.call(peerId, stream);
+            const call = myPeer.call(userID, stream);
             const video = document.createElement('video');
 
             call.on("stream", function(stream){
