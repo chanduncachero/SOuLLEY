@@ -187,6 +187,14 @@ io.on("connection", (socket) => {
         // io.broadcast("user-disconnected", peerId);
         socket.broadcast.to(room).emit("caller-disconnected", peerId);
     });
+
+//Group Video Call 3 and more user
+    socket.on("groupcall_three_and_more", async(peerCaller, peerReceiver)=>{
+        let x = await User.find({});
+        let y = await x.find(user=> user.peerid === peerCaller);
+
+        socket.to(y.socketid).emit("to_groupcall_three_and_more", peerReceiver);
+    })
 });
 
 function requireLogin(req, res, next) {
