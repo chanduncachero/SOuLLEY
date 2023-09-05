@@ -136,38 +136,38 @@ socket.on("current-connected-group-peer", peerID=>{
 socket.on("current-connected-group-peer-twoandmore", grouplist=>{
     console.log(grouplist, "current-connected-group-peer-twoandmore");
     try{
-        const video = document.createElement('video');
-        navigator.mediaDevices.getUserMedia({
-            video:true,
-            audio:true
-        }).then(stream=> {
-            groupVideoStream(video, stream);
-            groupVideoCallStatus.unshift(true);
-            videoCallStatus.unshift(true);
-            callerStream.unshift(stream);
+        grouplist.list_of_user.forEach(element=>{
+            const video = document.createElement('video');
+            navigator.mediaDevices.getUserMedia({
+                video:true,
+                audio:true
+            }).then(stream=> {
+                groupVideoStream(video, stream);
+                groupVideoCallStatus.unshift(true);
+                videoCallStatus.unshift(true);
+                callerStream.unshift(stream);
 
-            grouplist.list_of_user.forEach(element=>{
-                const call = myPeer.call(element, stream);
-                const video = document.createElement('video');
-    
-                call.on("stream", function(stream){
-                    groupVideoStream(video, stream);
-                });
-                if(videoCallStatus[0]===true){
-                    document.getElementById("end_call").addEventListener("click", function(){
+                    const call = myPeer.call(element, stream);
+                    const video = document.createElement('video');
+        
+                    call.on("stream", function(stream){
+                        groupVideoStream(video, stream);
+                    });
+                    if(videoCallStatus[0]===true){
+                        document.getElementById("end_call").addEventListener("click", function(){
+                            video.remove();
+                        });
+                    };
+                    call.on("close", ()=>{
                         video.remove();
                     });
-                };
-                call.on("close", ()=>{
-                    video.remove();
-                });
-                call.on("error",err =>{
-                    console.log(err, "data connection detected, code in caller side");
-                })
-                // peers[element] = call;
+                    call.on("error",err =>{
+                        console.log(err, "data connection detected, code in caller side");
+                    })
+                    peers[element] = call;
             });
-           
         });
+
         let x = `
             <div class="end-call-button" id="end-call-button">
                 <button>
@@ -487,8 +487,8 @@ async function autoUpdatePeerid(id){
 };
 
 //Save Group Session
-function createGroupSession(){
-    fetch('/create/group-session', {
+async function createGroupSession(){
+    await fetch('/create/group-session', {
         method: 'post',
         headers: {
             'Content-type': 'application/json'
@@ -943,7 +943,7 @@ document.getElementById("groupCallSubmit").addEventListener("click", function(){
             });
             // callerGroupCall();
             document.body.classList.remove("active-create-channel-dialog");
-
+            x_array.splice(0, x_array.length);
             document.getElementById("groupCallInvited").innerHTML = null;
             document.getElementById("groupCall").value = "";
             document.body.classList.add("active-groupCallerDialog");
