@@ -136,12 +136,12 @@ socket.on("current-connected-group-peer", peerID=>{
 socket.on("current-connected-group-peer-twoandmore", grouplist=>{
     console.log(grouplist, "current-connected-group-peer-twoandmore");
     try{
-        // const video = document.createElement('video');
+        const video = document.createElement('video');
         navigator.mediaDevices.getUserMedia({
             video:true,
             audio:true
         }).then(stream=> {
-            groupVideoStream(myVideo, stream);
+            groupVideoStream(video, stream);
             groupVideoCallStatus.unshift(true);
             videoCallStatus.unshift(true);
             callerStream.unshift(stream);
@@ -164,7 +164,7 @@ socket.on("current-connected-group-peer-twoandmore", grouplist=>{
                 call.on("error",err =>{
                     console.log(err, "data connection detected, code in caller side");
                 })
-                peers[element] = call;
+                // peers[element] = call;
             });
            
         });
