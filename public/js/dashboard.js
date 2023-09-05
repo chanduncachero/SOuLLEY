@@ -137,6 +137,7 @@ socket.on("current-connected-group-peer-twoandmore", grouplist=>{
     console.log(grouplist, "current-connected-group-peer-twoandmore");
     try{
         grouplist.list_of_user.forEach(element=>{
+            console.log(element, "element here chandun")
             // const video = document.createElement('video');
             navigator.mediaDevices.getUserMedia({
                 video:true,
@@ -164,7 +165,7 @@ socket.on("current-connected-group-peer-twoandmore", grouplist=>{
                     call.on("error",err =>{
                         console.log(err, "data connection detected, code in caller side");
                     })
-                    peers[element] = call;
+                    // peers[element] = call;
             });
         });
 
