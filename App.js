@@ -125,7 +125,7 @@ io.on("connection", (socket) => {
 //Group Room Video Call Join room UUID and PEER ID
     socket.on("group-call-join-room-caller", (roomId, peerId)=>{
             socket.join(roomId);
-            // socket.broadcast.to(roomId).emit("user-connected-group-call", peerId);
+            socket.broadcast.to(roomId).emit("user-connected-group-call", peerId);
     
             socket.on("disconnect", ()=>{
                 socket.broadcast.to(roomId).emit("user-disconnected", peerId);
@@ -285,8 +285,10 @@ app.post("/create/group-session", async(req, res) => {
             list_of_user: req.body.peerId
         });
         await GroupSession.create(newGroupCall);
+        res.status(200).json(newGroupCall);
     }catch(error){
         console.log(error, "group session error");
+        res.status(500).json({message: error.message});
     };
 });
 
