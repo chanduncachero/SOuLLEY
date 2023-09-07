@@ -990,9 +990,17 @@ document.getElementById("groupCallSubmit").addEventListener("click", function(){
             alert("close previous sessioin to start new video call");
         }else{
             createGroupSession();
-            x_array.forEach( element=>{
-                socket.emit("group_video_call", element, room_id1[0], userData[0].username, connectedUser[0], peerId[0]);
-            });
+            let x = x_array.length;
+            console.log(x,x_array, "x data and x_array");
+            if(x===1){
+                console.log( "if x ===1");
+                socket.emit("group_video_call", x_array[0], room_id1[0], userData[0].username, connectedUser[0], peerId[0]);
+            }else{
+                console.log( "if x > 1");
+                x_array.forEach( element=>{
+                    socket.emit("group_video_call", element, room_id1[0], userData[0].username, connectedUser[0], peerId[0]);
+                });
+            };
             // callerGroupCall();
             document.body.classList.remove("active-create-channel-dialog");
             x_array.splice(0, x_array.length);
