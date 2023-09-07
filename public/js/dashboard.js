@@ -184,28 +184,32 @@ socket.on("current-connected-group-peer-twoandmore", grouplist=>{
                 groupVideoCallStatus.unshift(true);
                 videoCallStatus.unshift(true);
                 callerStream.unshift(stream);
-                    // grouplist.list_of_user.forEach(element=>{
-                    console.log(callerPeers, "list_of_user element here chandun");
-                    console.log(callerPeers[0], "list_of_user[0] element here chandun");
-                    const call = myPeer.call(callerPeers[0], stream);
-                    const video = document.createElement('video');
-        
-                    call.on("stream", function(stream){
-                        groupVideoStream(video, stream);
+                    grouplist.list_of_user.forEach(element=>{
+                        if(element===callerPeers[0]){
+                            console.log(element, "list_of_user[0] element here chandun");
+                            const call = myPeer.call(element, stream);
+                            const video = document.createElement('video');
+                
+                            call.on("stream", function(stream){
+                                groupVideoStream(video, stream);
+                            });
+                            if(videoCallStatus[0]===true){
+                                document.getElementById("end_call").addEventListener("click", function(){
+                                    video.remove();
+                                });
+                            };
+                            call.on("close", ()=>{
+                                video.remove();
+                            });
+                            call.on("error",err =>{
+                                console.log(err, "data connection detected, code in caller side");
+                            })
+                            // peers[element] = call;
+                        }else{
+                            console.log(element,"x data element");
+                            socket.emit("groupcall_three_and_more", element, peerId[0]);
+                        }
                     });
-                    if(videoCallStatus[0]===true){
-                        document.getElementById("end_call").addEventListener("click", function(){
-                            video.remove();
-                        });
-                    };
-                    call.on("close", ()=>{
-                        video.remove();
-                    });
-                    call.on("error",err =>{
-                        console.log(err, "data connection detected, code in caller side");
-                    })
-                    // peers[element] = call;
-                    // });
             });
 
         let x = `
@@ -248,7 +252,7 @@ socket.on("current-connected-group-peer-twoandmore", grouplist=>{
     //         socket.emit("groupcall_three_and_more", element, peerId[0]);
     //     })
     // };
-    
+
     // grouplist.list_of_user.forEach(element=>{
     //     if(element!=callerPeers[0]){
     //         socket.emit("groupcall_three_and_more", element, peerId[0])
