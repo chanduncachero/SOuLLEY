@@ -172,7 +172,7 @@ socket.on("to_groupcall_three_and_more", peerReceiver=>{
 //Group Call, 2 and more Callee
 socket.on("current-connected-group-peer-twoandmore", grouplist=>{
     console.log(grouplist, "current-connected-group-peer-twoandmore");
-    let list_peer = grouplist.list_of_user;
+    // let list_peer = grouplist.list_of_user;
     // listPeerID.unshift(grouplist.list_of_user);
     try{
             // const video = document.createElement('video');
@@ -248,13 +248,14 @@ socket.on("current-connected-group-peer-twoandmore", grouplist=>{
     //         socket.emit("groupcall_three_and_more", element, peerId[0]);
     //     })
     // };
-    grouplist.list_of_user.forEach(element=>{
-        if(element!=callerPeers[0]){
-            socket.emit("groupcall_three_and_more", element, peerId[0])
-        }else{
-            return false;
-        }
-    })
+    
+    // grouplist.list_of_user.forEach(element=>{
+    //     if(element!=callerPeers[0]){
+    //         socket.emit("groupcall_three_and_more", element, peerId[0])
+    //     }else{
+    //         return false;
+    //     }
+    // })
 });
 socket.on("cancel-group-call", ()=>{
     document.body.classList.remove("active-group-receiver-dialog");
