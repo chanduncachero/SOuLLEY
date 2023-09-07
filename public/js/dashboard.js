@@ -172,6 +172,7 @@ socket.on("to_groupcall_three_and_more", peerReceiver=>{
 //Group Call, 2 and more Callee
 socket.on("current-connected-group-peer-twoandmore", grouplist=>{
     console.log(grouplist, "current-connected-group-peer-twoandmore");
+    let list_peer = grouplist.list_of_user;
     // listPeerID.unshift(grouplist.list_of_user);
     try{
             // const video = document.createElement('video');
@@ -184,9 +185,9 @@ socket.on("current-connected-group-peer-twoandmore", grouplist=>{
                 videoCallStatus.unshift(true);
                 callerStream.unshift(stream);
                     // grouplist.list_of_user.forEach(element=>{
-                    console.log(grouplist.list_of_user, "list_of_user element here chandun");
-                    console.log(grouplist.list_of_user[0], "list_of_user[0] element here chandun");
-                    const call = myPeer.call(grouplist.list_of_user[0], stream);
+                    console.log(list_peer, "list_of_user element here chandun");
+                    console.log(list_peer[0], "list_of_user[0] element here chandun");
+                    const call = myPeer.call(list_peer[0], stream);
                     const video = document.createElement('video');
         
                     call.on("stream", function(stream){
@@ -232,11 +233,11 @@ socket.on("current-connected-group-peer-twoandmore", grouplist=>{
         console.log(err, "video call error caller side");
     };
 
-    let y = grouplist.list_of_user.length
+    let y = list_peer.length
     console.log(y,"y length data");
 
-    console.log(grouplist.list_of_user,"before x data");
-    let x = grouplist.list_of_user.shift();
+    console.log(list_peer,"before x data");
+    let x = list_peer.shift();
     console.log(x,"x data");
 
     if(y===2){

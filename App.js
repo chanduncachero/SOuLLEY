@@ -163,7 +163,7 @@ io.on("connection", (socket) => {
                 });
             }else{
                 socket.join(roomId);
-                io.to(socketId).emit("current-connected-group-peer-twoandmore", y.sort({list_of_user:1}));
+                io.to(socketId).emit("current-connected-group-peer-twoandmore", y);
 
                 socket.broadcast.to(roomId).emit("current-connected-group-peer", peerId);
         
