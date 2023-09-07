@@ -248,12 +248,12 @@ socket.on("current-connected-group-peer-twoandmore", grouplist=>{
     //         socket.emit("groupcall_three_and_more", element, peerId[0]);
     //     })
     // };
-    list_peer.forEach(element=>{
-        if(element===callerPeers[0]){
-            return false;
-        }else(
+    grouplist.list_of_user.forEach(element=>{
+        if(element!=callerPeers[0]){
             socket.emit("groupcall_three_and_more", element, peerId[0])
-        )
+        }else{
+            return false;
+        }
     })
 });
 socket.on("cancel-group-call", ()=>{
