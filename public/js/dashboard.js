@@ -172,7 +172,7 @@ socket.on("to_groupcall_three_and_more", peerReceiver=>{
 //Group Call, 2 and more Callee
 socket.on("current-connected-group-peer-twoandmore", grouplist=>{
     console.log(grouplist, "current-connected-group-peer-twoandmore");
-    listPeerID.push(grouplist.list_of_user);
+    listPeerID.unshift(grouplist.list_of_user);
     try{
             // const video = document.createElement('video');
             navigator.mediaDevices.getUserMedia({
