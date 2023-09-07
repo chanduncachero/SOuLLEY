@@ -185,9 +185,9 @@ socket.on("current-connected-group-peer-twoandmore", grouplist=>{
                 videoCallStatus.unshift(true);
                 callerStream.unshift(stream);
                     // grouplist.list_of_user.forEach(element=>{
-                    console.log(list_peer, "list_of_user element here chandun");
-                    console.log(list_peer[0], "list_of_user[0] element here chandun");
-                    const call = myPeer.call(list_peer[0], stream);
+                    console.log(callerPeers, "list_of_user element here chandun");
+                    console.log(callerPeers[0], "list_of_user[0] element here chandun");
+                    const call = myPeer.call(callerPeers[0], stream);
                     const video = document.createElement('video');
         
                     call.on("stream", function(stream){
@@ -233,21 +233,28 @@ socket.on("current-connected-group-peer-twoandmore", grouplist=>{
         console.log(err, "video call error caller side");
     };
 
-    let y = list_peer.length
-    console.log(y,"y length data");
+    // let y = list_peer.length
+    // console.log(y,"y length data");
 
-    console.log(list_peer,"before x data");
-    let x = list_peer.shift();
-    console.log(x,"x data");
+    // console.log(list_peer,"before x data");
+    // let x = list_peer.shift();
+    // console.log(x,"x data");
 
-    if(y===2){
-        socket.emit("groupcall_three_and_more", x, peerId[0]);
-    }else{
-        x.forEach(element=>{
-            console.log(element,"x data element");
-            socket.emit("groupcall_three_and_more", element, peerId[0]);
-        })
-    };
+    // if(y===2){
+    //     socket.emit("groupcall_three_and_more", x, peerId[0]);
+    // }else{
+    //     x.forEach(element=>{
+    //         console.log(element,"x data element");
+    //         socket.emit("groupcall_three_and_more", element, peerId[0]);
+    //     })
+    // };
+    list_peer.forEach(element=>{
+        if(element===callerPeers[0]){
+            return false;
+        }else(
+            socket.emit("groupcall_three_and_more", element, peerId[0])
+        )
+    })
 });
 socket.on("cancel-group-call", ()=>{
     document.body.classList.remove("active-group-receiver-dialog");
