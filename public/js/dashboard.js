@@ -16,36 +16,36 @@ const   numberInput = document.getElementById("number"),
         callInput = document.getElementById("callInput"),
         videoBody = document.getElementById("video_body"),
         videoBelow = document.getElementById("video_below"),
-        iceConfiguration = {
-            iceServers: [
-                {
-                    urls: "stun:stun.relay.metered.ca:80",
-                },
-                {
-                    urls: "turn:a.relay.metered.ca:80",
-                    username: "4cc69cba81278a9bd51da56b",
-                    credential: "41t3146m1OrqCb9X",
-                },
-                {
-                    urls: "turn:a.relay.metered.ca:80?transport=tcp",
-                    username: "4cc69cba81278a9bd51da56b",
-                    credential: "41t3146m1OrqCb9X",
-                },
-                {
-                    urls: "turn:a.relay.metered.ca:443",
-                    username: "4cc69cba81278a9bd51da56b",
-                    credential: "41t3146m1OrqCb9X",
-                },
-                {
-                    urls: "turn:a.relay.metered.ca:443?transport=tcp",
-                    username: "4cc69cba81278a9bd51da56b",
-                    credential: "41t3146m1OrqCb9X",
-                },
-            ]
-        },
-        peerConfiguration = {},
-        responseRTC = await fetch("https://soulley.metered.live/api/v1/turn/credentials?apiKey=952f829b9568c7f2a9dc8e7ab73c7aed21bc"),
-        iceServers = await responseRTC.json(),
+        // iceConfiguration = {
+        //     iceServers: [
+        //         {
+        //             urls: "stun:stun.relay.metered.ca:80",
+        //         },
+        //         {
+        //             urls: "turn:a.relay.metered.ca:80",
+        //             username: "4cc69cba81278a9bd51da56b",
+        //             credential: "41t3146m1OrqCb9X",
+        //         },
+        //         {
+        //             urls: "turn:a.relay.metered.ca:80?transport=tcp",
+        //             username: "4cc69cba81278a9bd51da56b",
+        //             credential: "41t3146m1OrqCb9X",
+        //         },
+        //         {
+        //             urls: "turn:a.relay.metered.ca:443",
+        //             username: "4cc69cba81278a9bd51da56b",
+        //             credential: "41t3146m1OrqCb9X",
+        //         },
+        //         {
+        //             urls: "turn:a.relay.metered.ca:443?transport=tcp",
+        //             username: "4cc69cba81278a9bd51da56b",
+        //             credential: "41t3146m1OrqCb9X",
+        //         },
+        //     ]
+        // },
+        // peerConfiguration = {},
+        // responseRTC = await fetch("https://soulley.metered.live/api/v1/turn/credentials?apiKey=952f829b9568c7f2a9dc8e7ab73c7aed21bc"),
+        // iceServers = await responseRTC.json(),
         myPeer = new Peer(),
         // myPeer = new Peer(iceConfiguration),
         // myPeer = new Peer(),
@@ -1114,24 +1114,24 @@ function connectTwoAndMoreGroupVideoCall(grouplist, callerPeerId){
             callerStream.unshift(stream);
                 // grouplist.list_of_user.forEach(element=>{
                     // if(element===callerPeers[0]){
-                        console.log(callerPeerId, "list_of_user[0] element here chandun");
-                        const call = myPeer.call(callerPeerId, stream);
-                        const video = document.createElement('video');
-            
-                        call.on("stream", function(stream){
-                            groupVideoStream(video, stream);
-                        });
-                        if(videoCallStatus[0]===true){
-                            document.getElementById("end_call").addEventListener("click", function(){
-                                video.remove();
-                            });
-                        };
-                        call.on("close", ()=>{
-                            video.remove();
-                        });
-                        call.on("error",err =>{
-                            console.log(err, "data connection detected, code in caller side");
-                        })
+            console.log(callerPeerId, "list_of_user[0] element here chandun");
+            const call = myPeer.call(callerPeerId, stream);
+            const video = document.createElement('video');
+
+            call.on("stream", function(stream){
+                groupVideoStream(video, stream);
+            });
+            if(videoCallStatus[0]===true){
+                document.getElementById("end_call").addEventListener("click", function(){
+                    video.remove();
+                });
+            };
+            call.on("close", ()=>{
+                video.remove();
+            });
+            call.on("error",err =>{
+                console.log(err, "data connection detected, code in caller side");
+            })
                         // peers[element] = call;
                     // }else{
                         // console.log(callerPeerId,"x data element");
