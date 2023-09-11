@@ -973,7 +973,7 @@ function acceptGroupCall(){
 //Group Call 3 and more
             socket.on("to_groupcall_three_and_more", peerReceiver=>{
                 console.log("peerReceiver came, 3 and more group caller");
-                try{
+                // try{
                     // navigator.mediaDevices.getUserMedia({
                     //     video:true,
                     //     audio:true
@@ -1002,9 +1002,9 @@ function acceptGroupCall(){
                         })
                         peers[peerReceiver] = call;
                     // });
-                }catch(err){
-                    console.log(err, "peerReceiver came error 3 and more group user");
-                }
+                // }catch(err){
+                //     console.log(err, "peerReceiver came error 3 and more group user");
+                // }
                 // connectToGroupCallee(peerReceiver)
             });
         });
