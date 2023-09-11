@@ -136,16 +136,16 @@ socket.on("current-connected-group-peer", peerID=>{
 socket.on("to_groupcall_three_and_more", peerReceiver=>{
     console.log("peerReceiver came, 3 and more group caller");
     try{
-        navigator.mediaDevices.getUserMedia({
-            video:true,
-            audio:true
-        }).then(stream=> {
-            groupVideoStream(myVideo, stream);
+        // navigator.mediaDevices.getUserMedia({
+        //     video:true,
+        //     audio:true
+        // }).then(stream=> {
+        //     groupVideoStream(myVideo, stream);
             // groupVideoCallStatus.unshift(true);
             // videoCallStatus.unshift(true);
-            callerStream.unshift(stream);
+            // callerStream.unshift(stream);
 
-            const call = myPeer.call(peerReceiver, stream);
+            const call = myPeer.call(peerReceiver, calleeStream[0]);
             const video = document.createElement('video');
 
             call.on("stream", function(stream){
@@ -162,8 +162,8 @@ socket.on("to_groupcall_three_and_more", peerReceiver=>{
             call.on("error",err =>{
                 console.log(err, "data connection detected, code in caller side");
             })
-            peers[peerId] = call;
-        });
+            peers[peerReceiver] = call;
+        // });
     }catch(err){
         console.log(err, "peerReceiver came error 3 and more group user");
     }
