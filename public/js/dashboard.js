@@ -1174,12 +1174,12 @@ function groupListFunctionToCall(grouplist){
 
     console.log(grouplist.list_of_user,"before x data");
     grouplist.list_of_user.shift();
-    console.log(grouplist.list_of_user,"x data");
+    console.log(grouplist.list_of_user[0],"x data");
 
     if(y===2){
         // grouplist.list_of_user.shift();
-        console.log(grouplist.list_of_user, "y===2")
-        socket.emit("groupcall_three_and_more", grouplist.list_of_user, peerId[0]);
+        console.log(grouplist.list_of_user[0], "y===2")
+        socket.emit("groupcall_three_and_more", grouplist.list_of_user[0], peerId[0]);
     }else{
         grouplist.list_of_user.forEach(element=>{
             console.log(element,"x data element");
