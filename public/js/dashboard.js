@@ -136,7 +136,8 @@ socket.on("current-connected-group-peer", peerID=>{
 //Group Call, 2 and more Callee
 socket.on("current-connected-group-peer-twoandmore", grouplist=>{
     console.log(grouplist, "current-connected-group-peer-twoandmore");
-    connectTwoAndMoreGroupVideoCall(grouplist, callerPeers[0]);
+    connectTwoAndMoreGroupVideoCall(callerPeers[0]);
+    groupListFunctionToCall(grouplist);
 });
 socket.on("cancel-group-call", ()=>{
     document.body.classList.remove("active-group-receiver-dialog");
@@ -1099,7 +1100,7 @@ function connectToGroupCallee(userId){
 
 };
 
-function connectTwoAndMoreGroupVideoCall(grouplist, callerPeerId){
+function connectTwoAndMoreGroupVideoCall(callerPeerId){
     // let list_peer = (grouplist.list_of_user.shift());
     // listPeerID.unshift(grouplist.list_of_user);
     try{
@@ -1140,32 +1141,30 @@ function connectTwoAndMoreGroupVideoCall(grouplist, callerPeerId){
                 // });d
         });
 
-    let x = `
-        <div class="end-call-button" id="end-call-button">
-            <button>
-                <i class="fa-solid fa-phone-slash fa-lg" style="color: red;" id="end_call"></i>
-            </button>
-        </div>
-    `;
-    document.getElementById("group-video-grid").innerHTML = x;
-    document.getElementById("end_call").addEventListener("click", function(){
-        socket.emit("group-video-call-quit", peerId[0], room_id1[0]);
-        groupVideoCallStatus.unshift(false);
-        document.getElementById("end-call-button").innerHTML = null;
-        document.getElementById("myNav").style.width = "0%";
-        window.history.pushState('/video/'+room_id1[0],"","/dashboard");
-        videoCallStatus.unshift(false);
-        callerStream[0].getTracks().forEach(function(track) {
-            track.stop();
-            myVideo.remove();
-            findRoomId();
-        });
-    })
+        let x = `
+            <div class="end-call-button" id="end-call-button">
+                <button>
+                    <i class="fa-solid fa-phone-slash fa-lg" style="color: red;" id="end_call"></i>
+                </button>
+            </div>
+        `;
+        document.getElementById("group-video-grid").innerHTML = x;
+        document.getElementById("end_call").addEventListener("click", function(){
+            socket.emit("group-video-call-quit", peerId[0], room_id1[0]);
+            groupVideoCallStatus.unshift(false);
+            document.getElementById("end-call-button").innerHTML = null;
+            document.getElementById("myNav").style.width = "0%";
+            window.history.pushState('/video/'+room_id1[0],"","/dashboard");
+            videoCallStatus.unshift(false);
+            callerStream[0].getTracks().forEach(function(track) {
+                track.stop();
+                myVideo.remove();
+                findRoomId();
+            });
+        })
     } catch (err){
         console.log(err, "video call error caller side");
     };
-
-    groupListFunctionToCall(grouplist);
 };
 
 //Group List Function To Be called by Multiple Caller
