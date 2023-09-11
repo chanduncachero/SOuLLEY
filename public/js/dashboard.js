@@ -1099,7 +1099,7 @@ function connectToGroupCallee(userId){
 };
 
 function connectTwoAndMoreGroupVideoCall(grouplist, callerPeerId){
-    let list_peer = (grouplist.list_of_user.shift());
+    // let list_peer = (grouplist.list_of_user.shift());
     // listPeerID.unshift(grouplist.list_of_user);
     try{
         // const video = document.createElement('video');
@@ -1164,12 +1164,17 @@ function connectTwoAndMoreGroupVideoCall(grouplist, callerPeerId){
         console.log(err, "video call error caller side");
     };
 
+    groupListFunctionToCall(grouplist);
+};
+
+//Group List Function To Be called by Multiple Caller
+function groupListFunctionToCall(grouplist){
     let y = grouplist.list_of_user.length
     console.log(y,"y length data");
 
-    console.log(grouplist.list_of_user.shift(),"before x data");
-    // grouplist.list_of_user.splice(0,1);
-    // console.log(grouplist.list_of_user,"x data");
+    console.log(grouplist.list_of_user,"before x data");
+    grouplist.list_of_user.splice(0,1);
+    console.log(grouplist.list_of_user,"x data");
 
     if(y===2){
         // grouplist.list_of_user.shift();
@@ -1189,4 +1194,4 @@ function connectTwoAndMoreGroupVideoCall(grouplist, callerPeerId){
     //         return false;
     //     }
     // })
-};
+}
