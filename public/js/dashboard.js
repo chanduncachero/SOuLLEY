@@ -135,9 +135,11 @@ socket.on("current-connected-group-peer", peerID=>{
 
 //Group Call, 2 and more Callee
 socket.on("current-connected-group-peer-twoandmore", grouplist=>{
+    groupVideoCallStatus.unshift(true);
+    videoCallStatus.unshift(true);
     console.log(grouplist, "current-connected-group-peer-twoandmore");
     let x = grouplist.list_of_user.shift();
-    connectTwoAndMoreGroupVideoCall(x);
+    connectGroupVideoCall(x);
     groupListFunctionToCall(grouplist);
 });
 socket.on("cancel-group-call", ()=>{
@@ -1101,7 +1103,7 @@ function connectToGroupCallee(userId){
 
 };
 
-function connectTwoAndMoreGroupVideoCall(callerPeersId){
+function connectGroupVideoCall(callerPeersId){
     // let list_peer = (grouplist.list_of_user.shift());
     // listPeerID.unshift(grouplist.list_of_user);
     try{
@@ -1111,8 +1113,6 @@ function connectTwoAndMoreGroupVideoCall(callerPeersId){
             audio:true
         }).then(stream=> {
             groupVideoStream(myVideo, stream);
-            groupVideoCallStatus.unshift(true);
-            videoCallStatus.unshift(true);
             callerStream.unshift(stream);
             // let x = grouplist.list_of_user.shift()
                 // grouplist.list_of_user.forEach(element=>{
@@ -1121,9 +1121,8 @@ function connectTwoAndMoreGroupVideoCall(callerPeersId){
             console.log(x, "x element here chandun");
             const call = myPeer.call(callerPeersId, stream);
             const video = document.createElement('video');
-
-            call.on("stream", function(stream){
-                groupVideoStream(video, stream);
+            call.on("stream", function(calleestream){
+                groupVideoStream(video, calleestream);
             });
             // if(videoCallStatus[0]===true){
             //     document.getElementById("end_call").addEventListener("click", function(){
@@ -1177,12 +1176,12 @@ function groupListFunctionToCall(grouplist){
 
     console.log(grouplist.list_of_user,"before x data");
     grouplist.list_of_user.shift();
-    console.log(grouplist.list_of_user[0],"x data");
+    console.log(grouplist.list_of_user,"x data");
 
     if(y===2){
         // grouplist.list_of_user.shift();
         console.log(grouplist.list_of_user[0], "y===2")
-        socket.emit("groupcall_three_and_more", grouplist.list_of_user[0], peerId[0]);
+        socket.emit("groupcall_three_and_more", grouplist.list_of_user, peerId[0]);
     }else{
         grouplist.list_of_user.forEach(element=>{
             console.log(element,"x data element");
