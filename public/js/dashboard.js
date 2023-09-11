@@ -1099,7 +1099,7 @@ function connectToGroupCallee(userId){
 };
 
 function connectTwoAndMoreGroupVideoCall(grouplist, callerPeerId){
-     // let list_peer = grouplist.list_of_user;
+    let list_peer = (grouplist.list_of_user.shift());
     // listPeerID.unshift(grouplist.list_of_user);
     try{
         // const video = document.createElement('video');
@@ -1167,16 +1167,16 @@ function connectTwoAndMoreGroupVideoCall(grouplist, callerPeerId){
     let y = grouplist.list_of_user.length
     console.log(y,"y length data");
 
-    console.log(grouplist.list_of_user,"before x data");
+    console.log(grouplist.list_of_user.shift(),"before x data");
     // grouplist.list_of_user.splice(0,1);
     // console.log(grouplist.list_of_user,"x data");
 
     if(y===2){
         // grouplist.list_of_user.shift();
         console.log(grouplist.list_of_user, "y===2")
-        socket.emit("groupcall_three_and_more", grouplist.list_of_user.shift(), peerId[0]);
+        socket.emit("groupcall_three_and_more", grouplist.list_of_user, peerId[0]);
     }else{
-        grouplist.list_of_user.shift().forEach(element=>{
+        grouplist.list_of_user.forEach(element=>{
             console.log(element,"x data element");
             socket.emit("groupcall_three_and_more", element, peerId[0]);
         })
