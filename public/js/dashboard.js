@@ -971,42 +971,42 @@ function acceptGroupCall(){
             document.getElementById("group-video-grid").append(myVideo);
             videoCallStatus.unshift(true);
 //Group Call 3 and more
-        socket.on("to_groupcall_three_and_more", peerReceiver=>{
-            console.log("peerReceiver came, 3 and more group caller");
-            try{
-                // navigator.mediaDevices.getUserMedia({
-                //     video:true,
-                //     audio:true
-                // }).then(stream=> {
-                //     groupVideoStream(myVideo, stream);
-                    // groupVideoCallStatus.unshift(true);
-                    // videoCallStatus.unshift(true);
-                    // callerStream.unshift(stream);
+            socket.on("to_groupcall_three_and_more", peerReceiver=>{
+                console.log("peerReceiver came, 3 and more group caller");
+                try{
+                    // navigator.mediaDevices.getUserMedia({
+                    //     video:true,
+                    //     audio:true
+                    // }).then(stream=> {
+                    //     groupVideoStream(myVideo, stream);
+                        // groupVideoCallStatus.unshift(true);
+                        // videoCallStatus.unshift(true);
+                        // callerStream.unshift(stream);
 
-                    const call = myPeer.call(peerReceiver, stream);
-                    const video = document.createElement('video');
+                        const call = myPeer.call(peerReceiver, stream);
+                        const video = document.createElement('video');
 
-                    call.on("stream", function(stream){
-                        groupVideoStream(video, stream);
-                    });
-                    if(videoCallStatus[0]===true){
-                        document.getElementById("end_call").addEventListener("click", function(){
+                        call.on("stream", function(stream){
+                            groupVideoStream(video, stream);
+                        });
+                        if(videoCallStatus[0]===true){
+                            document.getElementById("end_call").addEventListener("click", function(){
+                                video.remove();
+                            });
+                        };
+                        call.on("close", ()=>{
                             video.remove();
                         });
-                    };
-                    call.on("close", ()=>{
-                        video.remove();
-                    });
-                    call.on("error",err =>{
-                        console.log(err, "data connection detected, code in caller side");
-                    })
-                    peers[peerReceiver] = call;
-                // });
-            }catch(err){
-                console.log(err, "peerReceiver came error 3 and more group user");
-            }
-            // connectToGroupCallee(peerReceiver)
-        });
+                        call.on("error",err =>{
+                            console.log(err, "data connection detected, code in caller side");
+                        })
+                        peers[peerReceiver] = call;
+                    // });
+                }catch(err){
+                    console.log(err, "peerReceiver came error 3 and more group user");
+                }
+                // connectToGroupCallee(peerReceiver)
+            });
         });
         let x = `
             <div class="end-call-button" id="end-call-button">
