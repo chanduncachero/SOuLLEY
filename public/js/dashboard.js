@@ -1113,10 +1113,10 @@ function connectTwoAndMoreGroupVideoCall(callerPeersId){
             groupVideoCallStatus.unshift(true);
             videoCallStatus.unshift(true);
             callerStream.unshift(stream);
-            let x = grouplist.list_of_user.shift()
+            // let x = grouplist.list_of_user.shift()
                 // grouplist.list_of_user.forEach(element=>{
                     // if(element===callerPeers[0]){
-            console.log(grouplist, "grouplist element here chandun");
+            // console.log(grouplist, "grouplist element here chandun");
             console.log(x, "x element here chandun");
             const call = myPeer.call(callerPeersId, stream);
             const video = document.createElement('video');
