@@ -1116,24 +1116,24 @@ function connectTwoAndMoreGroupVideoCall(callerPeerId){
                 // grouplist.list_of_user.forEach(element=>{
                     // if(element===callerPeers[0]){
             console.log(callerPeerId, "list_of_user[0] element here chandun");
-            const call = myPeer.call(callerPeerId, stream);
-            const video = document.createElement('video');
+            // const call = myPeer.call(callerPeerId, stream);
+            // const video = document.createElement('video');
 
-            call.on("stream", function(stream){
-                groupVideoStream(video, stream);
-            });
-            if(videoCallStatus[0]===true){
-                document.getElementById("end_call").addEventListener("click", function(){
-                    video.remove();
-                });
-            };
-            call.on("close", ()=>{
-                video.remove();
-            });
-            call.on("error",err =>{
-                console.log(err, "data connection detected, code in caller side");
-            })
-                        // peers[element] = call;
+            // call.on("stream", function(stream){
+            //     groupVideoStream(video, stream);
+            // });
+            // if(videoCallStatus[0]===true){
+            //     document.getElementById("end_call").addEventListener("click", function(){
+            //         video.remove();
+            //     });
+            // };
+            // call.on("close", ()=>{
+            //     video.remove();
+            // });
+            // call.on("error",err =>{
+            //     console.log(err, "data connection detected, code in caller side");
+            // })
+            //             // peers[element] = call;
                     // }else{
                         // console.log(callerPeerId,"x data element");
                         // socket.emit("groupcall_three_and_more", callerPeerId, peerId[0]);
