@@ -1133,8 +1133,8 @@ function connectTwoAndMoreGroupVideoCall(grouplist, callerPeerId){
                         })
                         // peers[element] = call;
                     // }else{
-                        console.log(element,"x data element");
-                        socket.emit("groupcall_three_and_more", element, peerId[0]);
+                        // console.log(callerPeerId,"x data element");
+                        // socket.emit("groupcall_three_and_more", callerPeerId, peerId[0]);
                     // }
                 // });d
         });
@@ -1164,11 +1164,11 @@ function connectTwoAndMoreGroupVideoCall(grouplist, callerPeerId){
         console.log(err, "video call error caller side");
     };
 
-    let y = grouplist.list_peer.length
+    let y = grouplist.list_of_user.length
     console.log(y,"y length data");
 
-    console.log(grouplist.list_peer,"before x data");
-    let x = grouplist.list_peer[0].shift();
+    console.log(grouplist.list_of_user,"before x data");
+    let x = grouplist.list_of_user[0].shift();
     console.log(x,"x data");
 
     if(y===2){
