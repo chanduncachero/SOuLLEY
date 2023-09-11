@@ -983,24 +983,24 @@ function acceptGroupCall(){
                         // videoCallStatus.unshift(true);
                         // callerStream.unshift(stream);
 
-                        const call = myPeer.call(peerReceiver, stream);
+                        const call = myPeer.call(peerReceiver, calleeStream[0]);
                         const video = document.createElement('video');
 
                         call.on("stream", function(stream){
                             groupVideoStream(video, stream);
                         });
-                        if(videoCallStatus[0]===true){
-                            document.getElementById("end_call").addEventListener("click", function(){
-                                video.remove();
-                            });
-                        };
+                        // if(videoCallStatus[0]===true){
+                        //     document.getElementById("end_call").addEventListener("click", function(){
+                        //         video.remove();
+                        //     });
+                        // };
                         call.on("close", ()=>{
                             video.remove();
                         });
                         call.on("error",err =>{
                             console.log(err, "data connection detected, code in caller side");
                         })
-                        peers[peerReceiver] = call;
+                        // peers[peerReceiver] = call;
                     // });
                 // }catch(err){
                 //     console.log(err, "peerReceiver came error 3 and more group user");
