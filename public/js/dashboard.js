@@ -136,7 +136,7 @@ socket.on("current-connected-group-peer", peerID=>{
 //Group Call, 2 and more Callee
 socket.on("current-connected-group-peer-twoandmore", grouplist=>{
     console.log(grouplist, "current-connected-group-peer-twoandmore");
-    connectTwoAndMoreGroupVideoCall(callerPeers[0]);
+    connectTwoAndMoreGroupVideoCall(grouplist);
     groupListFunctionToCall(grouplist);
 });
 socket.on("cancel-group-call", ()=>{
@@ -1100,7 +1100,7 @@ function connectToGroupCallee(userId){
 
 };
 
-function connectTwoAndMoreGroupVideoCall(callerPeerId){
+function connectTwoAndMoreGroupVideoCall(grouplist){
     // let list_peer = (grouplist.list_of_user.shift());
     // listPeerID.unshift(grouplist.list_of_user);
     try{
@@ -1113,26 +1113,28 @@ function connectTwoAndMoreGroupVideoCall(callerPeerId){
             groupVideoCallStatus.unshift(true);
             videoCallStatus.unshift(true);
             callerStream.unshift(stream);
+            let x = grouplist.list_of_user.shift()
                 // grouplist.list_of_user.forEach(element=>{
                     // if(element===callerPeers[0]){
-            console.log(callerPeerId, "list_of_user[0] element here chandun");
-            // const call = myPeer.call(callerPeerId, stream);
-            // const video = document.createElement('video');
+            console.log(grouplist, "grouplist element here chandun");
+            console.log(x, "x element here chandun");
+            const call = myPeer.call(x, stream);
+            const video = document.createElement('video');
 
-            // call.on("stream", function(stream){
-            //     groupVideoStream(video, stream);
-            // });
+            call.on("stream", function(stream){
+                groupVideoStream(video, stream);
+            });
             // if(videoCallStatus[0]===true){
             //     document.getElementById("end_call").addEventListener("click", function(){
             //         video.remove();
             //     });
             // };
-            // call.on("close", ()=>{
-            //     video.remove();
-            // });
-            // call.on("error",err =>{
-            //     console.log(err, "data connection detected, code in caller side");
-            // })
+            call.on("close", ()=>{
+                video.remove();
+            });
+            call.on("error",err =>{
+                console.log(err, "data connection detected, code in caller side");
+            })
             //             // peers[element] = call;
                     // }else{
                         // console.log(callerPeerId,"x data element");
