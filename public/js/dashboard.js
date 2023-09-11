@@ -136,7 +136,7 @@ socket.on("current-connected-group-peer", peerID=>{
 //Group Call, 2 and more Callee
 socket.on("current-connected-group-peer-twoandmore", grouplist=>{
     console.log(grouplist, "current-connected-group-peer-twoandmore");
-    connectTwoAndMoreGroupVideoCall(grouplist);
+    connectTwoAndMoreGroupVideoCall(callerPeers[0]);
     groupListFunctionToCall(grouplist);
 });
 socket.on("cancel-group-call", ()=>{
@@ -1100,7 +1100,7 @@ function connectToGroupCallee(userId){
 
 };
 
-function connectTwoAndMoreGroupVideoCall(grouplist){
+function connectTwoAndMoreGroupVideoCall(callerPeersId){
     // let list_peer = (grouplist.list_of_user.shift());
     // listPeerID.unshift(grouplist.list_of_user);
     try{
@@ -1118,7 +1118,7 @@ function connectTwoAndMoreGroupVideoCall(grouplist){
                     // if(element===callerPeers[0]){
             console.log(grouplist, "grouplist element here chandun");
             console.log(x, "x element here chandun");
-            const call = myPeer.call(callerPeers[0], stream);
+            const call = myPeer.call(callerPeersId, stream);
             const video = document.createElement('video');
 
             call.on("stream", function(stream){
