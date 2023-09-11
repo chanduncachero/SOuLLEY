@@ -222,8 +222,8 @@ acceptVcall.addEventListener("click", function(){
 myPeer.on("call", function(call) {
     if(groupVideoCallStatus[0]===true){
         try{
-            if(calleeStream[0]===[]){
-                console.log(groupVideoCallStatus[0],"groupVideoCallStatus true");
+            if(calleeStream[0]===""){
+                console.log(callerStream[0],"groupVideoCallStatus true");
                 call.answer(callerStream[0]);
                 const video = document.createElement("video");
                 call.on("stream", userVideoStream => {
@@ -247,7 +247,7 @@ myPeer.on("call", function(call) {
                 });
                 peers[callerPeers[0]] = call;
             }else{
-                console.log(groupVideoCallStatus[0],"groupVideoCallStatus true");
+                console.log(calleeStream[0],"groupVideoCallStatus true");
                 call.answer(calleeStream[0]);
                 const video = document.createElement("video");
                 call.on("stream", userVideoStream => {
