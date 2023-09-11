@@ -1170,7 +1170,7 @@ function connectTwoAndMoreGroupVideoCall(grouplist, callerPeerId){
     console.log(grouplist.list_of_user,"before x data");
     grouplist.list_of_user.shift();
     // grouplist.list_of_user.splice(0,1);
-    console.log(x,"x data");
+    console.log(grouplist.list_of_user,"x data");
 
     if(y===2){
         console.log(grouplist.list_of_user, "y===2")
