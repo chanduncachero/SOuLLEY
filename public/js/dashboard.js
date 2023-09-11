@@ -1165,14 +1165,14 @@ function connectTwoAndMoreGroupVideoCall(grouplist, callerPeerId){
     };
 
     let y = grouplist.list_of_user.length
-    console.log(y,"y length data");
+    // console.log(y,"y length data");
 
     console.log(grouplist.list_of_user,"before x data");
-    grouplist.list_of_user.shift();
     // grouplist.list_of_user.splice(0,1);
-    console.log(grouplist.list_of_user,"x data");
+    // console.log(grouplist.list_of_user,"x data");
 
     if(y===2){
+        grouplist.list_of_user.shift();
         console.log(grouplist.list_of_user, "y===2")
         socket.emit("groupcall_three_and_more", grouplist.list_of_user, peerId[0]);
     }else{
