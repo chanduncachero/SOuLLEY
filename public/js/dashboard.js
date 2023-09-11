@@ -1173,7 +1173,7 @@ function groupListFunctionToCall(grouplist){
     console.log(y,"y length data");
 
     console.log(grouplist.list_of_user,"before x data");
-    grouplist.list_of_user.splice(0,1);
+    grouplist.list_of_user.shift();
     console.log(grouplist.list_of_user,"x data");
 
     if(y===2){
