@@ -222,7 +222,7 @@ acceptVcall.addEventListener("click", function(){
 myPeer.on("call", function(call) {
     if(groupVideoCallStatus[0]===true){
         try{
-            if(calleeStream[0]===""){
+            if(calleeStream[0]===undefined){
                 console.log(callerStream[0],"callerStream true");
                 call.answer(callerStream[0]);
                 const video = document.createElement("video");
