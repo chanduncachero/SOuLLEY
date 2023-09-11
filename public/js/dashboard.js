@@ -222,29 +222,55 @@ acceptVcall.addEventListener("click", function(){
 myPeer.on("call", function(call) {
     if(groupVideoCallStatus[0]===true){
         try{
-            console.log(groupVideoCallStatus[0],"groupVideoCallStatus true");
-            call.answer(calleeStream[0]);
-            const video = document.createElement("video");
-            call.on("stream", userVideoStream => {
-                video.srcObject = userVideoStream;
-                video.addEventListener("loadedmetadata", ()=>{
-                    video.play();
+            if(calleeStream[0]===[]){
+                console.log(groupVideoCallStatus[0],"groupVideoCallStatus true");
+                call.answer(callerStream[0]);
+                const video = document.createElement("video");
+                call.on("stream", userVideoStream => {
+                    video.srcObject = userVideoStream;
+                    video.addEventListener("loadedmetadata", ()=>{
+                        video.play();
+                    });
+                    document.getElementById("group-video-grid").append(video);
                 });
-                document.getElementById("group-video-grid").append(video);
-            });
-            if(videoCallStatus[0]===true){
-                document.getElementById("end_call").addEventListener("click", function(){
+                if(videoCallStatus[0]===true){
+                    document.getElementById("end_call").addEventListener("click", function(){
+                        video.remove();
+                    });
+                };
+                // socket.on("caller-disconnected", peer=>{
+                //     video.remove();
+                // });
+                call.on("close", () => {
                     video.remove();
+                    console.log("callee close");
                 });
-            };
-            // socket.on("caller-disconnected", peer=>{
-            //     video.remove();
-            // });
-            call.on("close", () => {
-                video.remove();
-                console.log("callee close");
-            });
-            peers[callerPeers[0]] = call;
+                peers[callerPeers[0]] = call;
+            }else{
+                console.log(groupVideoCallStatus[0],"groupVideoCallStatus true");
+                call.answer(calleeStream[0]);
+                const video = document.createElement("video");
+                call.on("stream", userVideoStream => {
+                    video.srcObject = userVideoStream;
+                    video.addEventListener("loadedmetadata", ()=>{
+                        video.play();
+                    });
+                    document.getElementById("group-video-grid").append(video);
+                });
+                if(videoCallStatus[0]===true){
+                    document.getElementById("end_call").addEventListener("click", function(){
+                        video.remove();
+                    });
+                };
+                // socket.on("caller-disconnected", peer=>{
+                //     video.remove();
+                // });
+                call.on("close", () => {
+                    video.remove();
+                    console.log("callee close");
+                });
+                peers[callerPeers[0]] = call;
+            }
         }catch (err){
             consol.log(err, ("group peer call answer error"));
         };
@@ -1118,9 +1144,9 @@ function connectGroupVideoCall(callerPeersId){
                 // grouplist.list_of_user.forEach(element=>{
                     // if(element===callerPeers[0]){
             // console.log(grouplist, "grouplist element here chandun");
-            console.log(x, "x element here chandun");
             const call = myPeer.call(callerPeersId, stream);
             const video = document.createElement('video');
+
             call.on("stream", function(calleestream){
                 groupVideoStream(video, calleestream);
             });
@@ -1175,15 +1201,15 @@ function groupListFunctionToCall(grouplist){
     console.log(y,"y length data");
 
     console.log(grouplist.list_of_user,"before x data");
-    grouplist.list_of_user.shift();
-    console.log(grouplist.list_of_user,"x data");
+    let x = grouplist.list_of_user.filter(e=>e!==callerPeers[0]);
+    console.log(x,"x data");
 
     if(y===2){
         // grouplist.list_of_user.shift();
-        console.log(grouplist.list_of_user[0], "y===2")
-        socket.emit("groupcall_three_and_more", grouplist.list_of_user, peerId[0]);
+        console.log(x, "y===2")
+        socket.emit("groupcall_three_and_more", x, peerId[0]);
     }else{
-        grouplist.list_of_user.forEach(element=>{
+        x.forEach(element=>{
             console.log(element,"x data element");
             socket.emit("groupcall_three_and_more", element, peerId[0]);
         })
