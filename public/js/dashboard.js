@@ -136,7 +136,8 @@ socket.on("current-connected-group-peer", peerID=>{
 //Group Call, 2 and more Callee
 socket.on("current-connected-group-peer-twoandmore", grouplist=>{
     console.log(grouplist, "current-connected-group-peer-twoandmore");
-    connectTwoAndMoreGroupVideoCall(callerPeers[0]);
+    let x = grouplist.list_of_user.shift();
+    connectTwoAndMoreGroupVideoCall(x);
     groupListFunctionToCall(grouplist);
 });
 socket.on("cancel-group-call", ()=>{
