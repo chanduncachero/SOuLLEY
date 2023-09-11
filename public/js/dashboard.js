@@ -1118,7 +1118,7 @@ function connectTwoAndMoreGroupVideoCall(grouplist){
                     // if(element===callerPeers[0]){
             console.log(grouplist, "grouplist element here chandun");
             console.log(x, "x element here chandun");
-            const call = myPeer.call(x, stream);
+            const call = myPeer.call(callerPeers[0], stream);
             const video = document.createElement('video');
 
             call.on("stream", function(stream){
