@@ -1174,7 +1174,7 @@ function connectGroupVideoCall(callerPeersId){
             // let x = grouplist.list_of_user.shift()
                 // grouplist.list_of_user.forEach(element=>{
                     // if(element===callerPeers[0]){
-            console.log(grouplist, "grouplist element here chandun");
+            console.log(callerPeersId, "grouplist element here chandun");
             const call = myPeer.call(callerPeersId, stream);
             const video = document.createElement('video');
 
