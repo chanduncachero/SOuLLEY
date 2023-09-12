@@ -53,6 +53,7 @@ const   numberInput = document.getElementById("number"),
 
 
         acceptVcall = document.getElementById("accept_vcall"),
+        peersGroup = [],
         peers = {},
         myVideo = document.createElement("video"),
         callSomeone = document.getElementById("call_someone"),
@@ -246,6 +247,7 @@ myPeer.on("call", function(call) {
                     console.log("callee close");
                 });
                 peers[callerPeers[0]] = call;
+                peersGroup.unshift(peers[callerPeers[0]]);
             }else{
                 console.log(calleeStream[0],"calleeStream true");
                 call.answer(calleeStream[0]);
@@ -270,6 +272,7 @@ myPeer.on("call", function(call) {
                     console.log("callee close");
                 });
                 peers[callerPeers[0]] = call;
+                peersGroup.unshift(peers[callerPeers[0]]);
             }
         }catch (err){
             consol.log(err, ("group peer call answer error"));
@@ -306,6 +309,8 @@ myPeer.on("call", function(call) {
                 console.log("data connection detected code in callee side");
             });
             peers[callerPeers[0]] = call;
+            peersGroup.unshift(peers[callerPeers[0]]);
+
         }catch(err){
             consol.log(err, ("peer call answer error"));
         }
@@ -340,12 +345,18 @@ document.querySelector(".receiver-dialog .cancel_vcall").addEventListener("click
 
 //Video Call Disconnected
 socket.on("user-disconnected", userId => {
-    console.log(userId, "user disconnected chandun");
-    if(peers[userId]){
-        peers[userId].close();
+    console.log(userId, "user disconnected");
+    let x = peersGroup.filter(e=>e===peers[userId]);
+    if(x.length===0){
+        return false;
+    }else{
+        x[0].close();
+        // console.log("x[0].close()")
     };
     console.log(peers[userId], "user-disconnected 1st statement");
     console.log(peers, "user-disconnected 2nd statement");
+    console.log(peersGroup, "user-disconnected 3nd statement");
+    console.log(x, "user-disconnected 4th statement");
 });
 //Video Call Group Disconnect
 socket.on("caller-disconnected",peerId =>{
@@ -864,6 +875,8 @@ function connectToNewUser(userId){
                 console.log(error, "data connection detected, code in caller side");
             });
             peers[userId] = call;
+            peersGroup.unshift(peers[userId]);
+
         });
              let x = `
                         <div id="middle_pos_One">
@@ -1044,6 +1057,7 @@ function acceptGroupCall(){
                             console.log(err, "data connection detected, code in caller side");
                         })
                         peers[peerReceiver] = call;
+                        peersGroup.unshift(peers[peerReceiver]);
                     // });
                 // }catch(err){
                 //     console.log(err, "peerReceiver came error 3 and more group user");
@@ -1115,6 +1129,7 @@ function connectToGroupCallee(userId){
                 console.log(err, "data connection detected, code in caller side");
             })
             peers[userId] = call;
+            peersGroup.unshift(peers[userId]);
         });
         let x = `
             <div class="end-call-button" id="end-call-button">
@@ -1176,6 +1191,8 @@ function connectGroupVideoCall(callerPeersId){
                 console.log(err, "data connection detected, code in caller side");
             })
             peers[callerPeersId] = call;
+            peersGroup.unshift(peers[callerPeersId]);
+
                     // }else{
                         // console.log(callerPeerId,"x data element");
                         // socket.emit("groupcall_three_and_more", callerPeerId, peerId[0]);
