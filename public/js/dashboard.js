@@ -123,13 +123,13 @@ socket.on("group_video_call_accept", (roomid, callername, callerId1, callerPeer)
 });
 
 socket.on("user-connected-group-call", userId =>{
-    console.log(userId, "has joined the group call")
+    console.log(userId, "has joined the group call user-connected-group-call")
     setTimeout(connectToGroupCallee(userId),3000);
     document.body.classList.remove("active-groupCallerDialog");
     window.history.pushState("/dashboard","",'/video/'+room_id1[0]);
 });
 socket.on("current-connected-group-peer", peerID=>{
-    console.log(peerID, "has joined the group call");
+    console.log(peerID, "has joined the group call current-connected");
     console.log(peerID, "current-connected-group-peer");
 });
 
@@ -340,7 +340,8 @@ document.querySelector(".receiver-dialog .cancel_vcall").addEventListener("click
 
 //Video Call Disconnected
 socket.on("user-disconnected", userId => {
-    if(peers[userId]===true){
+    console.log(userId, "user disconnected chandun");
+    if(peers[userId]){
         peers[userId].close();
     };
     console.log(peers[userId], "user-disconnected 1st statement");
@@ -1059,7 +1060,8 @@ function acceptGroupCall(){
         `;
         document.getElementById("group-video-grid").innerHTML = x;
         document.getElementById("end_call").addEventListener("click", ()=>{
-            // socket.emit("group-video-call-quit", peerId[0], groupRoomId[0]);
+            socket.emit("group-user-disconnect", room_id1[0], peerId[0]);
+            console.log("group-user-disconnect");
             groupVideoCallStatus.unshift(false);
             window.history.pushState('/video/'+groupRoomId[0],"","/dashboard");
             document.getElementById("myNav").style.width = "0%";
@@ -1190,7 +1192,8 @@ function connectGroupVideoCall(callerPeersId){
         `;
         document.getElementById("group-video-grid").innerHTML = x;
         document.getElementById("end_call").addEventListener("click", function(){
-            socket.emit("group-video-call-quit", peerId[0], room_id1[0]);
+//Group Call close
+            socket.emit("group-user-disconnect", room_id1[0], peerId[0]);
             groupVideoCallStatus.unshift(false);
             document.getElementById("end-call-button").innerHTML = null;
             document.getElementById("myNav").style.width = "0%";

@@ -175,6 +175,11 @@ io.on("connection", (socket) => {
         
     });
 
+// Group Disconnect User
+    socket.on("group-user-disconnect" , (roomId, peer) =>{
+        socket.broadcast.emit("user-disconnected", peer);
+    });
+
 //Receive Group Video Call Invite
     socket.on("group_video_call", async (x_array, roomid, callername, callerId, callerPeer) => {
         let a = await User.find({});
