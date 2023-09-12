@@ -24,6 +24,9 @@ const groupSessionSchema = mongoose.Schema(
     },
     {
         timestamps: true
+    },
+    { 
+        expireAfterSeconds: 60
     }
 )
 
