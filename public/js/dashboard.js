@@ -178,46 +178,46 @@ socket.on("group-call-first-callee", userID =>{
 
 //Video Call Accepted
 acceptVcall.addEventListener("click", function(){
-        document.body.classList.remove("active-receiver-dialog");
-        // setTimeout(
-            socket.emit("join-room", room_id2[0] , peerId[0], callerId[0]), 4000
-        // );
-        console.log(room_id2[0] , peerId[0], callerId[0], "room_id2[0] , peerId[0], callerId[0]");
-        
-        // let videoTrack = 
-        navigator.mediaDevices.getUserMedia({
-            video: true,
-            audio: true,
-        })
-        // ;
-        // videoTrack
-        .then(stream => {
-            addVideoStream(myVideo,stream);
-            videoCallStatus.unshift(true);
-            calleeStream.unshift(stream);
-            let x = `
-                <div id="middle_pos_One">
-                    <button>
-                        <i class="fa-solid fa-video-slash fa-lg" id="off_cam"></i>
-                    </button>
-                    <button>
-                        <i class="fa-solid fa-phone-slash fa-lg" style="color: red;" id="end_call"></i>
-                    </button>
-                </diV>
-            `
-            document.getElementById("middle_position").innerHTML = x;
+    document.body.classList.remove("active-receiver-dialog");
+    // setTimeout(
+        socket.emit("join-room", room_id2[0] , peerId[0], callerId[0]), 4000
+    // );
+    console.log(room_id2[0] , peerId[0], callerId[0], "room_id2[0] , peerId[0], callerId[0]");
+    
+    // let videoTrack = 
+    navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+    })
+    // ;
+    // videoTrack
+    .then(stream => {
+        addVideoStream(myVideo,stream);
+        videoCallStatus.unshift(true);
+        calleeStream.unshift(stream);
+        let x = `
+            <div id="middle_pos_One">
+                <button>
+                    <i class="fa-solid fa-video-slash fa-lg" id="off_cam"></i>
+                </button>
+                <button>
+                    <i class="fa-solid fa-phone-slash fa-lg" style="color: red;" id="end_call"></i>
+                </button>
+            </diV>
+        `
+        document.getElementById("middle_position").innerHTML = x;
 
-            document.getElementById("end_call").addEventListener("click", function(){
-                window.history.pushState('/video/'+room_id1[0], ",", "/dashboard");
-                videoCallStatus.unshift(false);;
-                myVideo.remove();
-                stream.getTracks().forEach(function(track) {
-                    track.stop();
-                    document.getElementById("middle_pos_One").innerHTML = null;
-                    findRoomId();
-                });
-            })   
-        });     
+        document.getElementById("end_call").addEventListener("click", function(){
+            window.history.pushState('/video/'+room_id1[0], ",", "/dashboard");
+            videoCallStatus.unshift(false);;
+            myVideo.remove();
+            stream.getTracks().forEach(function(track) {
+                track.stop();
+                document.getElementById("middle_pos_One").innerHTML = null;
+                findRoomId();
+            });
+        })   
+    });     
 });
 
 //Video Interface Control
@@ -1161,20 +1161,15 @@ function connectToGroupCallee(userId){
 };
 
 function connectGroupVideoCall(callerPeersId){
-    // let list_peer = (grouplist.list_of_user.shift());
-    // listPeerID.unshift(grouplist.list_of_user);
     try{
-        // const video = document.createElement('video');
+        //const video = document.createElement('video');
         navigator.mediaDevices.getUserMedia({
             video:true,
             audio:true
         }).then(stream=> {
             groupVideoStream(myVideo, stream);
             callerStream.unshift(stream);
-            // let x = grouplist.list_of_user.shift()
-                // grouplist.list_of_user.forEach(element=>{
-                    // if(element===callerPeers[0]){
-            console.log(callerPeersId, "grouplist element here chandun");
+            // console.log(callerPeersId, "grouplist element here chandun");
             const call = myPeer.call(callerPeersId, stream);
             const video = document.createElement('video');
 
@@ -1195,11 +1190,27 @@ function connectGroupVideoCall(callerPeersId){
             peers[callerPeersId] = call;
             peersGroup.unshift(peers[callerPeersId]);
 
-                    // }else{
-                        // console.log(callerPeerId,"x data element");
-                        // socket.emit("groupcall_three_and_more", callerPeerId, peerId[0]);
-                    // }
-                // });d
+            socket.on("to_third_user_in_group", peerReceiver=>{
+                const call = myPeer.call(peerReceiver, stream);
+                const video = document.createElement('video');
+
+                call.on("stream", function(receiverStream){
+                    groupVideoStream(video, receiverStream);
+                });
+                // if(videoCallStatus[0]===true){
+                //     document.getElementById("end_call").addEventListener("click", function(){
+                //         video.remove();
+                //     });
+                // };
+                call.on("close", ()=>{
+                    video.remove();
+                });
+                call.on("error",err =>{
+                    console.log(err, "data connection detected, code in caller side");
+                })
+                peers[peerReceiver] = call;
+                peersGroup.unshift(peers[peerReceiver]);
+            });
         });
 
         let x = `
@@ -1237,16 +1248,27 @@ function groupListFunctionToCall(grouplist){
     console.log(grouplist.list_of_user,"before x data");
     let x = grouplist.list_of_user.filter(e=>e!==callerPeers[0]);
     console.log(x,"x data");
+    
+    let w = x.shift();
+    let z = x.filter(e=>e!==w[0]);
 
     if(y===2){
         // grouplist.list_of_user.shift();
         console.log(x, "y===2")
         socket.emit("groupcall_three_and_more", x, peerId[0]);
     }else{
-        x.forEach(element=>{
-            console.log(element,"x data element");
-            socket.emit("groupcall_three_and_more", element, peerId[0]);
-        })
+        // if(y===3){
+            socket.emit("groupcall_three_and_more", w, peerId[0]);
+            z.forEach(element=>{
+                socket.emit("groupcall_more_than_three", element, peerId[0]);
+            });
+        // }else{
+        //     socket.emit("groupcall_three_and_more", w, peerId[0]);
+        //     z.forEach(element=>{
+        //         console.log(element,"x data element");
+        //         socket.emit("groupcall_more_than_three", element, peerId[0]);
+        //     });
+        // }
     };
 
     // grouplist.list_of_user.forEach(element=>{

@@ -193,14 +193,23 @@ io.on("connection", (socket) => {
         socket.broadcast.to(room).emit("caller-disconnected", peerId);
     });
 
-//Group Video Call 3 and more user
+//Group Video Call to 2nd user
     socket.on("groupcall_three_and_more", async(peerCaller, peerReceiver)=>{
         let x = await User.find({});
         let y = await x.find(user=> user.peerid === peerCaller);
 
         socket.to(y.socketid).emit("to_groupcall_three_and_more", peerReceiver);
     })
+
+//Group Video Call 3 and more user
+    socket.on("groupcall_more_than_three", async(peerCaller, peerReceiver)=>{
+        let x = await User.find({});
+        let y = await x.find(user=> user.peerid === peerCaller);
+
+        socket.to(y.socketid).emit("to_third_user_in_group", peerReceiver);
+    })
 });
+
 
 function requireLogin(req, res, next) {
     if (req.session.loggedIn) {
