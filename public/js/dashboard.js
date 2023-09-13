@@ -125,7 +125,7 @@ socket.on("group_video_call_accept", (roomid, callername, callerId1, callerPeer)
 
 socket.on("user-connected-group-call", userId =>{
     console.log(userId, "has joined the group call user-connected-group-call")
-    setTimeout(connectToGroupCallee,10000, userId);
+    setTimeout(connectToGroupCallee, 3000, userId);
     document.body.classList.remove("active-groupCallerDialog");
     window.history.pushState("/dashboard","",'/video/'+room_id1[0]);
 });
@@ -1254,14 +1254,18 @@ function groupListFunctionToCall(grouplist){
     if(y===2){
         // grouplist.list_of_user.shift();
         console.log(x, "y===2")
-        socket.emit("groupcall_three_and_more", x[0], peerId[0]);
+        setTimeout(secondGroupCaller, 3000, x);
+        // socket.emit("groupcall_three_and_more", x[0], peerId[0]);
     }else{
         // if(y===3){
+            console.log(z, "z foreach element");
             let w = x.shift();
             let z = x.filter(e=>e!==w[0]);
-            socket.emit("groupcall_three_and_more", w, peerId[0]);
+            setTimeout(secondGroupCaller, 3000, w);
+            // socket.emit("groupcall_three_and_more", w, peerId[0]);
             z.forEach(element=>{
-                socket.emit("groupcall_more_than_three", element, peerId[0]);
+                setTimeout(foreEachGroup, 3000, element);
+                // socket.emit("groupcall_more_than_three", element, peerId[0]);
             });
         // }else{
         //     socket.emit("groupcall_three_and_more", w, peerId[0]);
@@ -1279,4 +1283,13 @@ function groupListFunctionToCall(grouplist){
     //         return false;
     //     }
     // })
+};
+
+function foreEachGroup(element){
+    socket.emit("groupcall_more_than_three", element, peerId[0]);
+};
+
+function secondGroupCaller(x){
+    socket.emit("groupcall_three_and_more", x, peerId[0]);
+
 }
