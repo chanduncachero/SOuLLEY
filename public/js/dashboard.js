@@ -1254,7 +1254,7 @@ function groupListFunctionToCall(grouplist){
     if(y===2){
         // grouplist.list_of_user.shift();
         console.log(x, "y===2")
-        socket.emit("groupcall_three_and_more", x, peerId[0]);
+        socket.emit("groupcall_three_and_more", x[0], peerId[0]);
     }else{
         // if(y===3){
             let w = x.shift();
