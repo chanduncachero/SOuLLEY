@@ -125,7 +125,7 @@ socket.on("group_video_call_accept", (roomid, callername, callerId1, callerPeer)
 
 socket.on("user-connected-group-call", userId =>{
     console.log(userId, "has joined the group call user-connected-group-call")
-    setTimeout(connectToGroupCallee(userId),10000);
+    setTimeout(connectToGroupCallee,10000, userId);
     document.body.classList.remove("active-groupCallerDialog");
     window.history.pushState("/dashboard","",'/video/'+room_id1[0]);
 });
@@ -1261,7 +1261,7 @@ function groupListFunctionToCall(grouplist){
             let z = x.filter(e=>e!==w[0]);
             socket.emit("groupcall_three_and_more", w, peerId[0]);
             z.forEach(element=>{
-                setTimeout(socket.emit("groupcall_more_than_three", element, peerId[0]),3000);
+                socket.emit("groupcall_more_than_three", element, peerId[0]);
             });
         // }else{
         //     socket.emit("groupcall_three_and_more", w, peerId[0]);
