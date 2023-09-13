@@ -16,38 +16,38 @@ const   numberInput = document.getElementById("number"),
         callInput = document.getElementById("callInput"),
         videoBody = document.getElementById("video_body"),
         videoBelow = document.getElementById("video_below"),
-        // iceConfiguration = {
-        //     iceServers: [
-        //         {
-        //             urls: "stun:stun.relay.metered.ca:80",
-        //         },
-        //         {
-        //             urls: "turn:a.relay.metered.ca:80",
-        //             username: "4cc69cba81278a9bd51da56b",
-        //             credential: "41t3146m1OrqCb9X",
-        //         },
-        //         {
-        //             urls: "turn:a.relay.metered.ca:80?transport=tcp",
-        //             username: "4cc69cba81278a9bd51da56b",
-        //             credential: "41t3146m1OrqCb9X",
-        //         },
-        //         {
-        //             urls: "turn:a.relay.metered.ca:443",
-        //             username: "4cc69cba81278a9bd51da56b",
-        //             credential: "41t3146m1OrqCb9X",
-        //         },
-        //         {
-        //             urls: "turn:a.relay.metered.ca:443?transport=tcp",
-        //             username: "4cc69cba81278a9bd51da56b",
-        //             credential: "41t3146m1OrqCb9X",
-        //         },
-        //     ]
-        // },
-        // peerConfiguration = {},
-        // responseRTC = await fetch("https://soulley.metered.live/api/v1/turn/credentials?apiKey=952f829b9568c7f2a9dc8e7ab73c7aed21bc"),
-        // iceServers = await responseRTC.json(),
-        myPeer = new Peer(),
-        // myPeer = new Peer(iceConfiguration),
+        iceConfiguration = {
+            iceServers: [
+                {
+                    urls: "stun:stun.relay.metered.ca:80",
+                },
+                {
+                    urls: "turn:a.relay.metered.ca:80",
+                    username: "4cc69cba81278a9bd51da56b",
+                    credential: "41t3146m1OrqCb9X",
+                },
+                {
+                    urls: "turn:a.relay.metered.ca:80?transport=tcp",
+                    username: "4cc69cba81278a9bd51da56b",
+                    credential: "41t3146m1OrqCb9X",
+                },
+                {
+                    urls: "turn:a.relay.metered.ca:443",
+                    username: "4cc69cba81278a9bd51da56b",
+                    credential: "41t3146m1OrqCb9X",
+                },
+                {
+                    urls: "turn:a.relay.metered.ca:443?transport=tcp",
+                    username: "4cc69cba81278a9bd51da56b",
+                    credential: "41t3146m1OrqCb9X",
+                },
+            ]
+        },
+        peerConfiguration = {},
+        responseRTC = await fetch("https://soulley.metered.live/api/v1/turn/credentials?apiKey=952f829b9568c7f2a9dc8e7ab73c7aed21bc"),
+        iceServers = await responseRTC.json(),
+        // myPeer = new Peer(),
+        myPeer = new Peer(iceConfiguration),
         // myPeer = new Peer(),
 
 
