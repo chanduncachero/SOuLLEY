@@ -1249,8 +1249,7 @@ function groupListFunctionToCall(grouplist){
     let x = grouplist.list_of_user.filter(e=>e!==callerPeers[0]);
     console.log(x,"x data");
     
-    let w = x.shift();
-    let z = x.filter(e=>e!==w[0]);
+    
 
     if(y===2){
         // grouplist.list_of_user.shift();
@@ -1258,6 +1257,8 @@ function groupListFunctionToCall(grouplist){
         socket.emit("groupcall_three_and_more", x, peerId[0]);
     }else{
         // if(y===3){
+            let w = x.shift();
+            let z = x.filter(e=>e!==w[0]);
             socket.emit("groupcall_three_and_more", w, peerId[0]);
             z.forEach(element=>{
                 socket.emit("groupcall_more_than_three", element, peerId[0]);
