@@ -141,8 +141,8 @@ socket.on("current-connected-group-peer-twoandmore", grouplist=>{
     groupVideoCallStatus.unshift(true);
     videoCallStatus.unshift(true);
     console.log(grouplist, "current-connected-group-peer-twoandmore");
-    let x = grouplist.list_of_user.shift();
-    connectGroupVideoCall(x);
+    // let x = grouplist.list_of_user.shift();
+    connectGroupVideoCall(grouplist.list_of_user.shift());
 });
 socket.on("cancel-group-call", ()=>{
     document.body.classList.remove("active-group-receiver-dialog");
