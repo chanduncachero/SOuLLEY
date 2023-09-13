@@ -354,10 +354,10 @@ socket.on("user-disconnected", userId => {
         x[0].close();
         // console.log("x[0].close()")
     };
-    console.log(peers[userId], "user-disconnected 1st statement");
-    console.log(peers, "user-disconnected 2nd statement");
-    console.log(peersGroup, "user-disconnected 3nd statement");
-    console.log(x, "user-disconnected 4th statement");
+    // console.log(peers[userId], "user-disconnected 1st statement");
+    // console.log(peers, "user-disconnected 2nd statement");
+    // console.log(peersGroup, "user-disconnected 3nd statement");
+    // console.log(x, "user-disconnected 4th statement");
 });
 //Video Call Group Disconnect
 socket.on("caller-disconnected",peerId =>{
@@ -1249,18 +1249,16 @@ function groupListFunctionToCall(grouplist){
     let x = grouplist.list_of_user.filter(e=>e!==callerPeers[0]);
     console.log(x,"x data");
     
-    
-
     if(y===2){
         // grouplist.list_of_user.shift();
         console.log(x, "y===2")
-        setTimeout(secondGroupCaller, 3000, x);
+        setTimeout(secondGroupCaller, 3000, x[0]);
         // socket.emit("groupcall_three_and_more", x[0], peerId[0]);
     }else{
         // if(y===3){
-            console.log(z, "z foreach element");
             let w = x.shift();
             let z = x.filter(e=>e!==w[0]);
+            console.log(z, "z foreach element");
             setTimeout(secondGroupCaller, 3000, w);
             // socket.emit("groupcall_three_and_more", w, peerId[0]);
             z.forEach(element=>{
@@ -1275,14 +1273,6 @@ function groupListFunctionToCall(grouplist){
         //     });
         // }
     };
-
-    // grouplist.list_of_user.forEach(element=>{
-    //     if(element!=callerPeers[0]){
-    //         socket.emit("groupcall_three_and_more", element, peerId[0])
-    //     }else{
-    //         return false;
-    //     }
-    // })
 };
 
 function foreEachGroup(element){
@@ -1291,5 +1281,4 @@ function foreEachGroup(element){
 
 function secondGroupCaller(x){
     socket.emit("groupcall_three_and_more", x, peerId[0]);
-
 }
