@@ -80,6 +80,7 @@ const   numberInput = document.getElementById("number"),
         userName = document.getElementById("username"),
         
 //group video call
+        usersArray = [],
         groupCallerSocketId = [],
         groupRoomId = [],
         x_array = [],
@@ -638,9 +639,14 @@ myInput.addEventListener("input",(req, res)=>{
         req.preventDefault();
         let data = req.target.value;
         touserData.unshift(data);
-        console.log(data,"sending to another user id");
-        // console.log(userData[0]._id,"sender id to another user id")
-        getPersonalChat(data);
+        let y = usersArray.find(function(elements){
+            return elements === data;
+        });
+        if(y===data){
+            getPersonalChat(data);
+        }else{
+            return false;
+        }
 });
 async function getPersonalChat(data){
     let sender_Id = userData[0]._id;
@@ -725,59 +731,31 @@ findRoomId();
 
 //Video Call Input function
 callInput.addEventListener("input", (req, res)=>{
-        if(req.target.value!=""){
+        let callee = req.target.value;
+        let y = usersArray.find(function(elements){
+            return elements === callee;
+        });
+        if(callee!=""){
             if(videoCallStatus[0]===true){
                 console.log("close previous session to start new call");
                 alert("close previous sessioin to start new video call");
             }else{
-                document.body.classList.add("active-dialog");
-                callSomeone.innerHTML = "Calling "+ req.target.value + "...";
-                calleeInfo4Socket.unshift(req.target.value);
-                setTimeout(
-                    socket.emit("video_call_invite", req.target.value, userData[0].username, room_id1[0], connectedUser), 4000
-                );
-                console.log(room_id1[0], "chandun roomid 1 here");  
-                window.history.pushState("/dashboard","",'/video/'+room_id1[0]);
-    
-    //Video Call Start
-                // let videoTrack = 
-                // navigator.mediaDevices.getUserMedia({
-                //     video: true,
-                //     audio: true,
-                // });
-                // videoTrack.then(stream => {
-                //     addVideoStream(myVideo,stream);
-                //     videoCallStatus.unshift(true);
-                //     callerStream.unshift(stream);
-                //     console.log(callerStream[0], "callerstream created");
-                //     let x = `
-                //         <div id="middle_pos_One">
-                //             <button>
-                //                 <i class="fa-solid fa-video-slash fa-lg" id="off_cam"></i>
-                //             </button>
-                //             <button>
-                //                 <i class="fa-solid fa-phone-slash fa-lg" style="color: red;" id="end_call"></i>
-                //             </button>
-                //         </diV>
-                //     `
-                //     document.getElementById("middle_position").innerHTML = x;
-                //     document.getElementById("end_call").addEventListener("click", function(){
-                //         window.history.pushState('/video/'+room_id1[0], ",", "/dashboard");
-                //         socket.emit("close_callee_videoBelow", calleeInfo4Socket[0], connectedUser);
-                //         videoCallStatus.unshift(false);
-                //         stream.getTracks().forEach(function(track) {
-                //             track.stop();
-                //             myVideo.remove();
-                //             document.getElementById("middle_pos_One").innerHTML = null;
-                //             findRoomId();
-                //         });
-                //     })   
-                // });
-            }
-           
+                if(y===callee){
+                    document.body.classList.add("active-dialog");
+                    callSomeone.innerHTML = "Calling "+ req.target.value + "...";
+                    calleeInfo4Socket.unshift(req.target.value);
+                    setTimeout(
+                        socket.emit("video_call_invite", req.target.value, userData[0].username, room_id1[0], connectedUser), 4000
+                    );
+                    console.log(room_id1[0], "chandun roomid 1 here");  
+                    window.history.pushState("/dashboard","",'/video/'+room_id1[0]);
+                }else{
+                    return false;
+                }
+            };
         }else{
             return false
-        }
+        };
 });  
 
 //Search Dropdown 
@@ -787,6 +765,7 @@ async function getAllUser(){
         return res.json();
     }).then(function(data){
         for(let user of data){
+            usersArray.unshift(user.username);
             const y =  `
                 <option value="${user.username}">
             `
@@ -917,12 +896,19 @@ document.querySelector(".create-channel-dialog .close-button").addEventListener(
 document.getElementById("groupCall").addEventListener("input", (req,res)=>{
     let x =  req.target.value;
     let d = x_array.find(function(elements){
-            return elements === x;
+        return elements === x;
+    });
+    let y = usersArray.find(function(elements){
+        return elements === x;
     });
     if(x!=""){
         if(d != x){
-            x_array.unshift(x);
-            return document.getElementById("groupCallInvited").innerHTML= document.getElementById("groupCallInvited").innerHTML + x + " ";
+            if(x===y){
+                x_array.unshift(x);
+                return document.getElementById("groupCallInvited").innerHTML= document.getElementById("groupCallInvited").innerHTML + x + " ";
+            }else{
+                return false;
+            }
         }else{
             console.log("false else");
             return false;

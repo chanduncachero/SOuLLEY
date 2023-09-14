@@ -344,8 +344,8 @@
             .end-call-button{
                 position: absolute;
                 z-index: 9;
-                margin-top: 250px;
-                margin-left: 140px;
+                margin-top: 200px;
+                margin-left: 90px;
                 padding: 10px;
             }
             .end-call-button button{
@@ -354,8 +354,8 @@
             }
             .group-video-grid{
                 display: grid;
-                grid-template-columns: repeat(auto-fill, 300px);
-                grid-auto-rows: 300px;
+                grid-template-columns: repeat(auto-fill, 250px  );
+                grid-auto-rows: 250px;
             }
 /* Group Invite Dialog */
             .group-receiver-dialog{
