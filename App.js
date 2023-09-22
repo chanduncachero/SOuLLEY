@@ -73,12 +73,12 @@ io.use(function(socket, next) {
     sessionMiddleware(socket.request, socket.request.res, next);
 });
 
-
+    // socket.request.session.socketio = socket.id;
+    // socket.request.session.save();
+    // connectedUser.push(socket.id);
 io.use(wrap(sessionMiddleware));
 io.on("connection", (socket) => {
-    socket.request.session.socketio = socket.id;
-    socket.request.session.save();
-    connectedUser.push(socket.id);
+    
     socket.emit("message",socket.id);
 
     socket.on("close_callee_videoBelow", async (calleeInfo4Socket, callerId) => {
