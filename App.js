@@ -31,9 +31,9 @@ const sessionMiddleware = session({
     secret: 'changeit',
 	resave: false,
 	saveUninitialized: false,
-    cookie: {
-        expires: 1800000
-    }
+    // cookie: {
+    //     expires: 100000
+    // }
 });
 const wrap = middleware => (socket, next) =>
     middleware(socket.request, {}, next);
