@@ -24,14 +24,23 @@ const { error } = require("console");
 const PORT = process.env.PORT || 3000; 
 const app = express();
 const server = http.createServer(app);
+
+// const { createServer } = require("http");
+// const httpServer = createServer();
 // const io = new Server(server);
-const io = require("socket.io")(server, {
-    cors: {
-        origin: '*'
-    //   origin: "http://localhost:3000/",
-    //   methods: ["GET", "POST"]
+// const io = require("socket.io")(server, {
+//     cors: {
+//         origin: '*'
+//     //   origin: "http://localhost:3000/",
+//     //   methods: ["GET", "POST"]
+//     }
+// });
+const io = new Server(server,{
+    cors:{
+        origin: '*',
+        credentials: 'true'
     }
-  });
+});
 
 //Express-session, 
 const sessionMiddleware = session({
