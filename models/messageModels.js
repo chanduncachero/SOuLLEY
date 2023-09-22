@@ -13,6 +13,12 @@ const messageSchema = mongoose.Schema(
             required: [
                 true, "User ID not found"
             ]
+        },
+        group_id:{
+            type:String,
+            required:[
+                false,
+            ]
         }
     },
     {

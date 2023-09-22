@@ -56,6 +56,7 @@
                bottom: 20%;
             }
             .card_body{
+                margin-right: auto;
                 height: 20px;
                 background-color: rgb(55, 134, 212);
                 /* border-style: solid; */
@@ -542,4 +543,48 @@
                 margin-top: 0px;
                 transition: top 0ms ease-in-out 0ms, 
                             opacity 300ms ease-in-out, margin-top 300ms ease-in-out;
+            }
+/* Group Call random CSS */
+            .group-remove-class{
+                cursor: pointer;
+            }
+            .edit-group-class{
+                display: none;
+            }
+            .group-chat-box{
+                box-sizing: border-box;
+                width: auto;
+                /* position: relative; */
+                /* border-style: solid; */
+                height: 80%;
+                margin-left: 2%;
+                margin-right: 2%;
+            };
+            .chatbox-bottom-interface{
+                position: absolute;
+                bottom: 0%;
+                /* margin-left: 5%;
+                margin-right: 3%; */
+            }
+            .chatbox-upper-interface{
+                height: 80%;
+                overflow-y: scroll;
+                display: flex;
+                /* flex-direction: column-reverse; */
+                /* margin-left: 5%;
+                margin-right: 3%; */
+            }
+            .sender-name{
+                font-size: x-small;
+            }
+            .group-none{
+                display: none;
+            }
+            .username-contact{
+                display: flex;
+                flex-direction: row;
+            }
+            .number-or-add{
+                margin-left: 10px;
+                font-size: small;
             }

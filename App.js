@@ -101,7 +101,17 @@ io.on("connection", (socket) => {
 //Video Call Receiver is busy
     socket.on("callee_is_busy", callerId =>{
         io.to(callerId).emit("callee_is_busy", "call denied");
-    })
+    });
+//Group ChatBox
+    socket.on("chatbox-sender", async(room, senderName, message, peer) =>{
+        let x = await User.find({});
+
+        let y = await x.find(user => user.peerid === peer);
+        console.log(y, "y console");
+        // y.list_of_user.forEach(async element => {
+        io.to(y.socketid).emit("chatbox-to-group", message, senderName);
+        // });
+    });
 
 //Receive chat
     socket.on("chatMessage", async body => {
@@ -149,7 +159,7 @@ io.on("connection", (socket) => {
             let groupsession = await GroupSession.findByIdAndUpdate(room,{$inc:{number_of_user:1}},{new: true});
             let groupsession2 = await GroupSession.findByIdAndUpdate(room,{$push:{list_of_user:peerId}},{safe: true, upsert: true},{new: true});
 
-            console.log(groupsession,groupsession2, "group number of user groupsession");
+            // console.log(groupsession,groupsession2, "group number of user groupsession");
 
             if(y.number_of_user === 1){
                 io.to(socketId).emit("group-call-first-callee", peerId);
@@ -372,7 +382,8 @@ app.post('/save/user', async (req, res) => {
             email: req.body.email,
             password: req.body.password,
             username: req.body.username,
-            socketid: "new_user"
+            socketid: "new_user",
+            contact_number: req.body.contact_number
         });
         await User.create(newUser);
 
@@ -510,6 +521,46 @@ app.post("/search/chat", async (req,res) => {
     // console.log(hey)
     // res.status(200).json({req})
 });
+
+//Group Chat Box
+app.post("/chatbox", async(req, res) =>{
+    try{
+        const params = {message: req.body.message, user_id: req.body.user_ID, group_id: req.body.room };
+        await Message.create(params);
+        const group = await GroupSession.find({});
+        const group_list = await group.find(session=> session.session_room ===req.body.room);
+        res.status(200).json(group_list);
+    }catch (error){
+        res.status(500).json({message: error.message});
+    };
+});
+app.post("/getChatbox", async(req, res) => {
+    try{
+        let g = await Message.find({});
+        let r = await g.filter(message=> message.group_id ===req.body.room);
+        console.log(r, "r datas");
+        if(r.length===undefined){
+            return false;
+        }else{
+            res.status(200).json(r);
+        }
+    }catch(er){
+        res.status(500).json({message: er.message});
+    }
+});
+
+//Save Number
+app.post("/save/number", async (req, res) =>{
+    try{
+        let x = await User.find({});
+        let y = await x.find(user=> user.id===req.body.id);
+        console.log(y,"y");
+        let z = await User.findByIdAndUpdate(y._id, {contact_number:req.body.number});
+        res.status(200).json(z);
+    }catch(er){
+        res.status(500).json({message: er.message});
+    }
+})
 
 app.use('/', router);
 server.listen(PORT);

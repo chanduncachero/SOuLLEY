@@ -13,7 +13,12 @@
             <div class="Title_header">
                 <div class="top_bar">
                     <div><h1 class="project_title">SOuL-LEY</h1></div>
-                    <div class="center"><h7 id="username"> </h7></div>
+                    <div class="center">
+                        <span class="username-contact">
+                            <h7 id="username"> </h7>
+                            <h9 id="contact"> </h9>
+                        </span>
+                    </div>
                 </div>
             </div>
             <div class="three_function_division">
@@ -140,8 +145,14 @@
                         <h3>Call a Group of People</h3>
                         <button id="create_channel">Create Channel</button>
                     </div>
-                    <div id="channel_list">
-
+                    <div id="group-chat-box-id" class="group-chat-box group-none">
+                        <div class="chatbox-upper-interface" id="channel_list">
+                            <!-- <h1>GeeksforGeeks</h1> -->
+                        </div>
+                        <div class="chatbox-bottom-interface">
+                            <input type="text" id="group-chatbox-text">
+                            <input type="submit" id="group-chatbox-send">
+                        </div>
                     </div>
                 </div>
                 <div class="group-video-list">
@@ -158,9 +169,11 @@
                         <!-- <option id=""></option> -->
                     </datalist>
                 </div>
-                <div id="groupCallInvited" class="groupCallInvited" > 
+                <div>
+                    <span id="groupCallInvited" class="groupCallInvited"></span> 
                 </div>
                 <input type="submit" id="groupCallSubmit">
+                <input type="submit" class="edit-group-class" id="edit-group-list" value="Change">
             </div>
 
 <!-- Group Video -->

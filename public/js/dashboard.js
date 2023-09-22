@@ -6,6 +6,7 @@ const   numberInput = document.getElementById("number"),
         callNumber = document.getElementById("call_number"),
         callButton = document.getElementById("call_id"),
         TWILIO_SID = "ACb5745873e9c982ef6eefe86dd3c21665",
+        // TWILIO_SID = "AC94a75cf40dc539cbd9b599b3ae9048ec",
 //Send Chat
         touserData = [],
 
@@ -80,6 +81,7 @@ const   numberInput = document.getElementById("number"),
         userName = document.getElementById("username"),
         
 //group video call
+        groupCallInvited = document.getElementById("groupCallInvited"),
         usersArray = [],
         groupCallerSocketId = [],
         groupRoomId = [],
@@ -114,6 +116,7 @@ socket.on("group_video_call_accept", (roomid, callername, callerId1, callerPeer)
     callerPeers.unshift(callerPeer);
     groupCallerSocketId.unshift(callerId1);
     groupRoomId.unshift(roomid);
+    room_id1.unshift(roomid);
     if(videoCallStatus[0]===true){
         socket.emit("callee_is_busy", callerId1);
     }else{
@@ -125,6 +128,7 @@ socket.on("group_video_call_accept", (roomid, callername, callerId1, callerPeer)
 });
 
 socket.on("user-connected-group-call", userId =>{
+    document.getElementById("group-chat-box-id").classList.remove("group-none");
     console.log(userId, "has joined the group call user-connected-group-call")
     setTimeout(connectToGroupCallee, 3000, userId);
     document.body.classList.remove("active-groupCallerDialog");
@@ -153,10 +157,13 @@ socket.on("cancel-group-call", ()=>{
 
 //Accept Group Video Call 
 document.getElementById("group-accept_vcall").addEventListener("click", function(){
+    document.getElementById("group-chat-box-id").classList.remove("group-none");
     groupVideoCallStatus.unshift(true);
     socket.emit("group-call-join-room", groupRoomId[0], peerId[0], connectedUser[0]);
     // socket.emit("join-group-call",groupCallerSocketId[0], peerId[0]);
     document.body.classList.remove("active-group-receiver-dialog");
+    getGroupChat();
+    
     // acceptGroupCall();
 });
 
@@ -181,7 +188,7 @@ socket.on("group-call-first-callee", userID =>{
 acceptVcall.addEventListener("click", function(){
     document.body.classList.remove("active-receiver-dialog");
     // setTimeout(
-        socket.emit("join-room", room_id2[0] , peerId[0], callerId[0]), 4000
+        socket.emit("join-room", room_id2[0] , peerId[0], callerId[0]), 3000
     // );
     console.log(room_id2[0] , peerId[0], callerId[0], "room_id2[0] , peerId[0], callerId[0]");
     
@@ -207,7 +214,14 @@ acceptVcall.addEventListener("click", function(){
             </diV>
         `
         document.getElementById("middle_position").innerHTML = x;
-
+        document.getElementById("off_cam").addEventListener("click", function(){
+            let videoStream = stream.getTracks().find(track => track.kind === 'video');
+            if(videoStream.enabled){
+                videoStream.enabled = false;
+            }else{
+                videoStream.enabled = true
+            }
+        });
         document.getElementById("end_call").addEventListener("click", function(){
             window.history.pushState('/video/'+room_id1[0], ",", "/dashboard");
             videoCallStatus.unshift(false);;
@@ -239,6 +253,7 @@ myPeer.on("call", function(call) {
                 if(videoCallStatus[0]===true){
                     document.getElementById("end_call").addEventListener("click", function(){
                         video.remove();
+                        document.getElementById("group-chat-box-id").classList.add("group-none");
                     });
                 };
                 // socket.on("caller-disconnected", peer=>{
@@ -263,6 +278,7 @@ myPeer.on("call", function(call) {
                 });
                 if(videoCallStatus[0]===true){
                     document.getElementById("end_call").addEventListener("click", function(){
+                        document.getElementById("group-chat-box-id").classList.add("group-none");
                         video.remove();
                     });
                 };
@@ -320,7 +336,7 @@ myPeer.on("call", function(call) {
 });
 socket.on("user-connected", userId => {
     console.log(callerStream[0],"connect to new user working , user connected");
-    setTimeout(connectToNewUser(userId), 3000); 
+    setTimeout(connectToNewUser, 3000, userId); 
     document.body.classList.remove("active-dialog");
 });
 
@@ -382,7 +398,18 @@ socket.on("caller-disconnected",peerId =>{
     alert("CALLER DISCONNECTED");
     
 });
-
+//Group Chat Box Reveiver from Sender
+socket.on("chatbox-to-group", (message, sender)=>{
+    console.log(sender, ", has said", message);
+    let x = `
+        <div id="user_style" class="card_body">
+            <span class="user_mess">${message}</span><br>
+        </div>
+        <span class="sender-name">${sender}</span>
+    `
+    channelList.innerHTML = channelList.innerHTML + x;
+})
+ 
 //Final socket.io, Sender Chat Interface response 
 socket.on("chatMessageResponseUser", body =>{
     console.log(body, "chatMessageResponse here");
@@ -439,7 +466,53 @@ function userLogin(){
                 <div id="log_butn">
                     <span class="span1">Logout</span>
                 </div>
+            `;
+            console.log(userData[0].contact_number,"userData[0].contact_number");
+            console.log(userData,"userData");
+
+            if(userData[0].contact_number!=undefined){
+                let z = `
+                    <span class="number-or-add"> + ${userData[0].contact_number}</span>
                 `;
+                document.getElementById("contact").innerHTML = z;
+            }else{
+// Add Phone Number DropOut
+                let w = `
+                    <span class="number-or-add"><a id="add-number" href="javascript: void(0)"> Add a phone Number </a></span>
+                    <div id="add-number-div"></div>
+                `;
+                // <form id="add-number-pop">
+                // </form>
+                // <label for="email_id">Email :</label><br>
+                // <input class="input_box" placeholder="Email" type="email" name="email" id="email_id" disabled value="${userData[0].email}"><br>
+                // <label for="username_id">Username :</label><br>
+                // <input class="input_box" placeholder="Username" type="text" name="username" id="username_id" disabled value="${userData[0].username}"><br>
+                document.getElementById("contact").innerHTML = w;
+                document.getElementById("add-number").addEventListener("click", function(){
+                    if(!document.getElementById("save-number-div")){
+                        let v = `
+                            <div id="save-number-div">
+                                <label for="email_id">Email :</label><br>
+                                <input class="input_box" placeholder="Email" type="email" name="email" id="email_id" disabled value="${userData[0].email}"><br>
+                                <label for="contact_id">Contact Number :</label><br>
+                                <input class="input_box" placeholder="Contact Number" type="number" required name="contact_number" id="contact_id"><br>
+                                <input class="submit_button" type="submit" value="save" id="save-number">
+                            </div>
+                        `;
+                        document.getElementById("add-number-div").innerHTML = v;
+                        document.getElementById("save-number").addEventListener("click", ()=>{
+                            let number = document.getElementById("contact_id").value
+                            saveNewNumber(number);
+                });
+                    }else{
+                        document.getElementById("save-number-div").remove();
+                    };
+                   
+                });
+               
+
+
+            }
             document.getElementById("drop").addEventListener("click", function(){
                 if(document.getElementById("logout").innerHTML != y){
                     document.getElementById("logout").innerHTML = y
@@ -496,6 +569,29 @@ async function createGroupSession(){
         body: JSON.stringify({room: room_id1[0], peerId: peerId[0]})
     }).then(res => {
         console.log(res, "Group Session Saved");
+    }).catch(res=>{
+        console.log(res, "Group Sess")
+    });
+};
+
+//Save New Number
+async function saveNewNumber(data){
+    console.log(data,"data save number");
+    await fetch('/save/number', {
+        method: 'post',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({number: data, id: userData[0]._id})
+    }).then(function(res) {
+        return res.json();
+    }).then(function(newdata) {
+        console.log(newdata, "Group Session Saved");
+        document.getElementById("save-number-div").remove();
+        let z = `
+            <span class="number-or-add">+${data}</span>
+        `;
+        document.getElementById("contact").innerHTML = z;
     }).catch(res=>{
         console.log(res, "Group Sess")
     });
@@ -643,6 +739,7 @@ myInput.addEventListener("input",(req, res)=>{
             return elements === data;
         });
         if(y===data){
+            inputTest.innerHTML = null
             getPersonalChat(data);
         }else{
             return false;
@@ -869,6 +966,14 @@ function connectToNewUser(userId){
                         </diV>
                 `
             document.getElementById("middle_position").innerHTML = x;
+            document.getElementById("off_cam").addEventListener("click", function(){
+                let videoStream = callerStream[0].getTracks().find(track => track.kind === 'video');
+                if(videoStream.enabled){
+                    videoStream.enabled = false;
+                }else{
+                    videoStream.enabled = true
+                }
+            });
             document.getElementById("end_call").addEventListener("click", function(){
                 window.history.pushState('/video/'+room_id1[0], ",", "/dashboard");
                 socket.emit("close_callee_videoBelow", calleeInfo4Socket[0], connectedUser[0]);
@@ -904,6 +1009,11 @@ document.getElementById("groupCall").addEventListener("input", (req,res)=>{
     if(x!=""){
         if(d != x){
             if(x===y){
+                document.getElementById("edit-group-list").classList.remove("edit-group-class");
+                // let x = `
+                //     <button id="edit-group-list">edit</button>
+                // `;
+                // document.getElementById("groupCallSubmit").innerHTML = document.getElementById("groupCallSubmit").innerHTML + " " + x ;
                 x_array.unshift(x);
                 return document.getElementById("groupCallInvited").innerHTML= document.getElementById("groupCallInvited").innerHTML + x + " ";
             }else{
@@ -917,7 +1027,93 @@ document.getElementById("groupCall").addEventListener("input", (req,res)=>{
         return false;
     };
 });
+document.getElementById("edit-group-list").addEventListener("click", function(){
+    if(document.getElementById("edit-group-list").value === "save change"){
+        document.getElementById("groupCall").removeAttribute('disabled');
+        document.getElementById("groupCallSubmit").removeAttribute('disabled');
+
+        groupCallInvited.innerHTML = null;
+        document.getElementById("edit-group-list").value = "Edit";
+        x_array.forEach(function (element){
+            document.getElementById("groupCallInvited").innerHTML= document.getElementById("groupCallInvited").innerHTML + element + " ";
+        })
+        if(x_array.length===0){
+            document.getElementById("edit-group-list").classList.add("edit-group-class");
+            document.getElementById("edit-group-list").value = "Edit";
+            while(x_array.length > 0) {
+                x_array.pop();
+            }
+        }
+    }else{
+        document.getElementById("groupCall").setAttribute('disabled', '');
+        document.getElementById("groupCallSubmit").setAttribute('disabled', '');
+       
+        
+        console.log("remove item in an array");
+        groupCallInvited.innerHTML = null
+           
+        document.getElementById("edit-group-list").value = "save change"
+            
+        x_array.forEach(function (element, i){
+            let x =`
+                <button id="${i}" element-id="${element}" class="group-remove-class">${element}</button>
+            `;
+            groupCallInvited.innerHTML = groupCallInvited.innerHTML + x;
+        });
+        hey()
+    }
+});
+function hey(){
+    if(x_array.length===0){
+        document.getElementById("edit-group-list").value = "Edit";
+        document.getElementById("groupCall").removeAttribute('disabled');
+        document.getElementById("groupCallSubmit").removeAttribute('disabled');
+        document.getElementById("edit-group-list").classList.add("edit-group-class");
+        while(x_array.length > 0) {
+            x_array.pop();
+        }
+    }
+    const groupRemoveClass = document.querySelectorAll('.group-remove-class');
+    groupRemoveClass.forEach(function(groupRemove){
+        groupRemove.addEventListener("click", function(){
+            var y = this.getAttribute('element-id');
+            console.log(y);
+    
+            groupRemovefunc(y);
+           
+            hey()
+        });
+    })
+};
+
+function groupRemovefunc(data){
+    groupCallInvited.innerHTML = null
+
+    console.log("groupRemovefunction here");
+
+    var z = x_array.filter(e=>e!==data);
+            console.log(z, "z");
+
+    while(x_array.length > 0) {
+        x_array.pop();
+    }
+    // x_array = z;
+    console.log(x_array, "after z filter");
+
+    z.forEach(function(e){
+        x_array.unshift(e);
+    });
+
+    x_array.forEach(function (element, i){
+        let x =`
+            <button id="${i}" element-id="${element}" class="group-remove-class">${element}</button>
+        `;
+        groupCallInvited.innerHTML = groupCallInvited.innerHTML + x;
+    });
+};
+
 document.getElementById("groupCallSubmit").addEventListener("click", function(){
+    document.getElementById("edit-group-list").classList.add("edit-group-class");
     if(document.getElementById("groupCall").value===""){
         alert("No user was choosen to a Group Call");
     }else{
@@ -945,6 +1141,9 @@ document.getElementById("groupCallSubmit").addEventListener("click", function(){
             document.body.classList.add("active-groupCallerDialog");
             // let body = {roomId:room_id1[0], peerId1:peerId[0]}
             socket.emit("group-call-join-room-caller", room_id1[0],connectedUser[0]);
+            while(x_array.length > 0) {
+                x_array.pop();
+            }
         }
     }
 });
@@ -1055,12 +1254,24 @@ function acceptGroupCall(){
         let x = `
             <div class="end-call-button" id="end-call-button">
                 <button>
+                    <i class="fa-solid fa-video-slash fa-lg" id="off_cam"></i>
+                </button>
+                <button>
                     <i class="fa-solid fa-phone-slash fa-lg" style="color: red;" id="end_call"></i>
                 </button>
             </div>
         `;
         document.getElementById("group-video-grid").innerHTML = x;
+        document.getElementById("off_cam").addEventListener("click", function(){
+            let videoStream = calleeStream[0].getTracks().find(track => track.kind === 'video');
+            if(videoStream.enabled){
+                videoStream.enabled = false;
+            }else{
+                videoStream.enabled = true
+            }
+        });
         document.getElementById("end_call").addEventListener("click", ()=>{
+            document.getElementById("group-chat-box-id").classList.add("group-none");
             socket.emit("group-user-disconnect", room_id1[0], peerId[0]);
             console.log("group-user-disconnect");
             groupVideoCallStatus.unshift(false);
@@ -1106,7 +1317,8 @@ function connectToGroupCallee(userId){
             });
             if(videoCallStatus[0]===true){
                 document.getElementById("end_call").addEventListener("click", function(){
-                    call.close();
+                call.close();
+                document.getElementById("group-chat-box-id").classList.add("group-none");
                 });
             };
             call.on("close", ()=>{
@@ -1121,12 +1333,24 @@ function connectToGroupCallee(userId){
         let x = `
             <div class="end-call-button" id="end-call-button">
                 <button>
+                    <i class="fa-solid fa-video-slash fa-lg" id="off_cam"></i>
+                </button>
+                <button>
                     <i class="fa-solid fa-phone-slash fa-lg" style="color: red;" id="end_call"></i>
                 </button>
             </div>
         `;
         document.getElementById("group-video-grid").innerHTML = x;
+        document.getElementById("off_cam").addEventListener("click", function(){
+            let videoStream = callerStream[0].getTracks().find(track => track.kind === 'video');
+            if(videoStream.enabled){
+                videoStream.enabled = false;
+            }else{
+                videoStream.enabled = true
+            }
+        });
         document.getElementById("end_call").addEventListener("click", function(){
+            document.getElementById("group-chat-box-id").classList.add("group-none");
             // socket.emit("group-video-call-quit", peerId[0], room_id1[0]);
             socket.emit("group-user-disconnect", room_id1[0], peerId[0]);
             groupVideoCallStatus.unshift(false);
@@ -1202,13 +1426,25 @@ function connectGroupVideoCall(callerPeersId){
         let x = `
             <div class="end-call-button" id="end-call-button">
                 <button>
+                    <i class="fa-solid fa-video-slash fa-lg" id="off_cam"></i>
+                </button>
+                <button>
                     <i class="fa-solid fa-phone-slash fa-lg" style="color: red;" id="end_call"></i>
                 </button>
             </div>
         `;
         document.getElementById("group-video-grid").innerHTML = x;
+        document.getElementById("off_cam").addEventListener("click", function(){
+            let videoStream = callerStream[0].getTracks().find(track => track.kind === 'video');
+            if(videoStream.enabled){
+                videoStream.enabled = false;
+            }else{
+                videoStream.enabled = true
+            }
+        });
         document.getElementById("end_call").addEventListener("click", function(){
 //Group Call close
+            document.getElementById("group-chat-box-id").classList.add("group-none");
             socket.emit("group-user-disconnect", room_id1[0], peerId[0]);
             groupVideoCallStatus.unshift(false);
             document.getElementById("end-call-button").innerHTML = null;
@@ -1267,4 +1503,60 @@ function foreEachGroup(element){
 
 function secondGroupCaller(x){
     socket.emit("groupcall_three_and_more", x, peerId[0]);
+}
+
+//Group Chat Box
+document.getElementById("group-chatbox-send").addEventListener("click", async function(){
+    let groupMessage = document.getElementById("group-chatbox-text").value;
+    console.log(groupMessage, "to group chat");
+    await fetch('/chatbox', {
+        method: 'post',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({message: groupMessage, user_ID: userID[0], room:room_id1[0]})
+    }).then(function(res){
+        return res.json();
+    }).then(function(data){
+        let x = `
+            <p id="user_style" class="user_message">
+                <span class="user_mess">${groupMessage}</span>
+            </p>
+        `
+        channelList.innerHTML = channelList.innerHTML + x;
+        console.log(data, "chatbox save success");
+        document.getElementById("group-chatbox-text").value = "";
+        console.log(room_id1[0], userData[0].username, groupMessage, "room_id1[0], userData[0].username, groupMessage");
+        // setTimeout(chatBoxSend, 3000, groupMessage);
+        data.list_of_user.forEach(element=>{
+            if(element===peerId[0]){
+                return false;
+            }else{
+                socket.emit("chatbox-sender", room_id1[0], userData[0].username, groupMessage, element);
+            }
+        })
+    }).catch(function(err){
+        console.log(err, "/chatbox error");
+    });
+})
+// function chatBoxSend(groupMessage){
+//     console.log("chatboxsend groupmessage", groupMessage);
+// }
+
+//Get All chat with the same roomid
+async function getGroupChat(){
+    await fetch('/getChatbox', {
+        method: 'post',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({room:room_id1[0]})
+    }).then(function(res){
+        return res.json();
+    }).then(function(data){
+        console.log(data, "data here chandun");
+
+    }).catch(function(err){
+        console.log(err, "/chatbox error");
+    });
 }

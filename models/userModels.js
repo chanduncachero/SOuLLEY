@@ -31,6 +31,12 @@ const userSchema = mongoose.Schema(
             required: [
                 false,
             ]
+        },
+        contact_number:{
+            type:String,
+            required: [
+                false,
+            ]
         }
     },
     {
