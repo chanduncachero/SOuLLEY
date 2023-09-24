@@ -25,6 +25,15 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 const server = http.createServer(app);
 
+// const ios = require('socket.io');
+// const io = new ios.Server({
+//     allowEIO3: true,
+//     cors:{
+//         origin: true,
+//         credentials: true
+//     }
+// });
+
 // const { createServer } = require("http");
 // const httpServer = createServer();
 // const io = new Server(server);
@@ -35,12 +44,10 @@ const server = http.createServer(app);
 //     //   methods: ["GET", "POST"]
 //     }
 // });
-const io = new Server(server,{
-    cors:{
-        origin: '*',
-        credentials: 'true'
-    }
-});
+
+const io = require('socket.io')(server, {origins:'164.92.95.149:* http://164.92.95.149:* http://www.164.92.95.149:*'});
+// io('http://localhost', {transports: ['websocket', 'polling', 'flashsocket']});
+
 
 //Express-session, 
 const sessionMiddleware = session({
@@ -554,7 +561,7 @@ app.post("/getChatbox", async(req, res) => {
     try{
         let g = await Message.find({});
         let r = await g.filter(message=> message.group_id ===req.body.room);
-        console.log(r, "r datas");
+        // console.log(r, "r datas");
         if(r.length===undefined){
             return false;
         }else{
