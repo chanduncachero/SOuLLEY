@@ -225,9 +225,9 @@
         <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
         <!-- <script src="/dist/peerjs.js"></script> -->
         <script src="/js/dashboard.js" type="module"></script>
-        <!-- <script>
-            var socket = io('http://164.92.95.149', { transports : ['websocket'] });
-        </script> -->
+        <script>
+            var socket = io('http://164.92.95.149', { transports : ['websocket', 'polling', 'flashsocket'] });
+        </script>
     </body>
     
 </html>
