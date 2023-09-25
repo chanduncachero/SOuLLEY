@@ -35,13 +35,18 @@ const server = http.createServer(app);
 
 const io = require('socket.io')(server, {
     cors:{
-        origin: "*",
-        allowedHeaders: [
-            "Access-Control-Allow-Origin",
-            "Access-Control-Allow-Methods",
-            'Access-Control-Allow-Credentials'
-        ],        
+        origin: ["http://164.92.95.149"],
+        // allowedHeaders: [
+        //     "Access-Control-Allow-Origin",
+        //     "Access-Control-Allow-Methods",
+        //     'Access-Control-Allow-Credentials'
+        // ],        
         credentials:true,
+
+        // allowRequest: (req, callback) => {
+        //     const noOriginHeader = req.headers.origin === undefined;
+        //     callback(null, noOriginHeader);
+        // }
     },
     // allowEIO3: true,
 });
