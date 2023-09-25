@@ -12,7 +12,6 @@ const session = require("express-session");
 const crypto = require("crypto");
 
 dotenv.config();
-const http = require("http");
 const mongoose = require("mongoose");
 const User = require("./models/userModels");
 const Message = require("./models/messageModels");
@@ -23,7 +22,8 @@ const { error } = require("console");
 
 const PORT = process.env.PORT || 3000; 
 const app = express();
-const server = http.createServer(app);
+// const http = require("http");
+// const server = http.createServer(app);
 
 //CORS SOLUTION
 // const cors = require('cors')
@@ -33,23 +33,33 @@ const server = http.createServer(app);
 //     optionSuccessStatus:200
 // };
 
-const io = require('socket.io')(server, {
+const { createServer } = require("http");
+const server = createServer(app);
+const io = new Server(server, {
     cors:{
-        origin: ["http://164.92.95.149"],
-        // allowedHeaders: [
-        //     "Access-Control-Allow-Origin",
-        //     "Access-Control-Allow-Methods",
-        //     'Access-Control-Allow-Credentials'
-        // ],        
+        origin: 'http://164.92.95.149',
         credentials:true,
-
-        allowRequest: (req, callback) => {
-            const noOriginHeader = req.headers.origin === undefined;
-            callback(null, noOriginHeader);
-        }
-    },
-    // allowEIO3: true,
+    }
 });
+
+// const io = require('socket.io')(server, {
+//     cors:{
+//         origin: ["http://164.92.95.149"],
+//         // allowedHeaders: [
+//         //     "Access-Control-Allow-Origin",
+//         //     "Access-Control-Allow-Methods",
+//         //     'Access-Control-Allow-Credentials'
+//         // ],        
+//         // credentials:true,
+//         // methods: ["GET", "POST"],
+
+//         // allowRequest: (req, callback) => {
+//         //     const noOriginHeader = req.headers.origin === undefined;
+//         //     callback(null, noOriginHeader);
+//         // }
+//     },
+//     // allowEIO3: true,
+// });
 
 // const ios = require('socket.io');
 // const io = new ios.Server({
