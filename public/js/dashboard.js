@@ -74,7 +74,7 @@ const   numberInput = document.getElementById("number"),
 
         searchChat = document.getElementById("search_chat"),
         inputTest = document.getElementById("input_test"),
-        socket = io(),
+        socket = io('http://164.92.95.149', { transports : ['websocket'] }),
         userID = [],
         userData = [],
         myInput = document.getElementById('myInput'),
