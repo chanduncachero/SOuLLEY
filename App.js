@@ -25,6 +25,14 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 const server = http.createServer(app);
 
+//CORS SOLUTION
+const cors = require('cors')
+const corsOptions ={
+    origin:'http://localhost:3000', 
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200
+}
+
 // const ios = require('socket.io');
 // const io = new ios.Server({
 //     allowEIO3: true,
@@ -586,6 +594,7 @@ app.post("/save/number", async (req, res) =>{
 })
 
 app.use('/', router);
+app.use(cors(corsOptions));
 server.listen(PORT);
 
 
