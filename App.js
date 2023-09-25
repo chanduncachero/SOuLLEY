@@ -251,6 +251,11 @@ io.on("connection", (socket) => {
     })
 });
 
+//PrependListener
+server.prependListener("request", (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "http://164.92.95.149");
+});
+
 
 function requireLogin(req, res, next) {
     if (req.session.loggedIn) {
