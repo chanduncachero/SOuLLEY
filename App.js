@@ -43,10 +43,10 @@ const io = require('socket.io')(server, {
         // ],        
         credentials:true,
 
-        // allowRequest: (req, callback) => {
-        //     const noOriginHeader = req.headers.origin === undefined;
-        //     callback(null, noOriginHeader);
-        // }
+        allowRequest: (req, callback) => {
+            const noOriginHeader = req.headers.origin === undefined;
+            callback(null, noOriginHeader);
+        }
     },
     // allowEIO3: true,
 });
