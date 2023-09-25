@@ -35,8 +35,10 @@ const server = http.createServer(app);
 
 const io = require('socket.io')(server, {
     cors:{
-        origin: "*"
-    }
+        origin: "*",
+        credentials:true,
+    },
+    // allowEIO3: true,
 });
 
 // const ios = require('socket.io');
