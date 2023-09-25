@@ -26,12 +26,18 @@ const app = express();
 const server = http.createServer(app);
 
 //CORS SOLUTION
-const cors = require('cors')
-const corsOptions ={
-    origin:'http://localhost:3000', 
-    credentials:true,            //access-control-allow-credentials:true
-    optionSuccessStatus:200
-}
+// const cors = require('cors')
+// const corsOptions ={
+//     origin:'http://localhost:3000', 
+//     credentials:true,            //access-control-allow-credentials:true
+//     optionSuccessStatus:200
+// };
+
+const io = require('socket.io')(server, {
+    cors:{
+        origin: "*"
+    }
+});
 
 // const ios = require('socket.io');
 // const io = new ios.Server({
@@ -53,7 +59,8 @@ const corsOptions ={
 //     }
 // });
 
-const io = require('socket.io')(server, {origins:'164.92.95.149:* http://164.92.95.149:* http://www.164.92.95.149:*'});
+// const io = require('socket.io')(server, {origins:'164.92.95.149:* http://164.92.95.149:* http://www.164.92.95.149:*'});
+
 // io('http://localhost', {transports: ['websocket', 'polling', 'flashsocket']});
 
 
@@ -92,164 +99,7 @@ io.use(function(socket, next) {
     // socket.request.session.save();
     // connectedUser.push(socket.id);
 io.use(wrap(sessionMiddleware));
-io.on("connection", (socket) => {
-    
-    socket.emit("message",socket.id);
-
-    socket.on("close_callee_videoBelow", async (calleeInfo4Socket, callerId) => {
-        let userTo = await User.find({});
-        let userTo2 = userTo.find(user => user.username === calleeInfo4Socket);
-
-        io.to(userTo2.socketid).emit("close_callee_videoBelow2", callerId);
-    });
-
-    socket.on("close_caller_videoBelow", callerId =>{
-        io.to(callerId).emit("close_caller_videoBelow");
-    });
-
-//Receive Video Call join room
-
-    socket.on("video_call_invite", async (toUserData, username, roomId, callerId) => {
-        let userTo = await User.find({});
-        let userTo2 = userTo.find(user => user.username === toUserData);
-        let socket = userTo2.socketid
-
-        io.to(socket).emit("vcall_invite_interface", username, roomId, callerId);
-    });
-//Receive video call join room
-    socket.on("join-room", (roomId, id, callerId) => {
-        // console.log("join room connecting...");
-
-        io.to(callerId).emit("user-connected", id);
-    });
-    socket.on("disconnect", () => {
-        io.emit("notice", "a user has left");
-    });
-//Receiver video call cancel call to caller
-    socket.on("answer_cancel_videocall", callerId => {
-        io.to(callerId).emit("callee_video_cancel", "call cancel");
-    });
-//Video Call Receiver is busy
-    socket.on("callee_is_busy", callerId =>{
-        io.to(callerId).emit("callee_is_busy", "call denied");
-    });
-//Group ChatBox
-    socket.on("chatbox-sender", async(room, senderName, message, peer) =>{
-        let x = await User.find({});
-
-        let y = await x.find(user => user.peerid === peer);
-        console.log(y, "y console");
-        // y.list_of_user.forEach(async element => {
-        io.to(y.socketid).emit("chatbox-to-group", message, senderName);
-        // });
-    });
-
-//Receive chat
-    socket.on("chatMessage", async body => {
-        io.to(body.user_ID).emit("chatMessageResponseUser", body);
-
-        let userTo = await User.find({});
-        let userFrom = await userTo.find(user => user.socketid === body.user_ID);
-        let userTo2 = await userTo.find(user => user.username === body.send_to);
-
-        console.log(userTo2, "to user with session");
-        io.to(userTo2.socketid).emit("chatMessageResponseOther", body, userFrom.username);
-    });
-
-//Receive Cancel Group Call from Caller
-    socket.on("groupCallerDialog", async (callee) => {
-        let a = await User.find({});
-        let b = await a.find(user => user.username === callee);
-        socket.to(b.socketid).emit("cancel-group-call");
-    });
-
-//Group Room Video Call Join room UUID and PEER ID
-    socket.on("group-call-join-room-caller", (roomId, peerId)=>{
-            socket.join(roomId);
-            socket.broadcast.to(roomId).emit("user-connected-group-call", peerId);
-    
-            socket.on("disconnect", ()=>{
-                socket.broadcast.to(roomId).emit("user-disconnected", peerId);
-                // io.broadcast.emit("user-disconnected", peerId);
-            });
-    });
-    socket.on("group-call-join-room", async(roomId,peerId,socketId)=>{
-        let x = await GroupSession.find({});
-        let y = await x.find(session => session.session_room === roomId);
-
-        // if(y.list_of_user[0]===peerId){
-        //     socket.join(roomId);
-        //     socket.broadcast.to(roomId).emit("user-connected-group-call", peerId);
-    
-        //     socket.on("disconnect", ()=>{
-        //         socket.broadcast.to(roomId).emit("user-disconnected", peerId);
-        //         // io.broadcast.emit("user-disconnected", peerId);
-        //     });
-        // }else{
-            let room = y._id;
-            let groupsession = await GroupSession.findByIdAndUpdate(room,{$inc:{number_of_user:1}},{new: true});
-            let groupsession2 = await GroupSession.findByIdAndUpdate(room,{$push:{list_of_user:peerId}},{safe: true, upsert: true},{new: true});
-
-            // console.log(groupsession,groupsession2, "group number of user groupsession");
-
-            if(y.number_of_user === 1){
-                io.to(socketId).emit("group-call-first-callee", peerId);
-
-                socket.join(roomId);
-
-                socket.broadcast.to(roomId).emit("user-connected-group-call", peerId);
-        
-                socket.on("disconnect", ()=>{
-                    socket.broadcast.to(roomId).emit("user-disconnected", peerId);
-                });
-            }else{
-                socket.join(roomId);
-                io.to(socketId).emit("current-connected-group-peer-twoandmore", y);
-
-                socket.broadcast.to(roomId).emit("current-connected-group-peer", peerId);
-        
-                socket.on("disconnect", ()=>{
-                    socket.broadcast.to(roomId).emit("user-disconnected", peerId);
-                });
-            }
-        // }
-        
-    });
-
-// Group Disconnect User
-    socket.on("group-user-disconnect" , (roomId, peer) =>{
-        socket.broadcast.emit("user-disconnected", peer);
-    });
-
-//Receive Group Video Call Invite
-    socket.on("group_video_call", async (x_array, roomid, callername, callerId, callerPeer) => {
-        let a = await User.find({});
-        let b = await a.find(user => user.username === x_array);
-        io.to(b.socketid).emit("group_video_call_accept", roomid,callername,callerId ,callerPeer );
-    });
-
-//Group Video Call Broadcast and delete 
-    socket.on("group-video-call-quit", (peerId , room )=>{
-        // io.broadcast("user-disconnected", peerId);
-        socket.broadcast.to(room).emit("caller-disconnected", peerId);
-    });
-
-//Group Video Call to 2nd user
-    socket.on("groupcall_three_and_more", async(peerCaller, peerReceiver)=>{
-        let x = await User.find({});
-        let y = await x.find(user=> user.peerid === peerCaller);
-
-        socket.to(y.socketid).emit("to_groupcall_three_and_more", peerReceiver);
-    })
-
-//Group Video Call 3 and more user
-    socket.on("groupcall_more_than_three", async(peerCaller, peerReceiver)=>{
-        let x = await User.find({});
-        let y = await x.find(user=> user.peerid === peerCaller);
-
-        socket.to(y.socketid).emit("to_third_user_in_group", peerReceiver);
-    })
-});
+//IO HERE
 
 //PrependListener
 server.prependListener("request", (req, res) => {
@@ -599,8 +449,167 @@ app.post("/save/number", async (req, res) =>{
 })
 
 app.use('/', router);
-app.use(cors(corsOptions));
-server.listen(PORT);
+// app.use(cors(corsOptions));
+server.listen(PORT, function(){
+    io.on("connection", (socket) => {
+    
+        socket.emit("message",socket.id);
+    
+        socket.on("close_callee_videoBelow", async (calleeInfo4Socket, callerId) => {
+            let userTo = await User.find({});
+            let userTo2 = userTo.find(user => user.username === calleeInfo4Socket);
+    
+            io.to(userTo2.socketid).emit("close_callee_videoBelow2", callerId);
+        });
+    
+        socket.on("close_caller_videoBelow", callerId =>{
+            io.to(callerId).emit("close_caller_videoBelow");
+        });
+    
+    //Receive Video Call join room
+    
+        socket.on("video_call_invite", async (toUserData, username, roomId, callerId) => {
+            let userTo = await User.find({});
+            let userTo2 = userTo.find(user => user.username === toUserData);
+            let socket = userTo2.socketid
+    
+            io.to(socket).emit("vcall_invite_interface", username, roomId, callerId);
+        });
+    //Receive video call join room
+        socket.on("join-room", (roomId, id, callerId) => {
+            // console.log("join room connecting...");
+    
+            io.to(callerId).emit("user-connected", id);
+        });
+        socket.on("disconnect", () => {
+            io.emit("notice", "a user has left");
+        });
+    //Receiver video call cancel call to caller
+        socket.on("answer_cancel_videocall", callerId => {
+            io.to(callerId).emit("callee_video_cancel", "call cancel");
+        });
+    //Video Call Receiver is busy
+        socket.on("callee_is_busy", callerId =>{
+            io.to(callerId).emit("callee_is_busy", "call denied");
+        });
+    //Group ChatBox
+        socket.on("chatbox-sender", async(room, senderName, message, peer) =>{
+            let x = await User.find({});
+    
+            let y = await x.find(user => user.peerid === peer);
+            console.log(y, "y console");
+            // y.list_of_user.forEach(async element => {
+            io.to(y.socketid).emit("chatbox-to-group", message, senderName);
+            // });
+        });
+    
+    //Receive chat
+        socket.on("chatMessage", async body => {
+            io.to(body.user_ID).emit("chatMessageResponseUser", body);
+    
+            let userTo = await User.find({});
+            let userFrom = await userTo.find(user => user.socketid === body.user_ID);
+            let userTo2 = await userTo.find(user => user.username === body.send_to);
+    
+            console.log(userTo2, "to user with session");
+            io.to(userTo2.socketid).emit("chatMessageResponseOther", body, userFrom.username);
+        });
+    
+    //Receive Cancel Group Call from Caller
+        socket.on("groupCallerDialog", async (callee) => {
+            let a = await User.find({});
+            let b = await a.find(user => user.username === callee);
+            socket.to(b.socketid).emit("cancel-group-call");
+        });
+    
+    //Group Room Video Call Join room UUID and PEER ID
+        socket.on("group-call-join-room-caller", (roomId, peerId)=>{
+                socket.join(roomId);
+                socket.broadcast.to(roomId).emit("user-connected-group-call", peerId);
+        
+                socket.on("disconnect", ()=>{
+                    socket.broadcast.to(roomId).emit("user-disconnected", peerId);
+                    // io.broadcast.emit("user-disconnected", peerId);
+                });
+        });
+        socket.on("group-call-join-room", async(roomId,peerId,socketId)=>{
+            let x = await GroupSession.find({});
+            let y = await x.find(session => session.session_room === roomId);
+    
+            // if(y.list_of_user[0]===peerId){
+            //     socket.join(roomId);
+            //     socket.broadcast.to(roomId).emit("user-connected-group-call", peerId);
+        
+            //     socket.on("disconnect", ()=>{
+            //         socket.broadcast.to(roomId).emit("user-disconnected", peerId);
+            //         // io.broadcast.emit("user-disconnected", peerId);
+            //     });
+            // }else{
+                let room = y._id;
+                let groupsession = await GroupSession.findByIdAndUpdate(room,{$inc:{number_of_user:1}},{new: true});
+                let groupsession2 = await GroupSession.findByIdAndUpdate(room,{$push:{list_of_user:peerId}},{safe: true, upsert: true},{new: true});
+    
+                // console.log(groupsession,groupsession2, "group number of user groupsession");
+    
+                if(y.number_of_user === 1){
+                    io.to(socketId).emit("group-call-first-callee", peerId);
+    
+                    socket.join(roomId);
+    
+                    socket.broadcast.to(roomId).emit("user-connected-group-call", peerId);
+            
+                    socket.on("disconnect", ()=>{
+                        socket.broadcast.to(roomId).emit("user-disconnected", peerId);
+                    });
+                }else{
+                    socket.join(roomId);
+                    io.to(socketId).emit("current-connected-group-peer-twoandmore", y);
+    
+                    socket.broadcast.to(roomId).emit("current-connected-group-peer", peerId);
+            
+                    socket.on("disconnect", ()=>{
+                        socket.broadcast.to(roomId).emit("user-disconnected", peerId);
+                    });
+                }
+            // }
+            
+        });
+    
+    // Group Disconnect User
+        socket.on("group-user-disconnect" , (roomId, peer) =>{
+            socket.broadcast.emit("user-disconnected", peer);
+        });
+    
+    //Receive Group Video Call Invite
+        socket.on("group_video_call", async (x_array, roomid, callername, callerId, callerPeer) => {
+            let a = await User.find({});
+            let b = await a.find(user => user.username === x_array);
+            io.to(b.socketid).emit("group_video_call_accept", roomid,callername,callerId ,callerPeer );
+        });
+    
+    //Group Video Call Broadcast and delete 
+        socket.on("group-video-call-quit", (peerId , room )=>{
+            // io.broadcast("user-disconnected", peerId);
+            socket.broadcast.to(room).emit("caller-disconnected", peerId);
+        });
+    
+    //Group Video Call to 2nd user
+        socket.on("groupcall_three_and_more", async(peerCaller, peerReceiver)=>{
+            let x = await User.find({});
+            let y = await x.find(user=> user.peerid === peerCaller);
+    
+            socket.to(y.socketid).emit("to_groupcall_three_and_more", peerReceiver);
+        })
+    
+    //Group Video Call 3 and more user
+        socket.on("groupcall_more_than_three", async(peerCaller, peerReceiver)=>{
+            let x = await User.find({});
+            let y = await x.find(user=> user.peerid === peerCaller);
+    
+            socket.to(y.socketid).emit("to_third_user_in_group", peerReceiver);
+        })
+    });
+});
 
 
 
