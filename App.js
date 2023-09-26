@@ -46,7 +46,7 @@ const io = require('socket.io')(server, {
 });
 
 //CORS SOLUTION
-// const cors = require('cors')
+const cors = require('cors');
 // const corsOptions ={
 //     origin:'http://localhost:3000', 
 //     credentials:true,            //access-control-allow-credentials:true
@@ -121,7 +121,7 @@ const wrap = middleware => (socket, next) =>
 app.use(sessionMiddleware);
 
 io.engine.use(sessionMiddleware);
-
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));   
 app.use(express.static(__dirname+"/public"));
