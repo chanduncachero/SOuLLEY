@@ -38,7 +38,12 @@ const server = http.createServer(app);
 //     // res.writeHead(200, headers);
 //     // res.end();
 // });
-const io = require('socket.io')(server, {cors: {origin: "*"}});
+const io = require('socket.io')(server, {
+    cors: {
+        origin: ["http://164.92.95.149"],
+        credentials: true
+    }
+});
 
 //CORS SOLUTION
 // const cors = require('cors')
