@@ -24,23 +24,24 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 const http = require("http");
-const server = http.createServer(app, (req, res)=>{
-    // const headers = {};
-    // headers["Access-Control-Allow-Origin"] = "*";
-    // headers["Access-Control-Allow-Methods"] = "POST, GET, PUT, DELETE, OPTIONS";
-    // headers["Access-Control-Allow-Credentials"] = true;
+const server = http.createServer(app);
+// const server = http.createServer(app, (req, res)=>{
+//     // const headers = {};
+//     // headers["Access-Control-Allow-Origin"] = "*";
+//     // headers["Access-Control-Allow-Methods"] = "POST, GET, PUT, DELETE, OPTIONS";
+//     // headers["Access-Control-Allow-Credentials"] = true;
 
-    header("Access-Control-Allow-Origin" , "*");
-    header("Access-Control-Allow-Methods", POST, GET, PUT, DELETE, OPTIONS);
-    header("Access-Control-Allow-Credentials", true);
+//     header("Access-Control-Allow-Origin" , "*");
+//     header("Access-Control-Allow-Methods", POST, GET, PUT, DELETE, OPTIONS);
+//     header("Access-Control-Allow-Credentials", true);
 
-    // res.writeHead(200, headers);
-    // res.end();
-});
-const io = require('socket.io')(server);
+//     // res.writeHead(200, headers);
+//     // res.end();
+// });
+const io = require('socket.io')(server, {cors: {origin: "*"}});
 
 //CORS SOLUTION
-const cors = require('cors')
+// const cors = require('cors')
 // const corsOptions ={
 //     origin:'http://localhost:3000', 
 //     credentials:true,            //access-control-allow-credentials:true
