@@ -26,7 +26,7 @@ const app = express();
 // const server = http.createServer(app);
 
 //CORS SOLUTION
-// const cors = require('cors')
+const cors = require('cors')
 // const corsOptions ={
 //     origin:'http://localhost:3000', 
 //     credentials:true,            //access-control-allow-credentials:true
@@ -38,6 +38,7 @@ const server = createServer(app);
 const io = new Server(server, {
     cors:{
         origin: 'http://164.92.95.149',
+        // origin: 'vince.ph05.us',
         credentials:true,
     }
 });
@@ -471,7 +472,9 @@ app.post("/save/number", async (req, res) =>{
 })
 
 app.use('/', router);
-// app.use(cors(corsOptions));
+app.use(cors({
+    origin: "http://164.92.95.149"
+}));
 server.listen(PORT, function(){
     io.on("connection", (socket) => {
     
