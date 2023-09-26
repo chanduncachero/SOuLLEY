@@ -22,8 +22,10 @@ const { error } = require("console");
 
 const PORT = process.env.PORT || 3000; 
 const app = express();
-// const http = require("http");
-// const server = http.createServer(app);
+
+const http = require("http");
+const server = http.createServer(app);
+const io = require('socket.io')(server);
 
 //CORS SOLUTION
 const cors = require('cors')
@@ -33,15 +35,15 @@ const cors = require('cors')
 //     optionSuccessStatus:200
 // };
 
-const { createServer } = require("http");
-const server = createServer(app);
-const io = new Server(server, {
-    cors:{
-        origin: 'http://164.92.95.149',
-        // origin: 'vince.ph05.us',
-        credentials:true,
-    }
-});
+// const { createServer } = require("http");
+// const server = createServer(app);
+// const io = new Server(server, {
+//     cors:{
+//         origin: 'http://164.92.95.149',
+//         // origin: 'vince.ph05.us',
+//         credentials:true,
+//     }
+// });
 
 // const io = require('socket.io')(server, {
 //     cors:{
@@ -472,9 +474,9 @@ app.post("/save/number", async (req, res) =>{
 })
 
 app.use('/', router);
-app.use(cors({
-    origin: "http://164.92.95.149"
-}));
+// app.use(cors({
+//     origin: "http://164.92.95.149"
+// }));
 server.listen(PORT, function(){
     io.on("connection", (socket) => {
     
