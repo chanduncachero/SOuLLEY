@@ -24,7 +24,19 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 const http = require("http");
-const server = http.createServer(app);
+const server = http.createServer(app, (req, res)=>{
+    // const headers = {};
+    // headers["Access-Control-Allow-Origin"] = "*";
+    // headers["Access-Control-Allow-Methods"] = "POST, GET, PUT, DELETE, OPTIONS";
+    // headers["Access-Control-Allow-Credentials"] = true;
+
+    headers("Access-Control-Allow-Origin" , "*");
+    headers("Access-Control-Allow-Methods", POST, GET, PUT, DELETE, OPTIONS);
+    headers("Access-Control-Allow-Credentials", true);
+
+    // res.writeHead(200, headers);
+    // res.end();
+});
 const io = require('socket.io')(server);
 
 //CORS SOLUTION
