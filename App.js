@@ -48,7 +48,10 @@ const io = require('socket.io')(server, {
             'Access-Control-Allow-Credentials'
         ],        
         credentials: true,
-        credentials: true
+        allowRequest: (req, callback) => {
+            const noOriginHeader = req.headers.origin === undefined;
+            callback(null, noOriginHeader);
+        }
     }
 });
 
