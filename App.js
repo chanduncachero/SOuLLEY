@@ -40,10 +40,18 @@ const server = http.createServer(app);
 // });
 const io = require('socket.io')(server, {
     cors: {
-        origin: ["http://164.92.95.149"],
+        origin: "http://164.92.95.149",
+        methods: ["GET", "POST"],
         credentials: true
     }
 });
+
+//XMLHttpRequest
+// const xhr = new XMLHttpRequest();
+// const urlx = "https://bar.other/resources/public-data/";
+// xhr.open("GET", urlx);
+// xhr.onreadystatechange = someHandler;
+// xhr.send();
 
 //CORS SOLUTION
 const cors = require('cors');
