@@ -40,7 +40,8 @@ const server = http.createServer(app);
 // });
 const io = require('socket.io')(server, {
     cors: {
-        origin: "http://164.92.95.149",
+        // origin: "http://164.92.95.149",
+        origin: "*",
         methods: ["GET", "POST"],
         allowedHeaders: [
             "Access-Control-Allow-Origin", 
