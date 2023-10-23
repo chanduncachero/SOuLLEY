@@ -1,6 +1,12 @@
             body{
                 font-family: "Roboto",sans-serif;
             }
+            .all{
+                margin: 0;
+                padding: 0;
+                font-family: sans-serif;
+                box-sizing: border-box;
+            }
             .main_container {
                 background-image: url("https://images.unsplash.com/photo-1483354483454-4cd359948304?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80");
                 width: 100%;
@@ -57,11 +63,15 @@
             }
             .card_body{
                 margin-right: auto;
-                height: 20px;
-                background-color: rgb(55, 134, 212);
+                /* height: auto; */
                 /* border-style: solid; */
-                box-shadow: 0px 2px 5px 5px rgba(0,0,0,0.1);
                 color: whitesmoke;
+                margin-bottom: auto;
+            }
+            .card_body_span{
+                background-color: rgb(55, 134, 212);
+                width: fit-content;
+                box-shadow: 0px 2px 5px 5px rgba(0,0,0,0.1);
             }
             .chat_header{
                 display: flex;
@@ -74,18 +84,22 @@
             }
             .user_message{
                 margin-left: auto;
-                background-color: white;
                 color: black;
+            }
+            .user_mess{
+                width: fit-content;
+
+                /* float: right; */
+                margin-bottom: auto;
+
                 box-shadow: 0px 2px 5px 5px rgba(0,0,0,0.1);
+                background-color: white;
             }
-            .user_message .user_mess{
-                float: right;
-            }
-            /* .message_box{
-                overflow: auto;
+            .message_box{
+                /* overflow: auto; */
                 display: flex;
-                flex-direction: column-reverse;
-            } */
+                flex-direction: column;
+            }
             .Title_header{
                 display: flex;
                 flex-wrap: nowrap;
@@ -553,29 +567,37 @@
             }
             .group-chat-box{
                 box-sizing: border-box;
-                width: auto;
+                max-width: 90%;
                 /* position: relative; */
                 /* border-style: solid; */
                 height: 80%;
                 margin-left: 2%;
                 margin-right: 2%;
-            };
+            }
+            .chatbox{
+                /* min-width: 90%; */
+                overflow-y: scroll;
+                display: flex;
+                flex-direction: column-reverse;
+            }
             .chatbox-bottom-interface{
                 position: absolute;
-                bottom: 0%;
+                bottom: 20%;
                 /* margin-left: 5%;
                 margin-right: 3%; */
             }
             .chatbox-upper-interface{
-                height: 80%;
-                overflow-y: scroll;
+                /* width: 90%; */
+                /* max-height: 60%; */
                 display: flex;
-                /* flex-direction: column-reverse; */
+                flex-direction: column;
                 /* margin-left: 5%;
                 margin-right: 3%; */
             }
             .sender-name{
                 font-size: x-small;
+                width: fit-content;
+                color: black;
             }
             .group-none{
                 display: none;
@@ -587,4 +609,12 @@
             .number-or-add{
                 margin-left: 10px;
                 font-size: small;
+            }
+            .card_body_group{
+                margin-right: auto;
+                height: fit-content;
+                /* border-style: solid; */
+                box-shadow: 0px 2px 5px 5px rgba(0,0,0,0.1);
+                color: whitesmoke;
+                margin-bottom: 15px;
             }

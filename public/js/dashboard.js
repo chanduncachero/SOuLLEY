@@ -399,14 +399,14 @@ socket.on("caller-disconnected",peerId =>{
     alert("CALLER DISCONNECTED");
     
 });
-//Group Chat Box Reveiver from Sender
+//Group Chat Box Receiver from Sender
 socket.on("chatbox-to-group", (message, sender)=>{
     console.log(sender, ", has said", message);
     let x = `
-        <div id="user_style" class="card_body">
-            <span class="user_mess">${message}</span><br>
-        </div>
-        <span class="sender-name">${sender}</span>
+        <p id="user_style" class="card_body_group">
+            <span class="sender-name"><b>${sender}</b></span><br>
+            <span class="card_body_span">${message}</span>
+        </p>
     `
     channelList.innerHTML = channelList.innerHTML + x;
 })
@@ -427,7 +427,7 @@ socket.on("chatMessageResponseOther", (body, senderName) =>{
         // console.log(senderName,touserData[0], "chatMessageResponseOther opened receiver convo");
         let x = `
         <p id="user_style" class="card_body">
-            <span>${body.message}</span><br>
+            <span class="card_body_span">${body.message}</span><br>
          </p>
         `
         inputTest.innerHTML = inputTest.innerHTML + x;
@@ -782,17 +782,16 @@ async function getPersonalChat(data){
                 // console.log(message.user_id[0],"chandun here", userID[0])
                 if(message.user_id[0]===userID[0]){
                 let x = `
-                        <p id="user_style" class="user_message">
+                        <p id="user_style" class=" user_message">
                         <span class="user_mess">${message.message}</span><br>
                             </p>
-
                     `
                     // document.getElementsById(user_style).classList.add("user_message");
                 inputTest.innerHTML = inputTest.innerHTML + x;
                 }else{
                     let x = `
-                        <p id="user_style" class="card_body">
-                            <span>${message.message}</span><br>
+                        <p id="user_style" class=" card_body">
+                            <span class="card_body_span">${message.message}</span><br>
                         </p>
                     `
                     inputTest.innerHTML = inputTest.innerHTML + x;
@@ -1521,7 +1520,7 @@ document.getElementById("group-chatbox-send").addEventListener("click", async fu
     }).then(function(data){
         let x = `
             <p id="user_style" class="user_message">
-                <span class="user_mess">${groupMessage}</span>
+                <span class="user_mess">${groupMessage}</span><br>
             </p>
         `
         channelList.innerHTML = channelList.innerHTML + x;
